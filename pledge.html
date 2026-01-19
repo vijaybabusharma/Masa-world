@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Pledge Platform | MASA World Foundation</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+            colors: {
+              'masa-orange': '#F97316',
+              'masa-blue': '#1E3A8A',
+              'masa-charcoal': '#1F2937',
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html"><img src="logo.svg" alt="MASA" class="h-10"></a>
+            <nav class="hidden lg:flex gap-6">
+                <a href="index.html" class="text-gray-700 hover:text-masa-orange font-medium">Home</a>
+                <a href="pledge.html" class="text-masa-orange font-semibold">Pledge Platform</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Slider -->
+    <section class="relative bg-gray-800 text-white h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 opacity-30">
+            <img src="https://picsum.photos/1600/900?grayscale&blur=2&random=1" class="w-full h-full object-cover">
+        </div>
+        <div class="relative container mx-auto px-4 text-center z-10 animate-fade-in-up max-w-5xl">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 drop-shadow-md leading-tight">Take a Pledge for a Better Tomorrow</h1>
+            <p class="text-2xl md:text-3xl font-bold tracking-tight text-masa-orange mb-8 drop-shadow-sm">Commit to positive change.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 items-center">
+                <button onclick="document.getElementById('pledge-categories').scrollIntoView({behavior: 'smooth'})" class="w-full sm:w-auto bg-masa-orange text-white px-8 py-3.5 rounded-full text-lg font-bold hover:bg-orange-600 transition-all shadow-lg flex items-center justify-center gap-2">
+                    Take the Pledge
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pledge Categories -->
+    <section id="pledge-categories" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-masa-charcoal">Choose Your Pledge</h2>
+                <p class="mt-4 text-lg text-gray-600">Select a cause that resonates with you.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                <!-- Example Pledge Card -->
+                <div class="bg-white p-6 rounded-xl shadow-md border hover:border-masa-orange transition-all flex flex-col text-center items-center">
+                    <div class="w-14 h-14 bg-orange-50 text-masa-orange rounded-full flex items-center justify-center mb-4">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    </div>
+                    <h3 class="font-bold text-masa-charcoal mb-2 flex-grow">Youth Empowerment</h3>
+                    <p class="text-xs text-gray-500 mb-4">Mentor and support young individuals to become future leaders.</p>
+                    <button onclick="openModal('modal-pledge')" class="mt-auto w-full bg-masa-blue text-white font-bold py-2 rounded-lg hover:bg-blue-900 transition-colors text-sm">Take Pledge</button>
+                </div>
+                <!-- Repeat for other pledges -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Pledge Modal Structure -->
+    <div id="modal-pledge" class="modal-overlay">
+        <div class="modal-content animate-fade-in-up">
+            <button onclick="closeModal('modal-pledge')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="bg-gray-50 px-8 py-6 border-b border-gray-200 text-center rounded-t-xl">
+                <h3 class="text-xl font-bold text-masa-charcoal">Official Pledge Portal</h3>
+                <p class="text-sm text-masa-orange font-semibold mt-1">Youth Empowerment Pledge</p>
+            </div>
+            <div class="p-8">
+                <form class="space-y-4">
+                    <input type="text" placeholder="Full Name" class="w-full border border-gray-300 rounded-md p-2">
+                    <input type="email" placeholder="Email Address" class="w-full border border-gray-300 rounded-md p-2">
+                    <button type="button" class="w-full bg-masa-charcoal text-white py-3 rounded-lg font-bold hover:bg-gray-800 shadow-md">Send OTP</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

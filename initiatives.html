@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Initiatives | MASA World Foundation</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+            colors: {
+              'masa-orange': '#F97316',
+              'masa-blue': '#1E3A8A',
+              'masa-charcoal': '#1F2937',
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html"><img src="logo.svg" alt="MASA" class="h-10"></a>
+            <nav class="hidden lg:flex gap-6">
+                <a href="index.html" class="text-gray-700 hover:text-masa-orange font-medium">Home</a>
+                <a href="initiatives.html" class="text-masa-orange font-semibold">Initiatives</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="relative bg-masa-charcoal text-white py-24 px-4 text-center overflow-hidden">
+            <div class="absolute inset-0 opacity-20 bg-center bg-cover" style="background-image: url('https://picsum.photos/1600/900?grayscale&blur=2&random=1')"></div>
+            <div class="relative z-10 max-w-4xl mx-auto">
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">Our Initiatives</h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed font-light">Addressing critical needs through holistic social reform and youth development.</p>
+                <a href="get-involved.html#donate" class="bg-masa-orange text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-orange-600 transition-all shadow-lg">Support Our Cause</a>
+            </div>
+        </section>
+
+        <!-- Overview -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto text-center">
+                    <span class="text-masa-blue font-bold uppercase tracking-widest text-sm mb-3 block">About The Initiative</span>
+                    <h2 class="text-3xl font-bold text-masa-charcoal mb-6">Driving Social Reform</h2>
+                    <p class="text-lg text-gray-600 mb-8 leading-relaxed">Masa World Foundation works on a multi-dimensional approach to uplift society. From empowering women with self-defense skills to ensuring basic health for the underprivileged, our initiatives are designed to create sustainable, long-term impact.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activities Grid -->
+        <section class="py-20 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="text-2xl font-bold text-masa-charcoal mb-10">Recent & Ongoing Activities</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="https://picsum.photos/600/400?random=11" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-4 left-4 bg-masa-orange text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Core Program</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="font-bold text-xl text-masa-charcoal mb-2">Women's Self-Defense Workshop</h3>
+                            <button class="mt-auto text-masa-blue font-bold text-sm uppercase tracking-wide hover:text-masa-orange flex items-center transition-colors">
+                                View Details &rarr;
+                            </button>
+                        </div>
+                    </div>
+                    <!-- More cards would go here -->
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
