@@ -37,6 +37,7 @@ const PurposeCard: React.FC<{ title: string; description: string; page: any; nav
 
 
 const ContactPage: React.FC<NavigationProps> = ({ navigateTo }) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -55,9 +56,11 @@ const ContactPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        submitForm('contact', formData);
+        setIsSubmitting(true);
+        await submitForm('contact', formData);
+        setIsSubmitting(false);
         navigateTo('thank-you-contact');
     };
 
@@ -139,8 +142,12 @@ const ContactPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                     <input required id="consent" name="consent" type="checkbox" onChange={handleChange} className="h-4 w-4 text-masa-orange border-gray-300 rounded focus:ring-masa-orange mt-1" />
                                     <label htmlFor="consent" className="ml-2 text-sm text-gray-600">I consent to MASA World Foundation contacting me regarding my inquiry.</label>
                                 </div>
-                                <button type="submit" className="w-full bg-masa-orange text-white py-4 rounded-full font-bold text-lg hover:bg-orange-600 shadow-lg transform hover:-translate-y-1 transition-all duration-300">
-                                    Submit Message
+                                <button 
+                                    type="submit" 
+                                    disabled={isSubmitting}
+                                    className={`w-full text-white py-4 rounded-full font-bold text-lg shadow-lg transform transition-all duration-300 ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-masa-orange hover:bg-orange-600 hover:-translate-y-1'}`}
+                                >
+                                    {isSubmitting ? 'Sending Message...' : 'Submit Message'}
                                 </button>
                             </form>
                         </div>

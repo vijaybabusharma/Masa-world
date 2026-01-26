@@ -211,7 +211,7 @@ const EventsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             <PageHeader 
                 title="Our Events" 
                 subtitle="Bringing communities together for action, celebration, and change."
-                bgImage="https://picsum.photos/1600/900?grayscale&blur=2&random=20"
+                bgImage="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1600&q=80"
             />
 
             {/* 2. Filter Bar */}

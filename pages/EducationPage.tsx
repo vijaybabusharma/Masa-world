@@ -18,7 +18,7 @@ const EducationPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             <section className="relative bg-gray-900 text-white min-h-[70vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0">
                      <img 
-                        src="https://picsum.photos/1600/900?grayscale&blur=2&random=200" 
+                        src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80" 
                         alt="Education Activity" 
                         className="w-full h-full object-cover opacity-30" 
                     />
@@ -118,7 +118,7 @@ const EducationPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <div className="order-2 md:order-1 relative h-80 rounded-2xl overflow-hidden shadow-2xl">
-                             <img src="https://picsum.photos/800/600?random=205" alt="Education Program" className="absolute inset-0 w-full h-full object-cover" />
+                             <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80" alt="Education Program" className="absolute inset-0 w-full h-full object-cover" />
                         </div>
                         <div className="order-1 md:order-2">
                             <h2 className="text-3xl font-bold text-masa-charcoal mb-6">Signature Programs</h2>

@@ -32,7 +32,8 @@ const SchemaMarkup = () => {
             "https://www.facebook.com/masaworldfoundation",
             "https://twitter.com/masaworldfoundation",
             "https://www.instagram.com/masaworldfoundation/",
-            "https://www.youtube.com/MASAWORLDFoundation"
+            "https://www.youtube.com/MASAWORLDFoundation",
+            "https://www.linkedin.com/company/masaworld-foundation/"
         ],
         "description": "MASA World Foundation empowers youth and communities through Sports, Education, and Culture."
     };
@@ -55,97 +56,121 @@ const SchemaMarkup = () => {
     );
 };
 
-// --- 1. HERO SECTION (4 SLIDES) ---
+// --- 1. HERO SECTION (UPDATED SLIDES & ANIMATION) ---
 const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
     const slides = [
         {
-            headline: "Connecting Global Support with Real, On-the-Ground Local Impact",
-            subtext: "MASA World Foundation empowers youth and communities through Sports, Education, and Culture—creating sustainable change across India and beyond.",
-            image: "https://picsum.photos/1800/1200?grayscale&random=1",
+            headline: "Empowering Youth. Strengthening Communities.",
+            subtext: "We believe in building a stronger future through holistic development, discipline, and shared values.",
+            image: "https://images.unsplash.com/photo-1529390003868-6c04176165dc?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Get Involved", page: "get-involved", primary: true },
                 { label: "Donate Now", page: "donate", primary: false }
             ]
         },
         {
-            headline: "Building Strong Youth Through Discipline, Sports & Leadership",
-            subtext: "From grassroots training to national-level programs, we shape confident, disciplined, and purpose-driven young leaders.",
-            image: "https://picsum.photos/1800/1200?grayscale&random=2",
+            headline: "Sports, Education & Culture for Real Impact",
+            subtext: "A proven model for character building, social unity, and creating responsible citizens.",
+            image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1800&q=80",
             ctas: [
-                { label: "Explore Programs", page: "sports", primary: true },
-                { label: "Join as Volunteer", page: "volunteer", primary: false }
+                { label: "Explore Programs", page: "programs-overview", primary: true },
+                { label: "Volunteer", page: "volunteer", primary: false }
             ]
         },
         {
-            headline: "Education That Builds Skills, Values, and Future Leaders",
-            subtext: "We deliver skill-based education, leadership development, and value-driven learning for real-world impact.",
-            image: "https://picsum.photos/1800/1200?grayscale&random=3",
+            headline: "From Grassroots to Global Change",
+            subtext: "Local actions creating ripples across the world. Connecting communities beyond borders.",
+            image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80",
             ctas: [
-                { label: "View Trainings", page: "trainings", primary: true },
-                { label: "Become a Member", page: "membership", primary: false }
+                { label: "Our Story", page: "about", primary: true },
+                { label: "Our Initiatives", page: "initiatives", primary: false }
             ]
         },
         {
-            headline: "Preserving Culture, Empowering Communities, Inspiring Unity",
-            subtext: "Celebrating heritage, creativity, and community participation to strengthen social harmony and identity.",
-            image: "https://picsum.photos/1800/1200?grayscale&random=4",
+            headline: "Building Leaders. Creating Opportunities.",
+            subtext: "Nurturing talent, discipline, and leadership skills in every child, regardless of background.",
+            image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1800&q=80",
             ctas: [
-                { label: "Explore Initiatives", "page": "initiatives", primary: true },
-                { label: "Support Our Mission", "page": "donate", primary: false }
+                { label: "Trainings", page: "trainings", primary: true },
+                { label: "Membership", page: "membership", primary: false }
+            ]
+        },
+        {
+            headline: "Action Today. Impact Tomorrow.",
+            subtext: "Join the movement that transforms lives daily. Your support makes it possible.",
+            image: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1800&q=80",
+            ctas: [
+                { label: "Donate Now", page: "donate", primary: true },
+                { label: "Join Us", page: "membership", primary: false }
             ]
         }
     ];
 
     const [currentSlide, setCurrentSlide] = useState(0);
+    
+    // Auto-advance logic
     const nextSlide = useCallback(() => setCurrentSlide(prev => (prev + 1) % slides.length), [slides.length]);
 
     useEffect(() => {
-        const timer = setInterval(nextSlide, 7000);
+        const timer = setInterval(nextSlide, 7000); // 7 seconds per slide
         return () => clearInterval(timer);
     }, [nextSlide]);
 
     return (
         <section className="relative bg-masa-charcoal text-white h-[85vh] min-h-[600px] flex items-center overflow-hidden">
             {slides.map((slide, index) => (
-                <div key={index} className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}>
-                    <img src={slide.image} alt={slide.headline} className="w-full h-full object-cover" />
-                    {/* Premium Gradient Overlay for Text Readability */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent"></div>
+                <div 
+                    key={index} 
+                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                >
+                    {/* Ken Burns Effect Image */}
+                    <div className={`w-full h-full ${index === currentSlide ? 'animate-ken-burns' : ''}`}>
+                        <img 
+                            src={slide.image} 
+                            alt={slide.headline} 
+                            className="w-full h-full object-cover" 
+                        />
+                    </div>
+                    {/* Premium Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent"></div>
                 </div>
             ))}
             
-            <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 z-10">
+            <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 z-20">
                 <div className="max-w-4xl text-left">
-                     {/* Key is used to trigger animation on slide change */}
-                     <h1 key={`head-${currentSlide}`} className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight animate-fade-in-up drop-shadow-lg">
-                        {slides[currentSlide].headline}
-                    </h1>
-                    <p key={`sub-${currentSlide}`} className="mt-4 md:mt-6 text-lg md:text-2xl text-gray-100 font-light max-w-3xl leading-relaxed animate-fade-in-up drop-shadow-md" style={{ animationDelay: '0.2s' }}>
-                        {slides[currentSlide].subtext}
-                    </p>
-                    <div key={`cta-${currentSlide}`} className="mt-8 md:mt-12 flex flex-col sm:flex-row gap-4 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                        {slides[currentSlide].ctas.map((cta, idx) => (
-                            <button 
-                                key={idx}
-                                onClick={() => navigateTo(cta.page as any)} 
-                                className={`${cta.primary 
-                                    ? 'bg-masa-orange text-white hover:bg-orange-600 shadow-lg hover:shadow-orange-500/40 border-2 border-transparent' 
-                                    : 'bg-transparent border-2 border-white text-white hover:bg-white hover:text-masa-charcoal'} 
-                                    px-8 py-3.5 rounded-full text-base md:text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-95`}
-                            >
-                                {cta.label}
-                            </button>
-                        ))}
+                     {/* Text Animation Key: Changes when slide changes to trigger re-animation */}
+                     <div key={`text-${currentSlide}`} className="animate-fade-in-up">
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                            {slides[currentSlide].headline}
+                        </h1>
+                        <p className="mt-6 text-xl md:text-2xl text-gray-100 font-light max-w-3xl leading-relaxed drop-shadow-md border-l-4 border-masa-orange pl-4">
+                            {slides[currentSlide].subtext}
+                        </p>
+                        <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4">
+                            {slides[currentSlide].ctas.map((cta, idx) => (
+                                <button 
+                                    key={idx}
+                                    onClick={() => navigateTo(cta.page as any)} 
+                                    className={`${cta.primary 
+                                        ? 'bg-masa-orange text-white hover:bg-orange-600 shadow-lg hover:shadow-orange-500/40 border-2 border-transparent' 
+                                        : 'bg-transparent border-2 border-white text-white hover:bg-white hover:text-masa-charcoal'} 
+                                        px-8 py-4 rounded-full text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-95`}
+                                >
+                                    {cta.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex space-x-3">
+            {/* Slide Indicators */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-3">
                 {slides.map((_, index) => (
                     <button 
                         key={index} 
                         onClick={() => setCurrentSlide(index)} 
-                        className={`h-3 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-masa-orange w-10' : 'bg-white/50 hover:bg-white w-3'}`}
+                        className={`h-3 rounded-full transition-all duration-500 ${index === currentSlide ? 'bg-masa-orange w-12' : 'bg-white/40 hover:bg-white w-3'}`}
                         aria-label={`Go to slide ${index + 1}`}
                     ></button>
                 ))}
@@ -859,6 +884,14 @@ const HomePage: React.FC<NavigationProps> = ({ navigateTo }) => {
              <style>{`
                 @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
                 .animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; }
+                
+                @keyframes ken-burns {
+                  0% { transform: scale(1); }
+                  100% { transform: scale(1.15); }
+                }
+                .animate-ken-burns {
+                  animation: ken-burns 10s ease-out forwards;
+                }
              `}</style>
         </>
     );

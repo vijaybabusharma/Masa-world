@@ -1,9 +1,7 @@
 
-// This file centralizes data that would normally come from an API.
-// This is part of making the application "Mobile App Ready" by separating data from presentation.
 import React from 'react';
-import { AcademicCapIcon, BriefcaseIcon, GlobeIcon, HandRaisedIcon, HeartIcon, ShieldCheckIcon, SparklesIcon, TrophyIcon, UsersIcon, LaptopIcon } from '../components/icons/FeatureIcons';
 import { Post } from '../types';
+import { UsersIcon, GlobeIcon, HeartIcon, ShieldCheckIcon } from '../components/icons/FeatureIcons';
 
 export const FOUNDER_IMAGE_URL = 'https://masaworldfoundation.com/wp-content/uploads/2026/01/Founder.jpeg';
 
@@ -39,7 +37,7 @@ export const coursesData: Course[] = [
         level: "Beginner",
         duration: "4 Weeks",
         mode: "Offline",
-        image: "https://picsum.photos/600/400?random=101",
+        image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=800&q=80",
         highlights: ["Public Speaking Mastery", "Team Building Activities", "Community Service Project", "Certificate of Completion"],
         price: "Free"
     },
@@ -52,7 +50,7 @@ export const coursesData: Course[] = [
         level: "Intermediate",
         duration: "3 Months",
         mode: "Hybrid",
-        image: "https://picsum.photos/600/400?random=102",
+        image: "https://images.unsplash.com/photo-1517466787929-bc90951d6428?auto=format&fit=crop&w=800&q=80",
         highlights: ["FIFA Grassroots Methodology", "Practical Field Sessions", "Player Psychology", "License upon passing exam"],
         price: "₹4,999"
     },
@@ -65,7 +63,7 @@ export const coursesData: Course[] = [
         level: "Beginner",
         duration: "6 Weeks",
         mode: "Online",
-        image: "https://picsum.photos/600/400?random=103",
+        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80",
         highlights: ["Internet Safety & Security", "Smartphone Usage", "Government E-Services", "Basic Office Tools"],
         price: "Free"
     },
@@ -78,7 +76,7 @@ export const coursesData: Course[] = [
         level: "Beginner",
         duration: "2 Weeks",
         mode: "Offline",
-        image: "https://picsum.photos/600/400?random=104",
+        image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=800&q=80",
         highlights: ["Learn from Master Artisans", "Materials Provided", "Take Home Your Art", "Exhibition Opportunity"],
         price: "₹1,499"
     },
@@ -91,7 +89,7 @@ export const coursesData: Course[] = [
         level: "Advanced",
         duration: "8 Weeks",
         mode: "Offline",
-        image: "https://picsum.photos/600/400?random=105",
+        image: "https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80",
         highlights: ["Situational Awareness", "Multiple Attacker Scenarios", "Pressure Point Control", "Legal Aspects of Self-Defense"],
         price: "₹2,999"
     },
@@ -104,70 +102,9 @@ export const coursesData: Course[] = [
         level: "Intermediate",
         duration: "5 Weeks",
         mode: "Online",
-        image: "https://picsum.photos/600/400?random=106",
+        image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=800&q=80",
         highlights: ["Volunteer Management", "Fundraising Basics", "Event Planning Logic", "Social Impact Measurement"],
         price: "Free"
-    }
-];
-
-// --- PLEDGE DATA ---
-export interface Pledge {
-    id: string;
-    title: string;
-    description: string;
-    statement: string;
-    icon: any;
-}
-
-export const pledgeData: Pledge[] = [
-    {
-        id: 'youth-empowerment',
-        title: 'Youth Empowerment',
-        description: 'Mentor and support young individuals to become future leaders.',
-        statement: 'I pledge to be a positive role model for the youth, to mentor and support their growth, and to empower them to become confident, responsible leaders of tomorrow.',
-        icon: UsersIcon
-    },
-    {
-        id: 'sports-fitness',
-        title: 'Sports & Fitness',
-        description: 'Adopt an active lifestyle and promote sports for health and discipline.',
-        statement: 'I pledge to prioritize my physical and mental well-being by adopting an active lifestyle, and to promote the values of sportsmanship, discipline, and teamwork in my community.',
-        icon: TrophyIcon
-    },
-    {
-        id: 'education-for-all',
-        title: 'Education for All',
-        description: 'Support accessible and quality education for every child.',
-        statement: 'I pledge to support and advocate for the right to quality education for all, recognizing it as the foundation for a better and more equitable world.',
-        icon: AcademicCapIcon
-    },
-    {
-        id: 'culture-heritage',
-        title: 'Culture & Heritage',
-        description: 'Vow to respect, preserve, and promote our rich cultural heritage.',
-        statement: 'I pledge to respect, preserve, and promote the rich cultural heritage that defines us, and to pass on its values and traditions to the next generation.',
-        icon: GlobeIcon
-    },
-    {
-        id: 'environment-cleanliness',
-        title: 'Environment & Cleanliness',
-        description: 'Commit to a sustainable lifestyle for a cleaner planet.',
-        statement: 'I pledge to be mindful of my environmental impact, to reduce waste, conserve resources, and actively participate in creating a cleaner, greener planet for all.',
-        icon: SparklesIcon
-    },
-    {
-        id: 'women-safety',
-        title: 'Women Safety & Equality',
-        description: 'Stand for gender equality and a safe environment for all women.',
-        statement: 'I pledge to treat all individuals with equal respect, to stand against gender-based discrimination and violence, and to help create a safe and equitable environment for women and girls everywhere.',
-        icon: ShieldCheckIcon
-    },
-    {
-        id: 'volunteer-service',
-        title: 'Volunteer & Social Service',
-        description: 'Dedicate time and effort to selfless service for society.',
-        statement: 'I pledge to dedicate a portion of my time and effort to selfless service, to volunteer for causes I believe in, and to contribute actively to the betterment of my community and society.',
-        icon: HandRaisedIcon
     }
 ];
 
@@ -194,7 +131,7 @@ export const eventsData: Event[] = [
         displayDate: "Jan 15, 2025",
         location: "New Delhi, India",
         description: "A strategic gathering of 500+ student leaders to discuss policy reform and national development.",
-        image: "https://picsum.photos/600/400?random=61",
+        image: "https://images.unsplash.com/photo-1475721027767-f753c9138030?auto=format&fit=crop&w=800&q=80",
         status: 'Upcoming',
         price: '₹500'
     },
@@ -206,7 +143,7 @@ export const eventsData: Event[] = [
         displayDate: "Nov 10, 2024",
         location: "Mumbai, Maharashtra",
         description: "Empowering women with essential self-defense techniques and situational awareness skills.",
-        image: "https://picsum.photos/600/400?random=11",
+        image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=800&q=80",
         status: 'Upcoming',
         price: 'Free'
     },
@@ -218,7 +155,7 @@ export const eventsData: Event[] = [
         displayDate: "Aug 15, 2024",
         location: "National Stadium, Delhi",
         description: "Celebrating sportsmanship and athletic excellence with over 1000 young participants.",
-        image: "https://picsum.photos/600/400?random=21",
+        image: "https://images.unsplash.com/photo-1561917403-c6990175a503?auto=format&fit=crop&w=800&q=80",
         status: 'Completed',
         price: 'Free'
     },
@@ -230,9 +167,49 @@ export const eventsData: Event[] = [
         displayDate: "July 20, 2024",
         location: "Varanasi, UP",
         description: "Providing free medical consultations and basic medicines to underserved rural communities.",
-        image: "https://picsum.photos/600/400?random=10",
+        image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
         status: 'Completed',
         price: 'Free'
+    }
+];
+
+// --- PLEDGE DATA ---
+export interface Pledge {
+    id: string;
+    title: string;
+    description: string;
+    statement: string;
+    icon: any;
+}
+
+export const pledgeData: Pledge[] = [
+    {
+        id: 'pledge-001',
+        title: "Youth for Nation",
+        description: "Commit to contributing 2 hours a week for community service.",
+        statement: "I pledge to dedicate my time and energy towards the development of my community and nation.",
+        icon: UsersIcon
+    },
+    {
+        id: 'pledge-002',
+        title: "Clean Environment",
+        description: "Pledge to reduce plastic use and plant at least one tree a year.",
+        statement: "I pledge to protect the environment by reducing waste and planting trees for a greener future.",
+        icon: GlobeIcon
+    },
+    {
+        id: 'pledge-003',
+        title: "Social Harmony",
+        description: "Commit to treating everyone with respect regardless of background.",
+        statement: "I pledge to promote peace, unity, and brotherhood among all citizens of my country.",
+        icon: HeartIcon
+    },
+    {
+        id: 'pledge-004',
+        title: "Digital Ethics",
+        description: "Pledge to use social media responsibly and fight fake news.",
+        statement: "I pledge to be a responsible digital citizen and verify information before sharing.",
+        icon: ShieldCheckIcon
     }
 ];
 
@@ -264,7 +241,7 @@ In a rapidly globalizing world, maintaining one's identity is crucial. Our cultu
 ### Conclusion
 By weaving these three elements together, MASA World Foundation is building a global community rooted in local action. Join us in this journey of transformation.`,
         url: "/blog/building-global-community",
-        image: "https://picsum.photos/800/600?random=110",
+        image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
         author: "MASA World Foundation",
         tags: ["Vision", "Global", "Community"]
     },
@@ -288,7 +265,7 @@ For many of our beneficiaries, sports is a pathway to a better future. Through o
 ### Our Impact
 We have seen school attendance rise and delinquency fall in communities where we have introduced structured sports programs. This proves that a ball and a field can indeed change the world.`,
         url: "/blog/sports-build-discipline",
-        image: "https://picsum.photos/800/600?random=101",
+        image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=800&q=80",
         author: "MASA Sports Cell",
         tags: ["Sports", "Discipline", "Youth"]
     },
@@ -312,7 +289,7 @@ Knowledge without integrity is dangerous. Our curriculum heavily emphasizes valu
 ### Success Stories
 From a shy student in a rural school to a confident community organizer, we have witnessed remarkable transformations. This validates our belief that education must extend beyond the four walls of a classroom.`,
         url: "/blog/education-beyond-classrooms",
-        image: "https://picsum.photos/800/600?random=102",
+        image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80",
         author: "MASA Education Wing",
         tags: ["Education", "Skills", "Future"]
     },
@@ -333,7 +310,7 @@ Many traditional art forms are dying because artisans cannot find a market. We s
 ## Culture as a Unifier
 When people share food, music, and art, barriers dissolve. Cultural exchange programs are a core part of our strategy to promote social harmony and peace.`,
         url: "/blog/culture-social-harmony",
-        image: "https://picsum.photos/800/600?random=103",
+        image: "https://images.unsplash.com/photo-1514222709107-a180c68d72b4?auto=format&fit=crop&w=800&q=80",
         author: "Cultural Committee",
         tags: ["Culture", "Unity", "Heritage"]
     },
@@ -354,7 +331,7 @@ When a child sees a local social worker being honored on a stage, they learn tha
 ## A Call to Action
 We encourage everyone to look around their community. Identify these heroes. Nominate them. Let us shift the spotlight to where it truly belongs—on service, sacrifice, and integrity.`,
         url: "/blog/recognizing-real-heroes",
-        image: "https://picsum.photos/800/600?random=104",
+        image: "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=800&q=80",
         author: "Vijay Babu Sharma",
         tags: ["Awards", "Heroes", "Society"]
     },
@@ -375,7 +352,7 @@ This drive wasn't just about cleaning trash; it was about spreading awareness. W
 ## The Result
 The visual impact was immediate, but the behavioral impact will last longer. When citizens take ownership of their public spaces, the city changes for good. We thank every volunteer who sweated it out for a cleaner tomorrow.`,
         url: "/blog/grassroots-to-global",
-        image: "https://picsum.photos/800/600?random=105",
+        image: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80",
         author: "MASA Team",
         tags: ["Impact", "Grassroots", "Events"]
     }

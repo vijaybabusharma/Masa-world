@@ -19,13 +19,28 @@ const defaultSettings: GlobalSettings = {
         enableRegistrations: true,
         maintenanceMode: false,
     },
-    monetization: {
+    social: [
+        { id: 'fb', platform: 'facebook', url: 'https://facebook.com/masaworldfoundation', enabled: true },
+        { id: 'ig', platform: 'instagram', url: 'https://instagram.com/masaworldfoundation', enabled: true },
+        { id: 'tw', platform: 'twitter', url: 'https://twitter.com/masaworldfoundation', enabled: true },
+        { id: 'li', platform: 'linkedin', url: 'https://www.linkedin.com/company/masaworld-foundation/', enabled: true },
+        { id: 'yt', platform: 'youtube', url: 'https://youtube.com/MASAWORLDFoundation', enabled: true },
+        { id: 'wa', platform: 'whatsapp', url: 'https://wa.me/919876543210', enabled: false },
+    ],
+    scripts: {
         googleAnalyticsId: '',
-        googleAdsenseCode: '',
+        enableAnalytics: false,
         facebookPixelId: '',
-        metaVerification: '',
-        customHeadScripts: '',
-        customBodyScripts: '',
+        enablePixel: false,
+        googleAdsenseCode: '',
+        enableAdsense: false,
+        googleSearchConsole: '',
+        customHead: '',
+        enableCustomHead: false,
+        customBody: '',
+        enableCustomBody: false,
+        customFooter: '',
+        enableCustomFooter: false,
     },
     appearance: {
         customCss: '',
@@ -44,7 +59,6 @@ const defaultSettings: GlobalSettings = {
         blogEnabled: true,
         eventsEnabled: true,
         coursesEnabled: true,
-        pledgesEnabled: true,
         ngoHelpDeskEnabled: true,
     }
 };
@@ -70,6 +84,16 @@ const initializeData = () => {
     }
     if (!localStorage.getItem(KEYS.SETTINGS)) {
         localStorage.setItem(KEYS.SETTINGS, JSON.stringify(defaultSettings));
+    } else {
+        // Migration: Ensure new fields exist if loading old settings
+        const current = JSON.parse(localStorage.getItem(KEYS.SETTINGS) || '{}');
+        if (!current.scripts || !current.social) {
+            const merged = { ...defaultSettings, ...current };
+            // Ensure social/scripts structure matches new type
+            merged.social = current.social || defaultSettings.social;
+            merged.scripts = { ...defaultSettings.scripts, ...current.monetization }; // migrate old monetization to scripts partially
+            localStorage.setItem(KEYS.SETTINGS, JSON.stringify(merged));
+        }
     }
     if (!localStorage.getItem(KEYS.PAGES)) {
         localStorage.setItem(KEYS.PAGES, JSON.stringify(defaultPages));

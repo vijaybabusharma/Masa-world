@@ -13,7 +13,7 @@ const InitiativesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 subtitle: "Addressing critical needs through holistic social reform and youth development.",
                 primaryCtaLabel: "Support Our Cause",
                 primaryCtaAction: () => navigateTo('donate'),
-                bgImage: "https://picsum.photos/1600/900?grayscale&blur=2&random=1"
+                bgImage: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1600&q=80"
             }}
             overviewData={{
                 title: "Driving Social Reform",
@@ -38,21 +38,21 @@ const InitiativesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     title: "Women's Self-Defense Workshop",
                     date: "Ongoing",
                     location: "New Delhi & NCR",
-                    image: "https://picsum.photos/600/400?random=11",
+                    image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=600&q=80",
                     status: "Core Program"
                 },
                 {
                     title: "Rural Health Checkup Camp",
                     date: "Monthly",
                     location: "Uttar Pradesh",
-                    image: "https://picsum.photos/600/400?random=10",
+                    image: "https://images.unsplash.com/photo-1579684385183-1b60fe37e965?auto=format&fit=crop&w=600&q=80",
                     status: "Active"
                 },
                 {
                     title: "Youth Vocational Training",
                     date: "Quarterly Batches",
                     location: "Multiple Centers",
-                    image: "https://picsum.photos/600/400?random=12",
+                    image: "https://images.unsplash.com/photo-1581092921461-eab62e97a782?auto=format&fit=crop&w=600&q=80",
                     status: "Enrolling"
                 },
             ]}

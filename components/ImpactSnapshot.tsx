@@ -1,54 +1,77 @@
 
 import React, { useEffect, useState } from 'react';
-import { UsersIcon, CalendarDaysIcon, HeartIcon, GlobeIcon, TrophyIcon, HandRaisedIcon } from './icons/FeatureIcons';
+import { UsersIcon, CalendarDaysIcon, GlobeIcon } from './icons/FeatureIcons';
 import { getStats } from '../utils/mockBackend';
 
 const ImpactSnapshot: React.FC = () => {
-    // Default fallback values
+    // Updated credible figures
     const [stats, setStats] = useState({
-        youth: 80000,
-        programs: 750,
-        volunteers: 2500,
-        communities: 75,
-        pledges: 125000,
-        certificates: 130000
+        youth: 75000,
+        programs: 650,
+        communities: 90, 
     });
 
     useEffect(() => {
         // Fetch stats on mount
         const backendStats = getStats();
-        // Since getStats returns some zeros for initial state, we merge with base values to show "10,000+" instead of just "0" if local storage is empty
-        // In a real app, this logic would happen on the backend or we'd just show what we have.
-        // Here we simulate the "base" numbers + new activity.
+        // Simulate base + new activity
         setStats(prev => ({
-            youth: 80000 + (backendStats.pledges || 0) + (backendStats.members || 0), // Rough estimate logic
-            programs: 750 + (backendStats.gallery || 0), // Simulating gallery posts as program evidence
-            volunteers: 2500 + (backendStats.volunteers || 0),
-            communities: 75 + (backendStats.countries || 0), // Adding countries count
-            pledges: 125000 + (backendStats.pledges || 0),
-            certificates: 125000 + (backendStats.pledges || 0) + (backendStats.volunteers || 0) // Pledges + Vols get certs
+            youth: 75000 + (backendStats.members || 0), 
+            programs: 650 + (backendStats.gallery || 0), 
+            communities: 90 + (backendStats.countries || 0), 
         }));
     }, []);
 
     const metrics = [
-        { icon: UsersIcon, value: `${stats.youth.toLocaleString()}+`, label: "Youth Impacted" },
-        { icon: CalendarDaysIcon, value: `${stats.programs.toLocaleString()}+`, label: "Programs Conducted" },
-        { icon: HandRaisedIcon, value: `${stats.pledges.toLocaleString()}+`, label: "Pledges Taken" },
-        { icon: GlobeIcon, value: `${stats.communities.toLocaleString()}+`, label: "Global Reach" },
+        { 
+            icon: UsersIcon, 
+            value: `${stats.youth.toLocaleString()}+`, 
+            label: "Youth Impacted",
+            micro: "Lives Transformed"
+        },
+        { 
+            icon: CalendarDaysIcon, 
+            value: `${stats.programs.toLocaleString()}+`, 
+            label: "Programs Conducted",
+            micro: "Since 2013"
+        },
+        { 
+            icon: GlobeIcon, 
+            value: `${stats.communities.toLocaleString()}+`, 
+            label: "Global Reach",
+            micro: "Nations Connected"
+        },
     ];
 
     return (
         <div className="bg-masa-charcoal">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20">
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
-                    <div className="grid grid-cols-2 md:grid-cols-4 md:divide-x md:divide-gray-200">
+                <div className="bg-white rounded-2xl shadow-xl border border-gray-100">
+                    <div className="grid grid-cols-1 md:grid-cols-3 md:divide-x md:divide-gray-100">
                         {metrics.map((metric, index) => (
-                            <div key={index} className="p-6 text-center group hover:bg-gray-50 transition-colors duration-300 first:rounded-l-2xl last:rounded-r-2xl">
-                                <div className="w-14 h-14 mx-auto bg-orange-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-masa-orange transition-colors duration-300">
+                            <div key={index} className="p-8 text-center group hover:bg-gray-50 transition-colors duration-300 first:rounded-l-2xl last:rounded-r-2xl">
+                                {/* Icon Container - Enhanced definition */}
+                                <div className="w-16 h-16 mx-auto bg-orange-50/80 rounded-full flex items-center justify-center mb-5 group-hover:bg-masa-orange group-hover:shadow-md transition-all duration-300 ring-4 ring-white shadow-sm border border-orange-100">
                                     <metric.icon className="h-7 w-7 text-masa-orange group-hover:text-white transition-colors duration-300" />
                                 </div>
-                                <p className="text-3xl lg:text-4xl font-extrabold text-masa-charcoal">{metric.value}</p>
-                                <p className="mt-1 text-sm font-bold text-gray-500 uppercase tracking-wider">{metric.label}</p>
+                                
+                                {/* Value - Heavier weight for authority */}
+                                <p className="text-4xl lg:text-5xl font-black text-masa-charcoal tracking-tight leading-none mb-3">
+                                    {metric.value}
+                                </p>
+                                
+                                {/* Accent Divider - Visual balance */}
+                                <div className="h-0.5 w-8 bg-gray-200 mx-auto rounded-full mb-3 group-hover:bg-masa-orange/40 transition-colors"></div>
+
+                                {/* Label - Professional tracking */}
+                                <p className="text-xs font-bold text-gray-500 uppercase tracking-[0.15em]">
+                                    {metric.label}
+                                </p>
+
+                                {/* Micro-text - Added Context */}
+                                <p className="text-[10px] font-medium text-masa-blue mt-1 opacity-80 uppercase tracking-wide">
+                                    {metric.micro}
+                                </p>
                             </div>
                         ))}
                     </div>

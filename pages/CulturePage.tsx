@@ -16,7 +16,7 @@ const CulturePage: React.FC<NavigationProps> = ({ navigateTo }) => {
             <section className="relative bg-gray-900 text-white min-h-[70vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0">
                      <img 
-                        src="https://picsum.photos/1600/900?grayscale&blur=2&random=300" 
+                        src="https://images.unsplash.com/photo-1533230676442-99cb63364df7?auto=format&fit=crop&w=1600&q=80" 
                         alt="Cultural Event" 
                         className="w-full h-full object-cover opacity-30" 
                     />
@@ -133,7 +133,7 @@ const CulturePage: React.FC<NavigationProps> = ({ navigateTo }) => {
                             </ul>
                         </div>
                         <div className="relative h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10">
-                            <img src="https://picsum.photos/800/600?random=305" alt="Cultural Program" className="absolute inset-0 w-full h-full object-cover" />
+                            <img src="https://images.unsplash.com/photo-1604580864964-c8279553f7b1?auto=format&fit=crop&w=800&q=80" alt="Cultural Program" className="absolute inset-0 w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>

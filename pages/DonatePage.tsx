@@ -99,6 +99,7 @@ const FundingGoalsSection: React.FC = () => {
 const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [currency, setCurrency] = useState<'INR' | 'USD'>('INR');
     const [amount, setAmount] = useState<number | string>('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -128,9 +129,21 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleDonate = (e: React.FormEvent) => {
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        if (Number(val) < 0) return; // Prevent negative inputs
+        setAmount(val);
+    };
+
+    const handleDonate = async (e: React.FormEvent) => {
         e.preventDefault();
-        submitForm('donation', { ...formData, amount, currency });
+        if (!amount || Number(amount) <= 0) {
+            alert("Please enter a valid donation amount.");
+            return;
+        }
+        setIsSubmitting(true);
+        await submitForm('donation', { ...formData, amount, currency });
+        setIsSubmitting(false);
         navigateTo('thank-you-donate');
     };
 
@@ -192,9 +205,10 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">{currency === 'INR' ? '₹' : '$'}</span>
                                         <input 
                                             type="number" 
+                                            min="1"
                                             placeholder="Enter custom amount" 
                                             value={amount} 
-                                            onChange={(e) => setAmount(e.target.value)} 
+                                            onChange={handleAmountChange} 
                                             className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-masa-orange focus:border-transparent outline-none transition-all font-semibold"
                                             required
                                         />
@@ -266,9 +280,13 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                     </label>
                                 </div>
 
-                                <button type="submit" className="w-full bg-masa-orange text-white py-4 rounded-full font-bold text-lg hover:bg-orange-600 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center active:scale-95">
+                                <button 
+                                    type="submit" 
+                                    disabled={isSubmitting}
+                                    className={`w-full text-white py-4 rounded-full font-bold text-lg shadow-lg transform transition-all duration-300 flex items-center justify-center ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-masa-orange hover:bg-orange-600 hover:-translate-y-0.5 active:scale-95'}`}
+                                >
                                     <ShieldCheckIcon className="h-5 w-5 mr-2" />
-                                    Secure Pay {currency === 'INR' ? '₹' : '$'}{Number(amount) || '...'}
+                                    {isSubmitting ? 'Processing Payment...' : `Secure Pay ${currency === 'INR' ? '₹' : '$'}${Number(amount) || '...'}`}
                                 </button>
                             </form>
                         </div>

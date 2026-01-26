@@ -27,9 +27,9 @@ const GovernancePage: React.FC<NavigationProps> = ({ navigateTo }) => {
     ];
     
     const programHighlights = [
-        { title: "Youth Leadership Bootcamp", img: "https://picsum.photos/600/400?random=81", desc: "Empowered over 1,000 young leaders with essential skills." },
-        { title: "National Sports Conclave", img: "https://picsum.photos/600/400?random=82", desc: "Brought together athletes and coaches from across the country." },
-        { title: "Rural Health Initiative", img: "https://picsum.photos/600/400?random=83", desc: "Provided free health checkups in 20+ underserved villages." },
+        { title: "Youth Leadership Bootcamp", img: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=600&q=80", desc: "Empowered over 1,000 young leaders with essential skills." },
+        { title: "National Sports Conclave", img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=600&q=80", desc: "Brought together athletes and coaches from across the country." },
+        { title: "Rural Health Initiative", img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80", desc: "Provided free health checkups in 20+ underserved villages." },
     ];
 
     return (

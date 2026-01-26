@@ -1,10 +1,24 @@
 
-import React from 'react';
-import { NavigationProps, Page } from '../types';
+import React, { useState, useEffect } from 'react';
+import { NavigationProps, Page, SocialLink } from '../types';
 import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon, YouTubeIcon } from './icons/SocialIcons';
 import { EnvelopeIcon, MapPinIcon, ArrowRightIcon } from './icons/FeatureIcons';
+import { ContentManager } from '../utils/contentManager';
 
 const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
+
+  useEffect(() => {
+      // Load social links from settings on mount and listen for updates
+      const loadSettings = () => {
+          const settings = ContentManager.getSettings();
+          setSocialLinks(settings.social || []);
+      };
+      loadSettings();
+      window.addEventListener('masa-settings-updated', loadSettings);
+      return () => window.removeEventListener('masa-settings-updated', loadSettings);
+  }, []);
+
   const aboutLinks: { label: string; page: Page }[] = [
     { label: 'Our Story', page: 'about' },
     { label: 'Mission & Vision', page: 'mission-vision' },
@@ -37,6 +51,18 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
     { label: 'Ethical Use Policy', page: 'ethical-use-policy' },
   ];
 
+  const getSocialIcon = (platform: string) => {
+      switch(platform) {
+          case 'facebook': return <FacebookIcon />;
+          case 'twitter': return <TwitterIcon />;
+          case 'instagram': return <InstagramIcon />;
+          case 'linkedin': return <LinkedInIcon />;
+          case 'youtube': return <YouTubeIcon />;
+          case 'whatsapp': return <span className="font-bold text-sm">WA</span>;
+          default: return null;
+      }
+  };
+
   return (
     <footer className="bg-masa-charcoal text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -52,11 +78,18 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
               Empowering youth, honoring real heroes, and building a responsible society through grassroots action.
             </p>
             <div className="flex mt-6 space-x-4">
-                <a href="https://facebook.com/masaworldfoundation" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="text-gray-300 hover:text-masa-orange transition-colors"><FacebookIcon /></a>
-                <a href="https://twitter.com/masaworldfoundation" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Twitter" className="text-gray-300 hover:text-masa-orange transition-colors"><TwitterIcon /></a>
-                <a href="https://www.instagram.com/masaworldfoundation/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="text-gray-300 hover:text-masa-orange transition-colors"><InstagramIcon /></a>
-                <a href="https://linkedin.com/company/masaworldfoundation" target="_blank" rel="noopener noreferrer" aria-label="Follow us on LinkedIn" className="text-gray-300 hover:text-masa-orange transition-colors"><LinkedInIcon /></a>
-                <a href="https://www.youtube.com/MASAWORLDFoundation" target="_blank" rel="noopener noreferrer" aria-label="Subscribe to our YouTube channel" className="text-gray-300 hover:text-masa-orange transition-colors"><YouTubeIcon /></a>
+                {socialLinks.filter(l => l.enabled).map(link => (
+                    <a 
+                        key={link.id} 
+                        href={link.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        aria-label={`Follow us on ${link.platform}`} 
+                        className="text-gray-300 hover:text-masa-orange transition-colors"
+                    >
+                        {getSocialIcon(link.platform)}
+                    </a>
+                ))}
              </div>
           </div>
 

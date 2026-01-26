@@ -17,7 +17,7 @@ import {
 const PageHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
     <div className="relative bg-masa-charcoal py-24 text-white text-center">
         <div className="absolute inset-0 opacity-10">
-            <img src="https://picsum.photos/1600/900?grayscale&blur=2&random=70" className="w-full h-full object-cover" alt="Abstract background" />
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1600&q=80" className="w-full h-full object-cover" alt="Media press conference" />
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">{title}</h1>

@@ -6,6 +6,7 @@ import { submitForm } from '../utils/mockBackend';
 
 const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     // Form States
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -46,9 +47,11 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        submitForm('volunteer', formData);
+        setIsSubmitting(true);
+        await submitForm('volunteer', formData);
+        setIsSubmitting(false);
         navigateTo('thank-you-volunteer');
     };
 
@@ -207,8 +210,12 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 </label>
                             </div>
 
-                            <button type="submit" className="w-full bg-masa-blue text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-900 transition-all shadow-lg">
-                                Submit Application
+                            <button 
+                                type="submit" 
+                                disabled={isSubmitting}
+                                className={`w-full text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-masa-blue hover:bg-blue-900'}`}
+                            >
+                                {isSubmitting ? 'Submitting Application...' : 'Submit Application'}
                             </button>
                         </form>
                     </div>

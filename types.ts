@@ -1,5 +1,5 @@
 
-export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'pledge-platform' | 'certificate-downloader' | 'ngo-help-desk';
+export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'ngo-help-desk' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices';
 
 export interface NavigationProps {
   navigateTo: (page: Page, anchor?: string) => void;
@@ -17,6 +17,14 @@ export interface Post {
     author?: string;
     tags?: string[];
     status?: 'Draft' | 'Published' | 'Scheduled';
+    // Advanced Blog Features
+    slug?: string;
+    seoTitle?: string;
+    metaDescription?: string;
+    allowComments?: boolean;
+    views?: number;
+    featured?: boolean;
+    publishDate?: string; // ISO string for scheduling
 }
 
 export type MembershipType = 'Community' | 'Supporting' | 'Life' | 'International' | 'Student / Youth';
@@ -54,6 +62,13 @@ export interface Submission {
     status: 'New' | 'Read' | 'Replied';
 }
 
+export interface SocialLink {
+    id: string;
+    platform: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'youtube' | 'whatsapp';
+    url: string;
+    enabled: boolean;
+}
+
 // --- Global Settings & Modules ---
 export interface GlobalSettings {
     general: {
@@ -62,13 +77,31 @@ export interface GlobalSettings {
         enableRegistrations: boolean;
         maintenanceMode: boolean;
     };
-    monetization: {
+    social: SocialLink[];
+    scripts: {
+        // Analytics & Tracking
         googleAnalyticsId: string;
-        googleAdsenseCode: string;
+        enableAnalytics: boolean;
+        
         facebookPixelId: string;
-        metaVerification: string;
-        customHeadScripts: string;
-        customBodyScripts: string;
+        enablePixel: boolean;
+
+        // Monetization & Ads
+        googleAdsenseCode: string; // Full script or Client ID
+        enableAdsense: boolean;
+
+        // Verification
+        googleSearchConsole: string; // Meta tag content
+        
+        // Custom Code Injection
+        customHead: string;
+        enableCustomHead: boolean;
+        
+        customBody: string;
+        enableCustomBody: boolean;
+        
+        customFooter: string;
+        enableCustomFooter: boolean;
     };
     appearance: {
         customCss: string;
@@ -87,7 +120,6 @@ export interface GlobalSettings {
         blogEnabled: boolean;
         eventsEnabled: boolean;
         coursesEnabled: boolean;
-        pledgesEnabled: boolean;
         ngoHelpDeskEnabled: boolean;
     };
 }
