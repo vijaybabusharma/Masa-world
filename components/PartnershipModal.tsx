@@ -19,7 +19,20 @@ const PartnershipModal: React.FC<PartnershipModalProps> = ({ partnershipType, on
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        submitForm('partnership', { ...formData, partnershipType });
+        
+        // Normalize data keys for standard email notifications
+        const submissionData = {
+            partnershipType,
+            // Map specific fields to standard keys for email template compatibility
+            fullName: formData['inst-contact-person'] || formData['corp-contact-person'],
+            email: formData['inst-email'] || formData['corp-email'],
+            mobile: formData['inst-phone'] || formData['corp-phone'],
+            organizationName: formData['inst-name'] || formData['corp-name'],
+            // Include all original raw data for context
+            ...formData
+        };
+
+        submitForm('partnership', submissionData);
         setSubmitted(true);
     };
 

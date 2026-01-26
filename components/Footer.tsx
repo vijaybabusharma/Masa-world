@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavigationProps, Page } from '../types';
-import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon } from './icons/SocialIcons';
+import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon, YouTubeIcon } from './icons/SocialIcons';
 import { EnvelopeIcon, MapPinIcon, ArrowRightIcon } from './icons/FeatureIcons';
 
 const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
@@ -16,8 +16,8 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
     { label: 'Overview', page: 'get-involved' },
     { label: 'Careers', page: 'careers' },
     { label: 'Volunteer', page: 'volunteer' },
-    { label: 'Pledge Platform', page: 'pledge-platform' },
     { label: 'Membership', page: 'membership' },
+    { label: 'Donate', page: 'donate' },
   ];
 
   const resourceLinks: { label: string; page: Page }[] = [
@@ -25,7 +25,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
     { label: 'Events', page: 'events' },
     { label: 'Gallery', page: 'gallery' },
     { label: 'Media & Reports', page: 'media-reports' },
-    { label: 'Download Certificate', page: 'certificate-downloader' },
+    { label: 'Courses', page: 'courses' },
   ];
   
   const policyLinks: { label: string; page: Page }[] = [
@@ -54,8 +54,9 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
             <div className="flex mt-6 space-x-4">
                 <a href="https://facebook.com/masaworldfoundation" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="text-gray-300 hover:text-masa-orange transition-colors"><FacebookIcon /></a>
                 <a href="https://twitter.com/masaworldfoundation" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Twitter" className="text-gray-300 hover:text-masa-orange transition-colors"><TwitterIcon /></a>
-                <a href="https://instagram.com/masaworldfoundation" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="text-gray-300 hover:text-masa-orange transition-colors"><InstagramIcon /></a>
+                <a href="https://www.instagram.com/masaworldfoundation/" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="text-gray-300 hover:text-masa-orange transition-colors"><InstagramIcon /></a>
                 <a href="https://linkedin.com/company/masaworldfoundation" target="_blank" rel="noopener noreferrer" aria-label="Follow us on LinkedIn" className="text-gray-300 hover:text-masa-orange transition-colors"><LinkedInIcon /></a>
+                <a href="https://www.youtube.com/MASAWORLDFoundation" target="_blank" rel="noopener noreferrer" aria-label="Subscribe to our YouTube channel" className="text-gray-300 hover:text-masa-orange transition-colors"><YouTubeIcon /></a>
              </div>
           </div>
 
@@ -148,6 +149,13 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
                     {link.label}
                 </button>
              ))}
+             {/* Admin Login Link */}
+             <button 
+                onClick={() => navigateTo('admin-login')} 
+                className="hover:text-masa-orange transition-colors duration-200 text-xs"
+             >
+                Admin Login
+             </button>
           </div>
         </div>
       </div>

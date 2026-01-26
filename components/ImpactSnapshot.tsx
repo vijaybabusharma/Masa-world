@@ -6,10 +6,10 @@ import { getStats } from '../utils/mockBackend';
 const ImpactSnapshot: React.FC = () => {
     // Default fallback values
     const [stats, setStats] = useState({
-        youth: 10000,
-        programs: 500,
-        volunteers: 1200,
-        communities: 50,
+        youth: 80000,
+        programs: 750,
+        volunteers: 2500,
+        communities: 75,
         pledges: 125000,
         certificates: 130000
     });
@@ -21,10 +21,10 @@ const ImpactSnapshot: React.FC = () => {
         // In a real app, this logic would happen on the backend or we'd just show what we have.
         // Here we simulate the "base" numbers + new activity.
         setStats(prev => ({
-            youth: 10000 + (backendStats.pledges || 0) + (backendStats.members || 0), // Rough estimate logic
-            programs: 500 + (backendStats.gallery || 0), // Simulating gallery posts as program evidence
-            volunteers: 1200 + (backendStats.volunteers || 0),
-            communities: 50 + (backendStats.countries || 0), // Adding countries count
+            youth: 80000 + (backendStats.pledges || 0) + (backendStats.members || 0), // Rough estimate logic
+            programs: 750 + (backendStats.gallery || 0), // Simulating gallery posts as program evidence
+            volunteers: 2500 + (backendStats.volunteers || 0),
+            communities: 75 + (backendStats.countries || 0), // Adding countries count
             pledges: 125000 + (backendStats.pledges || 0),
             certificates: 125000 + (backendStats.pledges || 0) + (backendStats.volunteers || 0) // Pledges + Vols get certs
         }));

@@ -32,8 +32,6 @@ import MissionVisionPage from './pages/MissionVisionPage';
 import CoreValuesPage from './pages/CoreValuesPage';
 import GovernancePage from './pages/GovernancePage';
 import GlobalImpactPage from './pages/GlobalImpactPage';
-import PledgePlatformPage from './pages/PledgePlatformPage';
-import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
 import { Page } from './types';
 import { logAnalyticsEvent } from './utils/mockBackend';
 import LoginPage from './pages/LoginPage';
@@ -48,11 +46,16 @@ import EditorialPolicyPage from './pages/EditorialPolicyPage';
 import FactCheckPolicyPage from './pages/FactCheckPolicyPage';
 import CommentPolicyPage from './pages/CommentPolicyPage';
 import EthicalUsePolicyPage from './pages/EthicalUsePolicyPage';
+
+// Import new interactive pages
+import PledgePlatformPage from './pages/PledgePlatformPage';
 import CertificateDownloaderPage from './pages/CertificateDownloaderPage';
+import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
 
 // Import enhancements
 import AccessibilityWidget from './components/AccessibilityWidget';
 import LiveActivityToast from './components/LiveActivityToast';
+import GlobalScriptManager from './components/GlobalScriptManager';
 
 
 const App: React.FC = () => {
@@ -112,24 +115,24 @@ const App: React.FC = () => {
       case 'governance': return <GovernancePage navigateTo={navigateTo} />;
       case 'global-impact': return <GlobalImpactPage navigateTo={navigateTo} />;
       
-      // New NGO Help Desk
+      // New Interactive Pages
+      case 'pledge-platform': return <PledgePlatformPage navigateTo={navigateTo} />;
+      case 'certificate-downloader': return <CertificateDownloaderPage navigateTo={navigateTo} />;
       case 'ngo-help-desk': return <NgoHelpDeskPage navigateTo={navigateTo} />;
 
-      // New Pledge Platform
-      case 'pledge-platform': return <PledgePlatformPage navigateTo={navigateTo} />;
-      
       // Thank You Pages
       case 'thank-you-volunteer': return <ThankYouPage navigateTo={navigateTo} type="volunteer" />;
       case 'thank-you-donate': return <ThankYouPage navigateTo={navigateTo} type="donate" />;
       case 'thank-you-membership': return <ThankYouPage navigateTo={navigateTo} type="membership" />;
       case 'thank-you-career': return <ThankYouPage navigateTo={navigateTo} type="career" />;
       case 'thank-you-contact': return <ThankYouPage navigateTo={navigateTo} type="contact" />;
+      case 'thank-you-event': return <ThankYouPage navigateTo={navigateTo} type="event" />;
       
       // Admin
       case 'admin-dashboard': return <AdminDashboardPage />;
       case 'admin-login': return <AdminDashboardPage />; // Alias
 
-      // FIX: Add cases for member login and dashboard pages.
+      // Member login and dashboard
       case 'login': return <LoginPage navigateTo={navigateTo} />;
       case 'dashboard': return <DashboardPage navigateTo={navigateTo} />;
 
@@ -143,9 +146,6 @@ const App: React.FC = () => {
       case 'comment-policy': return <CommentPolicyPage navigateTo={navigateTo} />;
       case 'ethical-use-policy': return <EthicalUsePolicyPage navigateTo={navigateTo} />;
 
-      // Certificate Downloader
-      case 'certificate-downloader': return <CertificateDownloaderPage navigateTo={navigateTo} />;
-
       default: return <HomePage navigateTo={navigateTo} />;
     }
   };
@@ -155,6 +155,7 @@ const App: React.FC = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col font-sans text-masa-charcoal">
+      <GlobalScriptManager />
       {!isDashboard && <Header navigateTo={navigateTo} currentPage={currentPage} />}
       <main className="flex-grow">
         {renderPage()}

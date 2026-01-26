@@ -10,16 +10,19 @@ interface FounderMessageSectionProps extends NavigationProps {
 
 const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor = 'bg-white', navigateTo }) => {
     return (
-        <section className={`py-20 ${bgColor}`}>
+        <section className={`py-20 ${bgColor} overflow-hidden`}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+                <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
                     {/* Founder Image */}
-                    <div className="flex justify-center">
-                        <img 
-                            src={FOUNDER_IMAGE_URL}
-                            alt="Vijay Babu Sharma, Founder of Masa World Foundation" 
-                            className="rounded-lg shadow-soft w-full max-w-sm h-auto object-cover aspect-[4/5]"
-                        />
+                    <div className="flex justify-center relative">
+                         <div className="relative w-full max-w-sm">
+                            <div className="absolute top-4 -right-4 w-full h-full bg-masa-orange/20 rounded-2xl -z-10"></div>
+                            <img 
+                                src={FOUNDER_IMAGE_URL}
+                                alt="Vijay Babu Sharma, Founder of Masa World Foundation" 
+                                className="rounded-2xl shadow-xl w-full h-auto object-cover aspect-[4/5] border-8 border-white"
+                            />
+                         </div>
                     </div>
 
                     {/* Founder Message Preview */}

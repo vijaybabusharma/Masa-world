@@ -128,6 +128,7 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         'Grants & Funding': true,
         'Creative & Media': true // Default open interesting ones
     });
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Mobile toggle for sidebar
     
     // Chat & Logic State
     const [messages, setMessages] = useState<Message[]>([]);
@@ -182,6 +183,12 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
 
     const toggleCategory = (cat: string) => {
         setExpandedCategories(prev => ({...prev, [cat]: !prev[cat]}));
+    };
+
+    const handleToolSelect = (toolId: string) => {
+        setActiveToolId(toolId);
+        setMessages([]);
+        setIsMobileMenuOpen(false); // Close menu on mobile after selection
     };
 
     const handleSendMessage = async () => {
@@ -354,14 +361,26 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         <div className="bg-gray-50 min-h-screen flex flex-col">
             <PageHeader title="NGO Help Desk" subtitle="A complete suite of 40+ AI tools to streamline operations, funding, and impact." />
             
-            <div className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 flex flex-col lg:flex-row h-[85vh] min-h-[600px]">
+            <div className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 flex flex-col lg:flex-row h-[85vh] min-h-[600px] relative">
                     
+                    {/* MOBILE TOGGLE BUTTON */}
+                    <button 
+                        className="lg:hidden absolute top-4 right-4 z-20 p-2 bg-white rounded-md shadow-md border text-gray-600"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        {isMobileMenuOpen ? <ChevronUpIcon className="h-5 w-5" /> : <SearchIcon className="h-5 w-5" />}
+                    </button>
+
                     {/* LEFT SIDEBAR: Tools Navigation */}
-                    <div className="w-full lg:w-80 bg-gray-50 border-r border-gray-200 flex flex-col h-full">
+                    <div className={`
+                        lg:w-80 bg-gray-50 border-r border-gray-200 flex flex-col h-full 
+                        absolute lg:relative z-10 w-full lg:translate-x-0 transition-transform duration-300
+                        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+                    `}>
                         {/* Search Bar */}
-                        <div className="p-4 border-b border-gray-200 bg-white sticky top-0 z-10">
-                            <div className="relative">
+                        <div className="p-4 border-b border-gray-200 bg-white sticky top-0 z-10 flex justify-between items-center">
+                            <div className="relative flex-grow mr-2">
                                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                 <input 
                                     type="text" 
@@ -371,10 +390,14 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                     className="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-orange outline-none text-sm"
                                 />
                             </div>
+                            {/* Close button on mobile */}
+                            <button onClick={() => setIsMobileMenuOpen(false)} className="lg:hidden p-2 text-gray-500 hover:text-red-500">
+                                <ChevronUpIcon className="h-5 w-5 rotate-90" />
+                            </button>
                         </div>
 
                         {/* Tools List */}
-                        <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
+                        <div className="flex-1 overflow-y-auto custom-scrollbar p-2 bg-white lg:bg-transparent">
                             {Object.entries(TOOL_CATEGORIES).map(([catName, tools]) => {
                                 const filteredTools = tools.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()) || t.desc.toLowerCase().includes(searchQuery.toLowerCase()));
                                 if (filteredTools.length === 0) return null;
@@ -396,7 +419,7 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                                 {filteredTools.map(tool => (
                                                     <button
                                                         key={tool.id}
-                                                        onClick={() => { setActiveToolId(tool.id); setMessages([]); if(window.innerWidth < 1024) document.getElementById('workspace')?.scrollIntoView(); }}
+                                                        onClick={() => handleToolSelect(tool.id)}
                                                         className={`w-full flex items-start p-2 rounded-lg transition-all text-left group ${activeToolId === tool.id ? 'bg-masa-blue text-white shadow-md' : 'hover:bg-white hover:shadow-sm text-gray-700'}`}
                                                     >
                                                         <div className={`p-1.5 rounded-md mr-3 mt-0.5 flex-shrink-0 ${activeToolId === tool.id ? 'bg-white/20' : 'bg-gray-200 group-hover:bg-blue-50'}`}>
@@ -421,17 +444,17 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
 
                     {/* RIGHT WORKSPACE: Chat Interface */}
-                    <div id="workspace" className="flex-1 flex flex-col bg-white relative">
+                    <div id="workspace" className="flex-1 flex flex-col bg-white relative w-full">
                         
                         {/* Tool Header */}
-                        <div className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between shadow-sm z-10">
-                            <div className="flex items-center gap-4">
+                        <div className="bg-white border-b border-gray-100 px-4 md:px-6 py-4 flex items-center justify-between shadow-sm z-10">
+                            <div className="flex items-center gap-3 md:gap-4 pr-8">
                                 <div className="p-2 bg-blue-50 rounded-lg text-masa-blue">
                                     <activeToolDef.icon className="h-6 w-6" />
                                 </div>
-                                <div>
-                                    <h2 className="text-lg font-bold text-gray-900">{activeToolDef.name}</h2>
-                                    <p className="text-sm text-gray-500">{activeToolDef.desc}</p>
+                                <div className="min-w-0">
+                                    <h2 className="text-base md:text-lg font-bold text-gray-900 truncate">{activeToolDef.name}</h2>
+                                    <p className="text-xs md:text-sm text-gray-500 truncate">{activeToolDef.desc}</p>
                                 </div>
                             </div>
                             <div className="hidden sm:block text-xs text-gray-400 bg-gray-50 px-3 py-1 rounded-full border">
@@ -440,10 +463,10 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                         </div>
 
                         {/* Messages Area */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/50">
+                        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 bg-slate-50/50">
                             {messages.length === 0 && (
-                                <div className="h-full flex flex-col items-center justify-center text-center text-gray-400 opacity-60">
-                                    <activeToolDef.icon className="h-16 w-16 mb-4 text-gray-300" />
+                                <div className="h-full flex flex-col items-center justify-center text-center text-gray-400 opacity-60 px-4">
+                                    <activeToolDef.icon className="h-12 w-12 md:h-16 md:w-16 mb-4 text-gray-300" />
                                     <p className="text-lg font-medium text-gray-600">Start using {activeToolDef.name}</p>
                                     <p className="text-sm max-w-sm mx-auto mt-2">Type your details below or upload a file to begin.</p>
                                 </div>
@@ -451,7 +474,7 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                             
                             {messages.map((msg, idx) => (
                                 <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                    <div className={`max-w-[85%] p-4 rounded-2xl shadow-sm ${msg.role === 'user' ? 'bg-masa-blue text-white rounded-br-none' : 'bg-white text-gray-800 border border-gray-100 rounded-bl-none'}`}>
+                                    <div className={`max-w-[90%] md:max-w-[85%] p-4 rounded-2xl shadow-sm ${msg.role === 'user' ? 'bg-masa-blue text-white rounded-br-none' : 'bg-white text-gray-800 border border-gray-100 rounded-bl-none'}`}>
                                         {msg.fileName && (
                                             <div className="text-xs opacity-75 mb-2 flex items-center gap-1 bg-black/10 p-1 rounded w-fit">
                                                 <BriefcaseIcon className="h-3 w-3" /> Attached: {msg.fileName}

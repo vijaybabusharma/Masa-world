@@ -1,10 +1,10 @@
 
 import React, { useEffect } from 'react';
 import { NavigationProps } from '../types';
-import { CheckIcon, ArrowRightIcon, HeartIcon, UsersIcon, GlobeIcon, BriefcaseIcon } from '../components/icons/FeatureIcons';
+import { CheckIcon, ArrowRightIcon, HeartIcon, UsersIcon, GlobeIcon, BriefcaseIcon, CalendarDaysIcon } from '../components/icons/FeatureIcons';
 
 interface ThankYouPageProps extends NavigationProps {
-    type: 'volunteer' | 'donate' | 'membership' | 'career' | 'contact';
+    type: 'volunteer' | 'donate' | 'membership' | 'career' | 'contact' | 'event';
 }
 
 const contentConfig = {
@@ -57,6 +57,16 @@ const contentConfig = {
         icon: CheckIcon,
         color: "text-green-600",
         bg: "bg-green-50"
+    },
+    event: {
+        title: "Registration Confirmed!",
+        subtitle: "We look forward to seeing you there.",
+        message: "Thank you for registering for the event. Your spot is reserved. We have sent a confirmation email with all the event details to your registered address.",
+        primaryBtn: "View Other Events",
+        primaryAction: "events",
+        icon: CalendarDaysIcon,
+        color: "text-masa-orange",
+        bg: "bg-orange-50"
     }
 };
 

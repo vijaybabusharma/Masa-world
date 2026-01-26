@@ -17,7 +17,20 @@ const NominationModal: React.FC<NominationModalProps> = ({ onClose }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        submitForm('nomination', formData);
+        
+        // Normalize for email service
+        const submissionData = {
+            ...formData,
+            // Standardize primary contact details
+            fullName: formData['hon-nominator-name'],
+            email: formData['hon-nominator-email'],
+            // Specific Details
+            nomineeName: formData['hon-nominee-name'],
+            nomineeProfile: formData['hon-nominee-profile'],
+            nominationReason: formData['hon-reason']
+        };
+
+        submitForm('nomination', submissionData);
         setSubmitted(true);
     };
 

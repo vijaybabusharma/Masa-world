@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Page } from '../types';
 import { MenuIcon, XIcon, ChevronDownIcon } from './icons/UiIcons';
-import { HeartIcon, SparklesIcon } from './icons/FeatureIcons';
+import { HeartIcon } from './icons/FeatureIcons';
 
 interface HeaderProps {
   navigateTo: (page: Page) => void;
@@ -27,13 +27,23 @@ function isDropdown(item: NavItem | DropdownNavItem): item is DropdownNavItem {
 const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems: (NavItem | DropdownNavItem)[] = [
     { label: 'Home', page: 'home' },
     { label: 'About Us', page: 'about' },
     { label: 'Initiatives', page: 'initiatives' },
+    { label: 'Courses', page: 'courses' },
     { label: 'Events', page: 'events' },
-    { label: 'NGO Help Desk', page: 'ngo-help-desk' },
     { 
       label: 'Get Involved', 
       page: 'get-involved',
@@ -42,8 +52,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
         { label: 'Volunteer', page: 'volunteer' },
         { label: 'Become a Member', page: 'membership' },
         { label: 'Careers & Internships', page: 'careers' },
-        { label: 'Partner With Us', page: 'contact' },
-        { label: 'Pledge Platform', page: 'pledge-platform' }
+        { label: 'Partner With Us', page: 'contact' }
       ]
     },
   ];
@@ -63,14 +72,14 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
   };
 
   return (
-    <header className="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 transition-all duration-300">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md' : 'bg-white shadow-none'}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
           {/* Logo */}
           <div className="flex-shrink-0">
-            <button onClick={() => navigateTo('home')} className="flex-shrink-0">
-              <img src="/logo.svg" alt="MASA World Foundation" className="h-10 w-auto" />
+            <button onClick={() => navigateTo('home')} className="flex-shrink-0 focus:outline-none">
+              <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png" alt="MASA World Foundation" className="h-12 w-auto" onError={(e) => { e.currentTarget.src = '/logo.svg'; }} />
             </button>
           </div>
 
@@ -91,12 +100,12 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                       {item.label}
                       <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
                     </button>
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto invisible group-hover:visible">
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto invisible group-hover:visible border border-gray-100">
                       {item.subItems.map(subItem => (
                         <button
                           key={subItem.label}
                           onClick={() => handleNavClick(subItem.page)}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-masa-orange"
+                          className="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-masa-orange transition-colors"
                         >
                           {subItem.label}
                         </button>
@@ -113,7 +122,6 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                         : 'text-gray-700 hover:text-masa-orange'
                     }`}
                   >
-                    {item.label === 'NGO Help Desk' && <SparklesIcon className="h-4 w-4" />}
                     {item.label}
                   </button>
                 )
@@ -122,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
 
             <button 
                 onClick={() => navigateTo('donate')} 
-                className="bg-masa-orange text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-1.5"
+                className="bg-masa-orange text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-1.5 active:scale-95"
             >
                 <HeartIcon className="h-4 w-4" />
                 <span>Donate</span>
@@ -144,11 +152,11 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 h-[calc(100vh-80px)] overflow-y-auto">
-          <div className="px-4 pt-4 pb-8 space-y-1">
+        <div className="lg:hidden bg-white border-t border-gray-100 absolute top-20 left-0 w-full h-[calc(100vh-80px)] overflow-y-auto shadow-xl z-40">
+          <div className="px-4 pt-4 pb-20 space-y-2">
             {navItems.map((item) => (
               isDropdown(item) ? (
-                <div key={item.label}>
+                <div key={item.label} className="border-b border-gray-50 pb-2">
                   <button
                     onClick={() => toggleMobileSubMenu(item.label)}
                     className={`w-full text-left px-4 py-3 rounded-md text-base font-medium flex justify-between items-center ${
@@ -159,12 +167,12 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                     <ChevronDownIcon className={`h-5 w-5 transition-transform ${openMobileSubMenu === item.label ? 'rotate-180' : ''}`} />
                   </button>
                   {openMobileSubMenu === item.label && (
-                    <div className="pl-6 pt-2 pb-1 space-y-1">
+                    <div className="pl-6 pr-2 pt-2 pb-2 space-y-1 bg-gray-50 rounded-b-lg">
                       {item.subItems.map(subItem => (
                         <button
                           key={subItem.label}
                           onClick={() => handleNavClick(subItem.page)}
-                          className="block w-full text-left px-4 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+                          className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-gray-600 hover:bg-white hover:text-masa-orange transition-colors"
                         >
                           {subItem.label}
                         </button>
@@ -176,21 +184,20 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                 <button
                   key={item.label}
                   onClick={() => handleNavClick(item.page)}
-                  className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium flex items-center gap-2 ${
+                  className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium flex items-center gap-2 border-b border-gray-50 last:border-0 ${
                     currentPage === item.page ? 'text-masa-orange bg-orange-50' : 'text-gray-800 hover:bg-gray-50'
                   }`}
                 >
-                  {item.label === 'NGO Help Desk' && <SparklesIcon className="h-5 w-5" />}
                   {item.label}
                 </button>
               )
             ))}
             
             {/* Mobile Donate Button */}
-            <div className="pt-6 px-2">
+            <div className="pt-6 px-4">
                 <button 
                     onClick={() => handleNavClick('donate')} 
-                    className="w-full bg-masa-orange text-white px-6 py-4 rounded-lg text-lg font-bold hover:bg-orange-600 shadow-md transition-colors duration-300 flex items-center justify-center gap-2"
+                    className="w-full bg-masa-orange text-white px-6 py-4 rounded-lg text-lg font-bold hover:bg-orange-600 shadow-md transition-colors duration-300 flex items-center justify-center gap-2 active:scale-95"
                 >
                     <HeartIcon className="h-5 w-5" />
                     <span>Donate Now</span>

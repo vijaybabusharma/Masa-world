@@ -1,17 +1,26 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display-swap');
 
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: #1F2937;
     background-color: #F9FAFB;
     margin: 0;
     padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden; /* Prevent horizontal scroll on small devices */
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -31,6 +40,16 @@ body {
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+/* Focus States for Accessibility & Polish */
+button:focus-visible, 
+a:focus-visible, 
+input:focus-visible, 
+select:focus-visible, 
+textarea:focus-visible {
+    outline: 2px solid #F97316;
+    outline-offset: 2px;
 }
 
 /* Animations */

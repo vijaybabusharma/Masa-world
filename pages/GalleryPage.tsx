@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { NavigationProps } from '../types';
 import { XIcon } from '../components/icons/UiIcons';
-import { HeartIcon, UsersIcon, SparklesIcon } from '../components/icons/FeatureIcons';
+import { HeartIcon, UsersIcon, SparklesIcon, CalendarDaysIcon, MapPinIcon, ArrowRightIcon } from '../components/icons/FeatureIcons';
 import GalleryUploadModal from '../components/GalleryUploadModal';
 import AiImageGeneratorModal from '../components/AiImageGeneratorModal';
 
@@ -13,14 +13,14 @@ const galleryCategories = [
 ];
 
 const galleryData = [
-    { id: 1, category: 'Sports Events', title: 'Annual Sports Day', location: 'New Delhi', date: 'Aug 15, 2024', imageUrl: 'https://picsum.photos/800/600?random=1', description: 'Our annual celebration of sportsmanship and youth talent.', tags: ['Sports', 'Youth', 'Competition'] },
-    { id: 2, category: 'Community Outreach', title: 'Rural Health Camp', location: 'Uttar Pradesh', date: 'Jul 20, 2024', imageUrl: 'https://picsum.photos/600/800?random=2', description: 'Providing essential healthcare services to underserved communities.', tags: ['Health', 'Community', 'Service'] },
-    { id: 3, category: 'Trainings & Workshops', title: 'Leadership Bootcamp', location: 'Mumbai', date: 'Jul 10, 2024', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', description: 'Empowering the next generation of leaders with essential skills.', tags: ['Education', 'Leadership', 'Youth'] },
-    { id: 4, category: 'Awards & Recognition', title: 'Real Hero Awards', location: 'New Delhi', date: 'Jun 05, 2024', imageUrl: 'https://picsum.photos/800/800?random=4', description: 'Honoring the unsung heroes of our society.', tags: ['Awards', 'Recognition', 'Community'] },
-    { id: 5, category: 'Conferences & Seminars', title: 'National Youth Conclave', location: 'Bangalore', date: 'May 15, 2024', imageUrl: 'https://picsum.photos/600/400?random=5', description: 'A platform for dialogue on national issues concerning youth.', tags: ['Conference', 'Youth', 'Policy'] },
-    { id: 6, category: 'International Programs', title: 'Global Exchange Forum', location: 'Virtual', date: 'Apr 22, 2024', imageUrl: 'https://picsum.photos/800/500?random=6', description: 'Connecting youth leaders from India and around the world.', tags: ['Global', 'International', 'Culture'] },
-    { id: 7, category: 'Sports Events', title: 'District Football League', location: 'Kolkata', date: 'Mar 30, 2024', imageUrl: 'https://picsum.photos/700/800?random=7', description: 'Fostering teamwork and discipline through competitive sports.', tags: ['Sports', 'Football', 'Youth'] },
-    { id: 8, category: 'Community Outreach', title: 'City Cleanliness Drive', location: 'Pune', date: 'Mar 12, 2024', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', description: 'Volunteers coming together to create a cleaner, healthier city.', tags: ['Community', 'Environment', 'Volunteer'] },
+    { id: 1, category: 'Sports Events', title: 'Annual Sports Day', location: 'New Delhi', date: 'Aug 15, 2024', imageUrl: 'https://picsum.photos/800/600?random=1', description: 'Our annual celebration of sportsmanship and youth talent. Over 500 participants from across the state competed in various track and field events, showcasing determination and grit.', tags: ['Sports', 'Youth', 'Competition', 'Athletics'] },
+    { id: 2, category: 'Community Outreach', title: 'Rural Health Camp', location: 'Uttar Pradesh', date: 'Jul 20, 2024', imageUrl: 'https://picsum.photos/600/800?random=2', description: 'Providing essential healthcare services to underserved communities. Doctors and volunteers worked tirelessly to screen over 1,000 patients in a single day.', tags: ['Health', 'Community', 'Service', 'Medical'] },
+    { id: 3, category: 'Trainings & Workshops', title: 'Leadership Bootcamp', location: 'Mumbai', date: 'Jul 10, 2024', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', description: 'Empowering the next generation of leaders with essential skills. This 3-day intensive workshop covered public speaking, strategic thinking, and team management.', tags: ['Education', 'Leadership', 'Youth', 'Skills'] },
+    { id: 4, category: 'Awards & Recognition', title: 'Real Hero Awards', location: 'New Delhi', date: 'Jun 05, 2024', imageUrl: 'https://picsum.photos/800/800?random=4', description: 'Honoring the unsung heroes of our society who work silently to make a difference. 20 individuals were recognized for their outstanding social service.', tags: ['Awards', 'Recognition', 'Community', 'Heroes'] },
+    { id: 5, category: 'Conferences & Seminars', title: 'National Youth Conclave', location: 'Bangalore', date: 'May 15, 2024', imageUrl: 'https://picsum.photos/600/400?random=5', description: 'A platform for dialogue on national issues concerning youth. Policymakers and student leaders engaged in fruitful discussions on education reform.', tags: ['Conference', 'Youth', 'Policy', 'Debate'] },
+    { id: 6, category: 'International Programs', title: 'Global Exchange Forum', location: 'Virtual', date: 'Apr 22, 2024', imageUrl: 'https://picsum.photos/800/500?random=6', description: 'Connecting youth leaders from India and around the world to discuss sustainable development goals.', tags: ['Global', 'International', 'Culture', 'SDGs'] },
+    { id: 7, category: 'Sports Events', title: 'District Football League', location: 'Kolkata', date: 'Mar 30, 2024', imageUrl: 'https://picsum.photos/700/800?random=7', description: 'Fostering teamwork and discipline through competitive sports. The league saw fierce competition and high spirits among the local clubs.', tags: ['Sports', 'Football', 'Youth', 'Teamwork'] },
+    { id: 8, category: 'Community Outreach', title: 'City Cleanliness Drive', location: 'Pune', date: 'Mar 12, 2024', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', description: 'Volunteers coming together to create a cleaner, healthier city. The drive focused on waste segregation awareness and spot cleaning.', tags: ['Community', 'Environment', 'Volunteer', 'SwachhBharat'] },
 ];
 
 // --- Components ---
@@ -39,36 +39,100 @@ const LightboxModal: React.FC<{ item: any; onClose: () => void }> = ({ item, onC
     }, [onClose]);
 
     return (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
-            <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] relative flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
-                <button onClick={onClose} className="absolute top-3 right-3 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition-colors z-10">
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4 md:p-8 animate-fade-in" onClick={onClose}>
+            <div 
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-full max-h-[85vh] relative flex flex-col md:flex-row overflow-hidden animate-scale-up" 
+                onClick={e => e.stopPropagation()}
+            >
+                {/* Close Button - Mobile Overlay */}
+                <button 
+                    onClick={onClose} 
+                    className="absolute top-4 right-4 z-20 bg-black/50 text-white hover:bg-black/70 p-2 rounded-full backdrop-blur-md transition-all md:hidden"
+                >
                     <XIcon className="h-5 w-5" />
                 </button>
-                <div className="flex-shrink-0 bg-black flex items-center justify-center h-3/4">
+
+                {/* Media Section */}
+                <div className="w-full md:w-2/3 h-1/2 md:h-full bg-black flex items-center justify-center relative group">
                     {item.videoUrl ? (
-                        <video src={item.videoUrl} controls autoPlay className="max-w-full max-h-full" />
+                        <video src={item.videoUrl} controls autoPlay className="max-w-full max-h-full object-contain" />
                     ) : (
                         <img src={item.imageUrl} alt={item.title} className="max-w-full max-h-full object-contain" />
                     )}
                 </div>
-                <div className="p-6 flex-grow overflow-y-auto">
-                    <h3 className="text-2xl font-bold text-masa-charcoal">{item.title}</h3>
-                    <p className="text-sm text-gray-500 mt-1">{item.location} &bull; {item.date}</p>
-                    <p className="mt-4 text-gray-700">{item.description}</p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                        {item.tags.map((tag: string) => (
-                            <span key={tag} className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">#{tag}</span>
-                        ))}
+
+                {/* Details Section */}
+                <div className="w-full md:w-1/3 h-1/2 md:h-full bg-white flex flex-col relative">
+                    {/* Desktop Close Button */}
+                    <button 
+                        onClick={onClose} 
+                        className="absolute top-4 right-4 hidden md:block text-gray-400 hover:text-gray-800 transition-colors p-2 hover:bg-gray-100 rounded-full z-10"
+                    >
+                        <XIcon className="h-6 w-6" />
+                    </button>
+
+                    <div className="flex-grow overflow-y-auto p-6 md:p-8 custom-scrollbar">
+                        <div className="mb-6">
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="inline-block px-3 py-1 bg-masa-orange/10 text-masa-orange text-xs font-bold uppercase tracking-wider rounded-full">
+                                    {item.category}
+                                </span>
+                            </div>
+                            <h2 className="text-2xl md:text-3xl font-bold text-masa-charcoal leading-tight mb-3">
+                                {item.title}
+                            </h2>
+                            <div className="flex flex-wrap items-center text-sm text-gray-500 gap-4 font-medium">
+                                <div className="flex items-center gap-1">
+                                    <CalendarDaysIcon className="h-4 w-4 text-gray-400" />
+                                    <span>{item.date}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <MapPinIcon className="h-4 w-4 text-gray-400" />
+                                    <span>{item.location}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="prose prose-sm text-gray-600 leading-relaxed mb-8">
+                            <p>{item.description}</p>
+                        </div>
+
+                        <div>
+                            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Tags</h4>
+                            <div className="flex flex-wrap gap-2">
+                                {item.tags.map((tag: string) => (
+                                    <span key={tag} className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-xs font-semibold hover:bg-gray-200 transition-colors cursor-default">
+                                        #{tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="p-6 border-t border-gray-100 bg-gray-50/50">
+                        <div className="text-xs text-center text-gray-400 mb-3 font-medium">Like this moment?</div>
+                        <button className="w-full flex items-center justify-center gap-2 bg-white border-2 border-masa-orange text-masa-orange py-3 rounded-xl font-bold hover:bg-masa-orange hover:text-white transition-all shadow-sm group">
+                            <HeartIcon className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                            Share & Support
+                        </button>
                     </div>
                 </div>
             </div>
-            {/* FIX: Replaced non-standard 'jsx' style tag with a standard style tag. */}
             <style>{`
                 @keyframes fade-in {
                     from { opacity: 0; }
                     to { opacity: 1; }
                 }
+                @keyframes scale-up {
+                    from { transform: scale(0.95); opacity: 0; }
+                    to { transform: scale(1); opacity: 1; }
+                }
                 .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+                .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }
+                .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
             `}</style>
         </div>
     );
@@ -143,10 +207,10 @@ const GalleryPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                         {filteredItems.map(item => (
                             <div key={item.id} className="group relative overflow-hidden rounded-lg shadow-md cursor-pointer aspect-w-1 aspect-h-1" onClick={() => setSelectedItem(item)}>
                                 <img src={item.imageUrl || `https://img.youtube.com/vi/${item.videoUrl?.split('/').pop()}/0.jpg`} alt={item.title} loading="lazy" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                <div className="absolute bottom-0 left-0 p-4 text-white">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div className="absolute bottom-0 left-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
                                     <h3 className="font-bold text-sm md:text-base leading-tight">{item.title}</h3>
-                                    <p className="text-xs opacity-80 mt-1">{item.location}</p>
+                                    <p className="text-xs opacity-90 mt-1 flex items-center gap-1"><MapPinIcon className="h-3 w-3"/> {item.location}</p>
                                 </div>
                                 {item.videoUrl && <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center"><svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg></div>}
                             </div>

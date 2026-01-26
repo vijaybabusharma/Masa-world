@@ -20,20 +20,30 @@ const FounderMessagePage: React.FC = () => {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start max-w-7xl mx-auto">
                         
-                        {/* Left Column: Founder Image (Sticky on Desktop) */}
+                        {/* Left Column: Founder Image (Sticky on Desktop) - Enhanced */}
                         <div className="w-full lg:w-5/12 flex flex-col items-center lg:items-start lg:sticky lg:top-32 order-1 lg:order-1">
-                            <div className="relative w-full max-w-md">
-                                <div className="absolute inset-0 bg-masa-orange/10 transform translate-x-4 translate-y-4 rounded-xl -z-10"></div>
+                            <div className="relative w-full max-w-md group">
+                                {/* Solid Shadow Block */}
+                                <div className="absolute top-5 left-5 w-full h-full bg-masa-charcoal rounded-2xl -z-10 transition-transform duration-300 group-hover:top-6 group-hover:left-6"></div>
+                                {/* Outline Offset */}
+                                <div className="absolute -top-3 -left-3 w-full h-full border-2 border-masa-orange rounded-2xl -z-10"></div>
+                                
                                 <img 
                                     src={FOUNDER_IMAGE_URL}
                                     alt="Vijay Babu Sharma, Founder of Masa World Foundation" 
-                                    className="rounded-xl shadow-lg w-full h-auto object-cover aspect-[4/5] bg-gray-100"
+                                    className="rounded-2xl shadow-2xl w-full h-auto object-cover aspect-[4/5] bg-gray-100 border-4 border-white"
                                 />
+                                
+                                {/* Quote Overlay */}
+                                <div className="absolute bottom-8 right-8 bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg max-w-[200px] border-l-4 border-masa-orange">
+                                     <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Motto</p>
+                                     <p className="text-sm font-bold text-masa-charcoal italic">"Discipline defines destiny."</p>
+                                </div>
                             </div>
-                            <div className="mt-8 text-center lg:text-left w-full">
-                                <h3 className="text-2xl font-bold text-masa-charcoal">Vijay Babu Sharma</h3>
-                                <p className="text-masa-blue font-semibold mt-1">Founder & Chairman</p>
-                                <div className="h-1 w-16 bg-masa-orange mt-4 mx-auto lg:mx-0 rounded-full"></div>
+                            <div className="mt-12 text-center lg:text-left w-full pl-4">
+                                <h3 className="text-3xl font-extrabold text-masa-charcoal">Vijay Babu Sharma</h3>
+                                <p className="text-masa-blue font-bold text-lg mt-1">Founder & Chairman</p>
+                                <div className="h-1.5 w-20 bg-masa-orange mt-4 mx-auto lg:mx-0 rounded-full"></div>
                             </div>
                         </div>
 
@@ -79,7 +89,7 @@ const FounderMessagePage: React.FC = () => {
 
                             {/* Signature Block */}
                             <div className="mt-16 pt-8 border-t border-gray-200">
-                                <img src="/logo.svg" alt="MASA World Foundation" className="h-8 mb-6 opacity-80" />
+                                <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png" alt="MASA World Foundation" className="h-10 mb-6 opacity-90" onError={(e) => { e.currentTarget.src = '/logo.svg'; }} />
                                 <p className="text-xl font-bold text-masa-charcoal font-serif italic">
                                     — Vijay Babu Sharma
                                 </p>

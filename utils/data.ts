@@ -5,7 +5,7 @@ import React from 'react';
 import { AcademicCapIcon, BriefcaseIcon, GlobeIcon, HandRaisedIcon, HeartIcon, ShieldCheckIcon, SparklesIcon, TrophyIcon, UsersIcon, LaptopIcon } from '../components/icons/FeatureIcons';
 import { Post } from '../types';
 
-export const FOUNDER_IMAGE_URL = 'https://fireworks.do/works/oss/WcePzWf.png';
+export const FOUNDER_IMAGE_URL = 'https://masaworldfoundation.com/wp-content/uploads/2026/01/Founder.jpeg';
 
 export const calculateReadingTime = (text: string): string => {
     const wordsPerMinute = 200;
@@ -26,6 +26,7 @@ export interface Course {
     mode: 'Online' | 'Offline' | 'Hybrid';
     image: string;
     highlights: string[];
+    price: string; // New field for "Free", "Paid", or specific amount
 }
 
 export const coursesData: Course[] = [
@@ -39,7 +40,8 @@ export const coursesData: Course[] = [
         duration: "4 Weeks",
         mode: "Offline",
         image: "https://picsum.photos/600/400?random=101",
-        highlights: ["Public Speaking Mastery", "Team Building Activities", "Community Service Project", "Certificate of Completion"]
+        highlights: ["Public Speaking Mastery", "Team Building Activities", "Community Service Project", "Certificate of Completion"],
+        price: "Free"
     },
     {
         id: 2,
@@ -51,7 +53,8 @@ export const coursesData: Course[] = [
         duration: "3 Months",
         mode: "Hybrid",
         image: "https://picsum.photos/600/400?random=102",
-        highlights: ["FIFA Grassroots Methodology", "Practical Field Sessions", "Player Psychology", "License upon passing exam"]
+        highlights: ["FIFA Grassroots Methodology", "Practical Field Sessions", "Player Psychology", "License upon passing exam"],
+        price: "₹4,999"
     },
     {
         id: 3,
@@ -63,7 +66,8 @@ export const coursesData: Course[] = [
         duration: "6 Weeks",
         mode: "Online",
         image: "https://picsum.photos/600/400?random=103",
-        highlights: ["Internet Safety & Security", "Smartphone Usage", "Government E-Services", "Basic Office Tools"]
+        highlights: ["Internet Safety & Security", "Smartphone Usage", "Government E-Services", "Basic Office Tools"],
+        price: "Free"
     },
     {
         id: 4,
@@ -75,7 +79,8 @@ export const coursesData: Course[] = [
         duration: "2 Weeks",
         mode: "Offline",
         image: "https://picsum.photos/600/400?random=104",
-        highlights: ["Learn from Master Artisans", "Materials Provided", "Take Home Your Art", "Exhibition Opportunity"]
+        highlights: ["Learn from Master Artisans", "Materials Provided", "Take Home Your Art", "Exhibition Opportunity"],
+        price: "₹1,499"
     },
     {
         id: 5,
@@ -87,7 +92,8 @@ export const coursesData: Course[] = [
         duration: "8 Weeks",
         mode: "Offline",
         image: "https://picsum.photos/600/400?random=105",
-        highlights: ["Situational Awareness", "Multiple Attacker Scenarios", "Pressure Point Control", "Legal Aspects of Self-Defense"]
+        highlights: ["Situational Awareness", "Multiple Attacker Scenarios", "Pressure Point Control", "Legal Aspects of Self-Defense"],
+        price: "₹2,999"
     },
     {
         id: 6,
@@ -99,7 +105,69 @@ export const coursesData: Course[] = [
         duration: "5 Weeks",
         mode: "Online",
         image: "https://picsum.photos/600/400?random=106",
-        highlights: ["Volunteer Management", "Fundraising Basics", "Event Planning Logic", "Social Impact Measurement"]
+        highlights: ["Volunteer Management", "Fundraising Basics", "Event Planning Logic", "Social Impact Measurement"],
+        price: "Free"
+    }
+];
+
+// --- PLEDGE DATA ---
+export interface Pledge {
+    id: string;
+    title: string;
+    description: string;
+    statement: string;
+    icon: any;
+}
+
+export const pledgeData: Pledge[] = [
+    {
+        id: 'youth-empowerment',
+        title: 'Youth Empowerment',
+        description: 'Mentor and support young individuals to become future leaders.',
+        statement: 'I pledge to be a positive role model for the youth, to mentor and support their growth, and to empower them to become confident, responsible leaders of tomorrow.',
+        icon: UsersIcon
+    },
+    {
+        id: 'sports-fitness',
+        title: 'Sports & Fitness',
+        description: 'Adopt an active lifestyle and promote sports for health and discipline.',
+        statement: 'I pledge to prioritize my physical and mental well-being by adopting an active lifestyle, and to promote the values of sportsmanship, discipline, and teamwork in my community.',
+        icon: TrophyIcon
+    },
+    {
+        id: 'education-for-all',
+        title: 'Education for All',
+        description: 'Support accessible and quality education for every child.',
+        statement: 'I pledge to support and advocate for the right to quality education for all, recognizing it as the foundation for a better and more equitable world.',
+        icon: AcademicCapIcon
+    },
+    {
+        id: 'culture-heritage',
+        title: 'Culture & Heritage',
+        description: 'Vow to respect, preserve, and promote our rich cultural heritage.',
+        statement: 'I pledge to respect, preserve, and promote the rich cultural heritage that defines us, and to pass on its values and traditions to the next generation.',
+        icon: GlobeIcon
+    },
+    {
+        id: 'environment-cleanliness',
+        title: 'Environment & Cleanliness',
+        description: 'Commit to a sustainable lifestyle for a cleaner planet.',
+        statement: 'I pledge to be mindful of my environmental impact, to reduce waste, conserve resources, and actively participate in creating a cleaner, greener planet for all.',
+        icon: SparklesIcon
+    },
+    {
+        id: 'women-safety',
+        title: 'Women Safety & Equality',
+        description: 'Stand for gender equality and a safe environment for all women.',
+        statement: 'I pledge to treat all individuals with equal respect, to stand against gender-based discrimination and violence, and to help create a safe and equitable environment for women and girls everywhere.',
+        icon: ShieldCheckIcon
+    },
+    {
+        id: 'volunteer-service',
+        title: 'Volunteer & Social Service',
+        description: 'Dedicate time and effort to selfless service for society.',
+        statement: 'I pledge to dedicate a portion of my time and effort to selfless service, to volunteer for causes I believe in, and to contribute actively to the betterment of my community and society.',
+        icon: HandRaisedIcon
     }
 ];
 
@@ -114,6 +182,7 @@ export interface Event {
     description: string;
     image: string;
     status: 'Upcoming' | 'Completed';
+    price?: string; // e.g. "Free" or "₹500"
 }
 
 export const eventsData: Event[] = [
@@ -126,7 +195,8 @@ export const eventsData: Event[] = [
         location: "New Delhi, India",
         description: "A strategic gathering of 500+ student leaders to discuss policy reform and national development.",
         image: "https://picsum.photos/600/400?random=61",
-        status: 'Upcoming'
+        status: 'Upcoming',
+        price: '₹500'
     },
     {
         id: 'evt-002',
@@ -137,7 +207,8 @@ export const eventsData: Event[] = [
         location: "Mumbai, Maharashtra",
         description: "Empowering women with essential self-defense techniques and situational awareness skills.",
         image: "https://picsum.photos/600/400?random=11",
-        status: 'Upcoming'
+        status: 'Upcoming',
+        price: 'Free'
     },
     {
         id: 'evt-003',
@@ -148,7 +219,8 @@ export const eventsData: Event[] = [
         location: "National Stadium, Delhi",
         description: "Celebrating sportsmanship and athletic excellence with over 1000 young participants.",
         image: "https://picsum.photos/600/400?random=21",
-        status: 'Completed'
+        status: 'Completed',
+        price: 'Free'
     },
     {
         id: 'evt-004',
@@ -159,111 +231,8 @@ export const eventsData: Event[] = [
         location: "Varanasi, UP",
         description: "Providing free medical consultations and basic medicines to underserved rural communities.",
         image: "https://picsum.photos/600/400?random=10",
-        status: 'Completed'
-    }
-];
-
-// --- PLEDGES DATA ---
-export interface Pledge {
-    id: string;
-    title: string;
-    description: string;
-    statement: string;
-    icon: React.FC<any>;
-    category: string;
-    pamphletImage: string;
-}
-
-export const pledgeData: Pledge[] = [
-    { 
-        id: 'youth-empowerment', 
-        title: 'Youth Empowerment Pledge', 
-        description: 'Mentor and support young individuals to become future leaders.', 
-        statement: 'I pledge to be a positive role model for the youth, to mentor and support their growth, and to empower them to become confident, responsible leaders of tomorrow.',
-        icon: UsersIcon,
-        category: 'Youth',
-        pamphletImage: 'https://picsum.photos/seed/youth/600/800',
-    },
-    { 
-        id: 'sports-fitness', 
-        title: 'Sports & Fitness Pledge', 
-        description: 'Adopt an active lifestyle and promote sports for health and discipline.', 
-        statement: 'I pledge to prioritize my physical and mental well-being by adopting an active lifestyle, and to promote the values of sportsmanship, discipline, and teamwork in my community.',
-        icon: TrophyIcon,
-        category: 'Health',
-        pamphletImage: 'https://picsum.photos/seed/sports/600/800',
-    },
-    { 
-        id: 'education-for-all', 
-        title: 'Education for All Pledge', 
-        description: 'Support accessible and quality education for every child.', 
-        statement: 'I pledge to support and advocate for the right to quality education for all, recognizing it as the foundation for a better and more equitable world.',
-        icon: AcademicCapIcon,
-        category: 'Social',
-        pamphletImage: 'https://picsum.photos/seed/education/600/800',
-    },
-    { 
-        id: 'culture-heritage', 
-        title: 'Culture & Heritage Pledge', 
-        description: 'Vow to respect, preserve, and promote our rich cultural heritage.', 
-        statement: 'I pledge to respect, preserve, and promote the rich cultural heritage that defines us, and to pass on its values and traditions to the next generation.',
-        icon: SparklesIcon,
-        category: 'Culture',
-        pamphletImage: 'https://picsum.photos/seed/culture/600/800',
-    },
-    { 
-        id: 'environment-cleanliness', 
-        title: 'Environment & Cleanliness Pledge', 
-        description: 'Commit to a sustainable lifestyle for a cleaner planet.', 
-        statement: 'I pledge to be mindful of my environmental impact, to reduce waste, conserve resources, and actively participate in creating a cleaner, greener planet for all.',
-        icon: GlobeIcon,
-        category: 'Environment',
-        pamphletImage: 'https://picsum.photos/seed/env/600/800',
-    },
-    { 
-        id: 'anti-drug', 
-        title: 'Anti-Drug & Tobacco-Free Pledge', 
-        description: 'Lead a healthy, substance-free life and inspire others.', 
-        statement: 'I pledge to lead a healthy, substance-free life and to actively discourage the use of drugs and tobacco among my peers, fostering a healthier society.',
-        icon: ShieldCheckIcon,
-        category: 'Health',
-        pamphletImage: 'https://picsum.photos/seed/health/600/800',
-    },
-    { 
-        id: 'women-safety', 
-        title: 'Women Safety & Equality Pledge', 
-        description: 'Stand for gender equality and a safe environment for all women.', 
-        statement: 'I pledge to treat all individuals with equal respect, to stand against gender-based discrimination and violence, and to help create a safe and equitable environment for women and girls everywhere.',
-        icon: HeartIcon,
-        category: 'Social',
-        pamphletImage: 'https://picsum.photos/seed/women/600/800',
-    },
-    { 
-        id: 'digital-responsibility', 
-        title: 'Digital Responsibility Pledge', 
-        description: 'Promote online safety and fight misinformation.', 
-        statement: 'I pledge to be a responsible digital citizen, to promote positive and respectful online interactions, to verify information before sharing, and to help create a safer digital world.',
-        icon: LaptopIcon,
-        category: 'Ethics',
-        pamphletImage: 'https://picsum.photos/seed/digital/600/800',
-    },
-    { 
-        id: 'peace-humanity', 
-        title: 'Peace & Humanity Pledge', 
-        description: 'Foster peace, understanding, and compassion in the world.', 
-        statement: 'I pledge to promote peace, understanding, and harmony among all people, respecting diversity and working towards a world free of conflict and prejudice.',
-        icon: GlobeIcon,
-        category: 'Global',
-        pamphletImage: 'https://picsum.photos/seed/peace/600/800',
-    },
-    { 
-        id: 'volunteer-service', 
-        title: 'Volunteer & Social Service Pledge', 
-        description: 'Dedicate time and effort to selfless service for society.', 
-        statement: 'I pledge to dedicate a portion of my time and effort to selfless service, to volunteer for causes I believe in, and to contribute actively to the betterment of my community and society.',
-        icon: HandRaisedIcon,
-        category: 'Youth',
-        pamphletImage: 'https://picsum.photos/seed/volunteer/600/800',
+        status: 'Completed',
+        price: 'Free'
     }
 ];
 

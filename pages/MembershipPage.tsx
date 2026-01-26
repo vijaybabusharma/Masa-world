@@ -1,15 +1,15 @@
-
 import React, { useState } from 'react';
-import { NavigationProps, MembershipType, PartnershipType } from '../types';
+import { NavigationProps, PartnershipType } from '../types';
 import { 
     CheckIcon, 
-    UsersIcon, 
-    GlobeIcon, 
-    AcademicCapIcon, 
-    BriefcaseIcon, 
     ShieldCheckIcon, 
     HeartIcon, 
-    SparklesIcon
+    SparklesIcon,
+    GlobeIcon,
+    UsersIcon,
+    BriefcaseIcon,
+    ArrowRightIcon,
+    AcademicCapIcon
 } from '../components/icons/FeatureIcons';
 import MembershipModal from '../components/MembershipModal';
 import PartnershipModal from '../components/PartnershipModal';
@@ -22,13 +22,6 @@ const PageHeader: React.FC = () => (
             <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
                 Join a global community committed to empowering youth through sports, education, and culture.
             </p>
-            <p className="mt-6 text-lg text-gray-200 max-w-3xl mx-auto">
-                MASA World Foundation offers flexible membership options for individuals, institutions, and global supporters who wish to contribute, participate, and grow with our mission.
-            </p>
-            <div className="mt-6 inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/10 backdrop-blur-sm">
-                <SparklesIcon className="h-4 w-4 text-masa-orange" />
-                <span className="text-sm text-gray-200 font-medium">Coming Soon: AI-enabled tools for digital reporting and impact tracking for all members.</span>
-            </div>
         </div>
     </div>
 );
@@ -58,117 +51,94 @@ const TrustAndTransparencySection: React.FC = () => {
     );
 };
 
-const FinalCTA: React.FC<{ onFree: () => void; onPaid: () => void; onDonate: () => void; }> = ({ onFree, onPaid, onDonate }) => (
-    <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center bg-orange-50 rounded-2xl p-12">
-            <h2 className="text-3xl font-bold text-masa-charcoal">Your Membership Creates Real Impact</h2>
-            <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-                <button onClick={onFree} className="bg-masa-blue text-white px-8 py-3 rounded-full font-bold hover:bg-blue-900 transition-colors">
-                    Join Free
-                </button>
-                <button onClick={onPaid} className="bg-masa-orange text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-colors">
-                    Become a Member
-                </button>
-                <button onClick={onDonate} className="bg-transparent border-2 border-masa-charcoal text-masa-charcoal px-8 py-3 rounded-full font-bold hover:bg-masa-charcoal hover:text-white transition-colors">
-                    Donate Now
-                </button>
-            </div>
-        </div>
-    </section>
-);
-
 interface MembershipTier {
     title: string;
     description: string;
     benefits: string[];
-    buttonText: string;
-    action: () => void;
+    price: string;
+    duration: string;
+    icon: any;
     tierType: 'free' | 'paid' | 'special';
 }
 
 const MembershipPage: React.FC<NavigationProps> = ({ navigateTo }) => {
-    const [membershipModal, setMembershipModal] = useState<MembershipType | null>(null);
+    const [selectedTier, setSelectedTier] = useState<MembershipTier | null>(null);
     const [partnershipModal, setPartnershipModal] = useState<PartnershipType | null>(null);
     const [nominationModal, setNominationModal] = useState(false);
 
     const tiers: MembershipTier[] = [
         {
             title: "Community Member",
-            description: "For supporters, students, and well-wishers.",
-            benefits: ["Digital newsletter", "Event & activity updates", "Community participation"],
-            buttonText: "Join Free",
-            action: () => setMembershipModal('Community'),
+            description: "For supporters, students, and well-wishers who want to stay connected.",
+            price: "Free",
+            duration: "Lifetime",
+            benefits: ["Digital newsletter subscription", "Event & activity updates", "Community participation rights"],
+            icon: UsersIcon,
             tierType: "free",
         },
         {
             title: "Youth / Student Member",
-            description: "For school & college students.",
-            benefits: ["Training & event priority", "Participation certificates", "Youth programs access"],
-            buttonText: "Join as Student",
-            action: () => setMembershipModal('Student / Youth'),
+            description: "Dedicated to school & college students for skill building.",
+            price: "Free",
+            duration: "Annual",
+            benefits: ["Priority access to trainings", "Participation certificates", "Mentorship opportunities", "Youth network access"],
+            icon: AcademicCapIcon,
             tierType: "free",
         },
         {
             title: "Volunteer Member",
-            description: "For active volunteers contributing their time.",
-            benefits: ["Volunteer ID & certificate", "Experience letter", "Leadership opportunities"],
-            buttonText: "Apply as Volunteer",
-            action: () => navigateTo('volunteer'),
+            description: "For active contributors giving their time and skills.",
+            price: "Time Contribution",
+            duration: "Project Based",
+            benefits: ["Official Volunteer ID Card", "Experience Letter / Certificate", "Leadership opportunities", "Network with changemakers"],
+            icon: HeartIcon,
             tierType: "special",
         },
         {
             title: "Supporting Member",
-            description: "For individuals supporting financially (Annual).",
-            benefits: ["All free benefits", "Official certificate", "Priority event access", "Annual impact report"],
-            buttonText: "Become Supporting Member",
-            action: () => setMembershipModal('Supporting'),
+            description: "For individuals enabling our work through financial support.",
+            price: "₹999",
+            duration: "Annual",
+            benefits: ["All free benefits included", "Official Digital Membership Card", "Priority seating at events", "Annual Impact Report"],
+            icon: SparklesIcon,
             tierType: "paid",
         },
         {
             title: "Life Member",
-            description: "For long-term supporters (One-Time).",
-            benefits: ["Lifetime membership", "Website recognition", "VIP invitations", "Advisory opportunities"],
-            buttonText: "Become Life Member",
-            action: () => setMembershipModal('Life'),
+            description: "For committed long-term patrons of our mission.",
+            price: "₹10,000",
+            duration: "Lifetime",
+            benefits: ["Lifetime Membership Status", "Name on Website Supporter Wall", "VIP Event Invitations", "Advisory Board Eligibility"],
+            icon: ShieldCheckIcon,
             tierType: "paid",
         },
         {
             title: "International Member",
-            description: "For global supporters & NRIs.",
-            benefits: ["Global participation", "International reports", "Global community access"],
-            buttonText: "Join Internationally",
-            action: () => setMembershipModal('International'),
+            description: "For global citizens and NRIs supporting from abroad.",
+            price: "$50",
+            duration: "Annual",
+            benefits: ["Global network access", "International impact reports", "Cross-cultural exchange priority"],
+            icon: GlobeIcon,
             tierType: "paid",
-        },
-        {
-            title: "Institutional Member",
-            description: "For schools, colleges, and academies.",
-            benefits: ["Co-branded programs", "Student engagement", "Academic collaborations"],
-            buttonText: "Institutional Membership",
-            action: () => setPartnershipModal('Institutional'),
-            tierType: "special",
-        },
-        {
-            title: "Corporate / CSR Member",
-            description: "For companies & CSR partners.",
-            benefits: ["CSR implementation", "Impact reporting", "Brand visibility"],
-            buttonText: "Corporate Partnership",
-            action: () => setPartnershipModal('Corporate'),
-            tierType: "special",
-        },
-        {
-            title: "Honorary / Advisory Member",
-            description: "For leaders, experts, advisors (By Invitation).",
-            benefits: ["Honorary recognition", "Advisory role", "No fee"],
-            buttonText: "Submit Nomination",
-            action: () => setNominationModal(true),
-            tierType: "special",
         },
     ];
 
+    const handleApply = (tier: MembershipTier) => {
+        if (tier.title === "Volunteer Member") {
+            navigateTo('volunteer');
+        } else {
+            setSelectedTier(tier);
+        }
+    };
+
     return (
-        <div className="bg-gray-50">
-            {membershipModal && <MembershipModal membershipType={membershipModal} onClose={() => setMembershipModal(null)} navigateTo={navigateTo as any} />}
+        <div className="bg-gray-50 min-h-screen">
+            {selectedTier && (
+                <MembershipModal 
+                    tier={selectedTier}
+                    onClose={() => setSelectedTier(null)}
+                />
+            )}
             {partnershipModal && <PartnershipModal partnershipType={partnershipModal} onClose={() => setPartnershipModal(null)} />}
             {nominationModal && <NominationModal onClose={() => setNominationModal(false)} />}
             
@@ -178,39 +148,82 @@ const MembershipPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {tiers.map((tier) => (
-                            <div key={tier.title} className={`bg-white rounded-2xl shadow-lg border-t-4 p-8 flex flex-col ${
-                                tier.tierType === 'paid' ? 'border-masa-orange' : (tier.tierType === 'special' ? 'border-masa-charcoal' : 'border-masa-blue')
-                            }`}>
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">{tier.title}</h3>
-                                <p className="text-gray-600 mb-6 flex-grow">{tier.description}</p>
-                                <ul className="space-y-3 mb-8">
-                                    {tier.benefits.map((b) => (
-                                        <li key={b} className="flex items-start text-sm text-gray-700">
-                                            <CheckIcon className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" /> {b}
-                                        </li>
-                                    ))}
-                                </ul>
-                                <button
-                                    onClick={tier.action}
-                                    className={`w-full py-3 rounded-lg font-bold text-white transition-colors mt-auto ${
-                                        tier.tierType === 'paid' ? 'bg-masa-orange hover:bg-orange-600' : (tier.tierType === 'special' ? 'bg-masa-charcoal hover:bg-gray-800' : 'bg-masa-blue hover:bg-blue-900')
-                                    }`}
-                                >
-                                    {tier.buttonText}
-                                </button>
+                            <div key={tier.title} className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col overflow-hidden group relative">
+                                {/* Header */}
+                                <div className="p-6 pb-0">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className={`p-3 rounded-full ${tier.tierType === 'paid' ? 'bg-orange-100 text-masa-orange' : 'bg-blue-100 text-masa-blue'}`}>
+                                            <tier.icon className="h-6 w-6" />
+                                        </div>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${tier.tierType === 'paid' ? 'border-masa-orange text-masa-orange' : 'border-gray-300 text-gray-500'}`}>
+                                            {tier.duration}
+                                        </span>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-masa-charcoal mb-2">{tier.title}</h3>
+                                    <p className="text-gray-600 text-sm mb-4 line-clamp-2 min-h-[40px]">{tier.description}</p>
+                                </div>
+
+                                {/* Price */}
+                                <div className="px-6 mb-4">
+                                    <span className="text-3xl font-extrabold text-masa-charcoal">{tier.price}</span>
+                                    {tier.tierType === 'paid' && <span className="text-gray-500 text-sm font-medium"> / {tier.duration}</span>}
+                                </div>
+
+                                {/* Benefits */}
+                                <div className="px-6 pb-6 flex-grow border-t border-gray-50 pt-4">
+                                    <ul className="space-y-3">
+                                        {tier.benefits.map((b, idx) => (
+                                            <li key={idx} className="flex items-start text-sm text-gray-600">
+                                                <CheckIcon className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" />
+                                                {b}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                {/* Action */}
+                                <div className="p-6 pt-0 mt-auto">
+                                    <button
+                                        onClick={() => handleApply(tier)}
+                                        className={`w-full py-3.5 rounded-xl font-bold transition-all shadow-sm flex items-center justify-center gap-2 ${
+                                            tier.tierType === 'paid' 
+                                            ? 'bg-masa-orange text-white hover:bg-orange-600 shadow-md' 
+                                            : 'bg-masa-blue text-white hover:bg-blue-900'
+                                        }`}
+                                    >
+                                        Apply Now <ArrowRightIcon className="h-4 w-4" />
+                                    </button>
+                                </div>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Partnerships Section */}
+                    <div className="mt-20">
+                        <h2 className="text-2xl font-bold text-center text-masa-charcoal mb-10">Institutional & Corporate Partnerships</h2>
+                        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg transition-all">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="bg-purple-100 p-3 rounded-full text-purple-600"><BriefcaseIcon className="h-6 w-6"/></div>
+                                    <h3 className="font-bold text-lg text-masa-charcoal">Corporate / CSR</h3>
+                                </div>
+                                <p className="text-gray-600 text-sm mb-6">Partner with us for CSR initiatives, employee engagement, and impactful social projects with full reporting.</p>
+                                <button onClick={() => setPartnershipModal('Corporate')} className="text-purple-600 font-bold text-sm hover:underline">Inquire for Partnership &rarr;</button>
+                            </div>
+                            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 hover:shadow-lg transition-all">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="bg-green-100 p-3 rounded-full text-green-600"><AcademicCapIcon className="h-6 w-6"/></div>
+                                    <h3 className="font-bold text-lg text-masa-charcoal">Institutional</h3>
+                                </div>
+                                <p className="text-gray-600 text-sm mb-6">For schools and colleges to integrate our leadership and skill-building modules into their curriculum.</p>
+                                <button onClick={() => setPartnershipModal('Institutional')} className="text-green-600 font-bold text-sm hover:underline">Apply for Institution &rarr;</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <TrustAndTransparencySection />
-
-            <FinalCTA 
-                onFree={() => setMembershipModal('Community')}
-                onPaid={() => setMembershipModal('Supporting')}
-                onDonate={() => navigateTo('donate')}
-            />
         </div>
     );
 };

@@ -41,26 +41,35 @@ const AiImageGeneratorModal: React.FC<AiImageGeneratorModalProps> = ({ onClose, 
             const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
             const response = await ai.models.generateContent({
                 model: 'gemini-2.5-flash-image',
-                contents: { parts: [{ text: prompt }] },
+                contents: prompt,
                 config: {
                     imageConfig: { aspectRatio },
                 },
             });
 
             let imageFound = false;
-            for (const part of response.candidates[0].content.parts) {
+            let failureReason = '';
+            
+            const parts = response.candidates?.[0]?.content?.parts || [];
+
+            for (const part of parts) {
                 if (part.inlineData) {
                     setGeneratedImage(part.inlineData.data);
                     imageFound = true;
                     break;
                 }
+                // If the model refuses to generate an image, it usually returns text explaining why.
+                if (part.text) {
+                    failureReason += part.text;
+                }
             }
+            
             if (!imageFound) {
-                throw new Error("No image was generated. The prompt might have been blocked.");
+                throw new Error(failureReason || "No image was generated. The prompt might have been blocked.");
             }
-        } catch (e) {
+        } catch (e: any) {
             console.error(e);
-            setError('Failed to generate image. This may be due to a safety policy violation or network issue. Please try a different prompt.');
+            setError(e.message || 'Failed to generate image. This may be due to a safety policy violation or network issue. Please try a different prompt.');
         } finally {
             setIsLoading(false);
         }

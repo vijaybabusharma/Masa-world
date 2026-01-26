@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import SocialShareButtons from '../components/SocialShareButtons';
 import { Post } from '../types';
 import { 
@@ -11,7 +11,8 @@ import {
     ClockIcon
 } from '../components/icons/FeatureIcons';
 import { ChevronDownIcon, ChevronUpIcon } from '../components/icons/UiIcons';
-import { postsData, calculateReadingTime } from '../utils/data';
+import { calculateReadingTime } from '../utils/data';
+import { ContentManager } from '../utils/contentManager';
 
 // Reusing ArrowLeft from FeatureIcons if available, or just defining a simple one here for the back button
 const SimpleArrowLeftIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
@@ -39,7 +40,7 @@ const BlogPostSchema: React.FC<{ post: Post }> = ({ post }) => {
             "name": "MASA World Foundation",
             "logo": {
                 "@type": "ImageObject",
-                "url": "https://masaworld.org/logo.png"
+                "url": "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png"
             }
         },
         "datePublished": new Date(post.date).toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
@@ -171,6 +172,7 @@ const Sidebar: React.FC<{
 };
 
 const BlogPage: React.FC = () => {
+    const [posts, setPosts] = useState<Post[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedTag, setSelectedTag] = useState<string>('All');
     const [searchQuery, setSearchQuery] = useState('');
@@ -178,14 +180,19 @@ const BlogPage: React.FC = () => {
     const [selectedPost, setSelectedPost] = useState<Post | null>(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     
-    const tagsList = useMemo(() => {
-        const allTags = postsData.flatMap(post => post.tags || []);
-        return ['All', ...Array.from(new Set(allTags)).sort()];
+    // Fetch data from Manager
+    useEffect(() => {
+        setPosts(ContentManager.getPosts());
     }, []);
+
+    const tagsList = useMemo(() => {
+        const allTags = posts.flatMap(post => post.tags || []);
+        return ['All', ...Array.from(new Set(allTags)).sort()];
+    }, [posts]);
 
     // Filter Logic
     const filteredPosts = useMemo(() => {
-        return postsData.filter(post => {
+        return posts.filter(post => {
             const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                                   post.summary.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -195,7 +202,7 @@ const BlogPage: React.FC = () => {
 
             return matchesSearch && matchesCategory && matchesTag;
         });
-    }, [selectedCategory, selectedTag, searchQuery]);
+    }, [selectedCategory, selectedTag, searchQuery, posts]);
 
     // Derived Data
     const featuredPost = filteredPosts.length > 0 && selectedCategory === 'All' && selectedTag === 'All' && !searchQuery ? filteredPosts[0] : null;
@@ -211,8 +218,8 @@ const BlogPage: React.FC = () => {
 
     // Recent posts for sidebar (exclude current viewed post if any, else just top 4)
     const recentPosts = useMemo(() => {
-        return postsData.slice(0, 5);
-    }, []);
+        return posts.slice(0, 5);
+    }, [posts]);
 
     // Handlers
     const handleLoadMore = () => setVisibleCount(prev => prev + 6);

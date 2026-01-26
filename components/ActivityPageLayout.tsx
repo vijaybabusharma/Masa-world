@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationProps } from '../types';
 import { ArrowRightIcon, CheckIcon, HeartIcon, GlobeIcon, UsersIcon, CalendarDaysIcon, MapPinIcon } from './icons/FeatureIcons';
 
@@ -107,14 +107,14 @@ const ActivityPageLayout: React.FC<ActivityPageLayoutProps> = ({
     return (
         <div>
             {/* 1. Hero Introduction */}
-            <section className="relative bg-masa-charcoal text-white py-24 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
+            <section className="relative bg-masa-charcoal text-white py-20 md:py-24 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
                 <div className="absolute inset-0 opacity-20 bg-center bg-cover" style={{ backgroundImage: `url(${heroData.bgImage || 'https://picsum.photos/1600/900?grayscale&blur=2'})` }}></div>
                 <div className="relative z-10 max-w-4xl mx-auto">
-                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">{heroData.title}</h1>
-                    <p className="text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed font-light">{heroData.subtitle}</p>
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">{heroData.title}</h1>
+                    <p className="text-lg md:text-xl lg:text-2xl text-gray-300 mb-10 leading-relaxed font-light">{heroData.subtitle}</p>
                     <button 
                         onClick={heroData.primaryCtaAction || (() => navigateTo('contact'))}
-                        className="bg-masa-orange text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-orange-600 transition-all shadow-lg transform hover:-translate-y-1"
+                        className="bg-masa-orange text-white px-8 py-3.5 rounded-full text-lg font-bold hover:bg-orange-600 transition-all shadow-lg transform hover:-translate-y-1 active:scale-95"
                     >
                         {heroData.primaryCtaLabel}
                     </button>
@@ -190,10 +190,10 @@ const ActivityPageLayout: React.FC<ActivityPageLayoutProps> = ({
                             <h2 className="text-3xl font-bold mb-6">Ready to Make a Difference?</h2>
                             <p className="text-blue-100 mb-10 max-w-2xl mx-auto">Join us in our mission. Whether you want to participate, volunteer, or partner, there is a place for you here.</p>
                             <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                <button onClick={() => navigateTo('get-involved')} className="bg-masa-orange text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-all shadow-md">
+                                <button onClick={() => navigateTo('get-involved')} className="bg-masa-orange text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-all shadow-md active:scale-95">
                                     Register / Apply Now
                                 </button>
-                                <button onClick={() => navigateTo('contact')} className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-masa-blue transition-all">
+                                <button onClick={() => navigateTo('contact')} className="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-masa-blue transition-all active:scale-95">
                                     Contact Us
                                 </button>
                             </div>
@@ -208,8 +208,8 @@ const ActivityPageLayout: React.FC<ActivityPageLayoutProps> = ({
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                         {impactMetrics.map((metric, idx) => (
                             <div key={idx}>
-                                <p className="text-4xl font-extrabold text-masa-orange mb-2">{metric.value}</p>
-                                <p className="text-gray-600 font-medium uppercase text-sm tracking-wider">{metric.label}</p>
+                                <p className="text-3xl md:text-4xl font-extrabold text-masa-orange mb-2">{metric.value}</p>
+                                <p className="text-gray-600 font-medium uppercase text-xs md:text-sm tracking-wider">{metric.label}</p>
                             </div>
                         ))}
                     </div>
@@ -238,13 +238,13 @@ const ActivityPageLayout: React.FC<ActivityPageLayoutProps> = ({
                     <div className="flex flex-col sm:flex-row justify-center gap-6">
                         <button 
                             onClick={ctaData.primaryAction || (() => navigateTo('get-involved'))}
-                            className="bg-white text-masa-charcoal px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-all shadow-md"
+                            className="bg-white text-masa-charcoal px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-all shadow-md active:scale-95"
                         >
                             {ctaData.primaryLabel}
                         </button>
                         <button 
                             onClick={ctaData.secondaryAction || (() => navigateTo('contact'))}
-                            className="text-white border-2 border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-all"
+                            className="text-white border-2 border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/10 transition-all active:scale-95"
                         >
                             {ctaData.secondaryLabel}
                         </button>

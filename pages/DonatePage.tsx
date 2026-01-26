@@ -47,8 +47,8 @@ const FundingGoalsSection: React.FC = () => {
                     <p className="mt-4 text-lg text-gray-600">
                         See how your contribution directly fuels our key initiatives and helps us reach our current funding goals.
                     </p>
-                    <div className="mt-4 inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full border border-blue-100">
-                        <SparklesIcon className="h-4 w-4 text-masa-blue" />
+                    <div className="mt-4 inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full border border-blue-100 text-left md:text-center">
+                        <SparklesIcon className="h-4 w-4 text-masa-blue flex-shrink-0" />
                         <span className="text-sm text-gray-700 font-medium">Future Roadmap: Real-time AI Impact Tracking to show exactly where your funds go.</span>
                     </div>
                 </div>
@@ -84,7 +84,7 @@ const FundingGoalsSection: React.FC = () => {
                     <h3 className="text-2xl font-bold text-masa-charcoal mb-8">Every Contribution Counts</h3>
                     <div className="flex flex-wrap justify-center gap-6">
                         {impactExamples.map((example, index) => (
-                            <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 text-center shadow-sm w-64">
+                            <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 text-center shadow-sm w-full sm:w-64">
                                 <p className="text-2xl font-bold text-masa-orange mb-2">{example.amount}</p>
                                 <p className="text-gray-700">{example.effect}</p>
                             </div>
@@ -161,7 +161,7 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     <div className="grid lg:grid-cols-12 gap-12 items-start max-w-7xl mx-auto">
                         
                         {/* Donation Form */}
-                        <div className="lg:col-span-8 bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
+                        <div className="lg:col-span-8 bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
                             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-masa-orange to-masa-blue"></div>
                             <h3 className="text-2xl font-bold text-masa-charcoal mb-6">Secure Donation</h3>
                             
@@ -182,7 +182,7 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                                 type="button" 
                                                 key={val} 
                                                 onClick={() => setAmount(val)} 
-                                                className={`py-3 px-4 rounded-xl border-2 font-bold text-lg transition-all duration-200 ${amount === val ? 'border-masa-orange bg-orange-50 text-masa-orange' : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'}`}
+                                                className={`py-3 px-4 rounded-xl border-2 font-bold text-lg transition-all duration-200 active:scale-95 ${amount === val ? 'border-masa-orange bg-orange-50 text-masa-orange' : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'}`}
                                             >
                                                 {currency === 'INR' ? '₹' : '$'}{val}
                                             </button>
@@ -266,7 +266,7 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                     </label>
                                 </div>
 
-                                <button type="submit" className="w-full bg-masa-orange text-white py-4 rounded-full font-bold text-lg hover:bg-orange-600 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center">
+                                <button type="submit" className="w-full bg-masa-orange text-white py-4 rounded-full font-bold text-lg hover:bg-orange-600 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center active:scale-95">
                                     <ShieldCheckIcon className="h-5 w-5 mr-2" />
                                     Secure Pay {currency === 'INR' ? '₹' : '$'}{Number(amount) || '...'}
                                 </button>

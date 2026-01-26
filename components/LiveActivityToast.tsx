@@ -1,12 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { HeartIcon, UsersIcon, HandRaisedIcon } from './icons/FeatureIcons';
+import { HeartIcon, UsersIcon } from './icons/FeatureIcons';
 
 const MOCK_ACTIVITIES = [
     { name: "Priya S.", city: "Mumbai", action: "just volunteered", type: 'volunteer' },
     { name: "Rahul K.", city: "Delhi", action: "donated ₹500", type: 'donate' },
     { name: "Sarah J.", city: "London", action: "joined as a member", type: 'member' },
-    { name: "Amit B.", city: "Pune", action: "took the Youth Pledge", type: 'pledge' },
     { name: "Local Team", city: "Jaipur", action: "completed a cleanup drive", type: 'event' },
     { name: "Anjali M.", city: "Bangalore", action: "shared a story", type: 'share' },
 ];
@@ -43,7 +42,6 @@ const LiveActivityToast: React.FC = () => {
         switch(activity.type) {
             case 'volunteer': return <UsersIcon className="h-4 w-4 text-masa-blue" />;
             case 'donate': return <HeartIcon className="h-4 w-4 text-red-500" />;
-            case 'pledge': return <HandRaisedIcon className="h-4 w-4 text-masa-orange" />;
             default: return <UsersIcon className="h-4 w-4 text-green-600" />;
         }
     };
