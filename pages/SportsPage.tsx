@@ -18,7 +18,7 @@ const SportsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             <section className="relative bg-gray-900 text-white min-h-[70vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0">
                      <img 
-                        src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1600&q=80" 
+                        src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1600&q=80" 
                         alt="Sports Activity" 
                         className="w-full h-full object-cover opacity-30" 
                     />
@@ -135,7 +135,7 @@ const SportsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                             </ul>
                         </div>
                         <div className="relative h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10">
-                            <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=800&q=80" alt="Sports Program" className="absolute inset-0 w-full h-full object-cover" />
+                            <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=800&q=80" alt="Sports Program" className="absolute inset-0 w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>

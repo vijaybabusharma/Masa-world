@@ -13,7 +13,7 @@ const RecordsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 subtitle: "Showcasing extraordinary feats of discipline, dedication, and human spirit.",
                 primaryCtaLabel: "Attempt a Record",
                 primaryCtaAction: () => navigateTo('contact'),
-                bgImage: "https://picsum.photos/1600/900?grayscale&blur=2&random=50"
+                bgImage: "https://images.unsplash.com/photo-1552674605-5d226f5bf7d5?auto=format&fit=crop&w=1600&q=80"
             }}
             overviewData={{
                 title: "Pushing the Boundaries",
@@ -38,21 +38,21 @@ const RecordsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     title: "Mass Yoga Session Record",
                     date: "June 21, 2023",
                     location: "Lucknow",
-                    image: "https://picsum.photos/600/400?random=51",
+                    image: "https://images.unsplash.com/photo-1599447292180-45fd84092ef0?auto=format&fit=crop&w=600&q=80",
                     status: "Record Holder"
                 },
                 {
                     title: "Non-Stop Skating Marathon",
                     date: "Feb 2023",
                     location: "Chandigarh",
-                    image: "https://picsum.photos/600/400?random=52",
+                    image: "https://images.unsplash.com/photo-1515239999052-a6f91f37cc73?auto=format&fit=crop&w=600&q=80",
                     status: "Record Holder"
                 },
                 {
                     title: "Largest Self-Defense Lesson",
                     date: "Pending",
                     location: "Delhi",
-                    image: "https://picsum.photos/600/400?random=53",
+                    image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=600&q=80",
                     status: "Upcoming Attempt"
                 },
             ]}

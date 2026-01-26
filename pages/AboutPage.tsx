@@ -11,7 +11,7 @@ import FounderMessageSection from '../components/FounderMessageSection';
 const PageHeader: React.FC<{ title: string; subtitle: string, navigateTo: NavigationProps['navigateTo'] }> = ({ title, subtitle, navigateTo }) => (
     <div className="relative bg-masa-charcoal py-24 text-white text-center">
         <div className="absolute inset-0 opacity-20">
-            <img src="https://images.unsplash.com/photo-1529209074137-c6b2b86805ad?auto=format&fit=crop&w=1600&q=80" className="w-full h-full object-cover" alt="Team planning strategy" />
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80" className="w-full h-full object-cover" alt="Team planning strategy" />
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">{title}</h1>
@@ -37,7 +37,7 @@ const OurStorySection: React.FC = () => (
                 </div>
                 <div className="relative">
                     <div className="absolute -inset-4 bg-masa-orange/10 rounded-2xl transform rotate-3"></div>
-                    <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80" alt="Community interaction" className="relative rounded-xl shadow-2xl w-full h-auto object-cover" />
+                    <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=800&q=80" alt="Community interaction" className="relative rounded-xl shadow-2xl w-full h-auto object-cover" />
                 </div>
             </div>
         </div>

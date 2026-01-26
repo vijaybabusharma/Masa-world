@@ -13,7 +13,7 @@ const TrainingsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 subtitle: "Building the leaders of tomorrow with discipline and skill.",
                 primaryCtaLabel: "Join a Training",
                 primaryCtaAction: () => navigateTo('contact'),
-                bgImage: "https://picsum.photos/1600/900?grayscale&blur=2&random=30"
+                bgImage: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=1600&q=80"
             }}
             overviewData={{
                 title: "Discipline, Leadership, and Skill Building",
@@ -38,21 +38,21 @@ const TrainingsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     title: "Youth Leadership Bootcamp",
                     date: "Monthly",
                     location: "Regional Centers",
-                    image: "https://picsum.photos/600/400?random=31",
+                    image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=600&q=80",
                     status: "Current Training"
                 },
                 {
                     title: "Sports Coaches Training",
                     date: "Quarterly",
                     location: "National Sports Complex",
-                    image: "https://picsum.photos/600/400?random=32",
+                    image: "https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&w=600&q=80",
                     status: "Upcoming Training"
                 },
                 {
                     title: "Digital Literacy Workshop",
                     date: "Last Batch: June",
                     location: "Rural Centers",
-                    image: "https://picsum.photos/600/400?random=33",
+                    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80",
                     status: "Past Training"
                 },
             ]}

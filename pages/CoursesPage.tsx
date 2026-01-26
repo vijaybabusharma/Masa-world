@@ -431,7 +431,7 @@ const CoursesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             <PageHeader 
                 title="Masa Academy" 
                 subtitle="Empowering you with skills for life, leadership, and excellence." 
-                bgImage="https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1600&q=80"
+                bgImage="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1600&q=80"
             />
 
             <section className="py-12 border-b border-gray-200 bg-white sticky top-20 z-40 shadow-sm">

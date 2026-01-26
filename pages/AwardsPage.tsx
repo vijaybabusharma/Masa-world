@@ -13,7 +13,7 @@ const AwardsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 subtitle: "Celebrating the unsung heroes who build our communities.",
                 primaryCtaLabel: "Submit Nomination",
                 primaryCtaAction: () => navigateTo('contact'),
-                bgImage: "https://picsum.photos/1600/900?grayscale&blur=2&random=40"
+                bgImage: "https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?auto=format&fit=crop&w=1600&q=80"
             }}
             overviewData={{
                 title: "Honoring Real Heroes",
@@ -38,21 +38,21 @@ const AwardsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     title: "Real Hero Awards 2023",
                     date: "Dec 2023",
                     location: "New Delhi",
-                    image: "https://picsum.photos/600/400?random=41",
+                    image: "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=600&q=80",
                     status: "Completed"
                 },
                 {
                     title: "Sanitation Warriors Felicitation",
                     date: "Oct 2023",
                     location: "Mumbai",
-                    image: "https://picsum.photos/600/400?random=42",
+                    image: "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?auto=format&fit=crop&w=600&q=80",
                     status: "Completed"
                 },
                 {
                     title: "Teacher's Day Honors",
                     date: "Sept 2024",
                     location: "Nationwide",
-                    image: "https://picsum.photos/600/400?random=43",
+                    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80",
                     status: "Upcoming"
                 },
             ]}

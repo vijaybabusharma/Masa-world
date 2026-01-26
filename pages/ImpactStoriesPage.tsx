@@ -14,7 +14,7 @@ const ImpactStoriesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             <div className="space-y-8 mt-8">
                 {/* Story 1 */}
                 <div className="flex flex-col md:flex-row gap-6">
-                    <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=600&q=80" alt="Rohan's Story" className="w-full md:w-1/3 rounded-xl object-cover h-48 md:h-auto" />
+                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=80" alt="Rohan's Story" className="w-full md:w-1/3 rounded-xl object-cover h-48 md:h-auto" />
                     <div>
                         <h4 className="text-xl font-bold text-masa-charcoal mb-2">Rohan's Journey: From the Streets to the Stadium</h4>
                         <p className="text-gray-600 text-sm mb-4">
@@ -28,7 +28,7 @@ const ImpactStoriesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
 
                 {/* Story 2 */}
                 <div className="flex flex-col md:flex-row gap-6">
-                    <img src="https://images.unsplash.com/photo-1529335764857-3f1164d1cb24?auto=format&fit=crop&w=600&q=80" alt="Anjali's Story" className="w-full md:w-1/3 rounded-xl object-cover h-48 md:h-auto" />
+                    <img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=600&q=80" alt="Anjali's Story" className="w-full md:w-1/3 rounded-xl object-cover h-48 md:h-auto" />
                     <div>
                         <h4 className="text-xl font-bold text-masa-charcoal mb-2">Anjali: Breaking Barriers with Self-Defense</h4>
                         <p className="text-gray-600 text-sm mb-4">
@@ -42,7 +42,7 @@ const ImpactStoriesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
 
                 {/* Story 3 */}
                 <div className="flex flex-col md:flex-row gap-6">
-                    <img src="https://images.unsplash.com/photo-1617195920706-6967732a8732?auto=format&fit=crop&w=600&q=80" alt="Community Story" className="w-full md:w-1/3 rounded-xl object-cover h-48 md:h-auto" />
+                    <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=600&q=80" alt="Community Story" className="w-full md:w-1/3 rounded-xl object-cover h-48 md:h-auto" />
                     <div>
                         <h4 className="text-xl font-bold text-masa-charcoal mb-2">Village Transformation: The Clean Water Project</h4>
                         <p className="text-gray-600 text-sm mb-4">

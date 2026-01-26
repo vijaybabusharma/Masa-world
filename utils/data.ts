@@ -3,7 +3,8 @@ import React from 'react';
 import { Post } from '../types';
 import { UsersIcon, GlobeIcon, HeartIcon, ShieldCheckIcon } from '../components/icons/FeatureIcons';
 
-export const FOUNDER_IMAGE_URL = 'https://masaworldfoundation.com/wp-content/uploads/2026/01/Founder.jpeg';
+// Replaced with a professional placeholder representing leadership
+export const FOUNDER_IMAGE_URL = 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80';
 
 export const calculateReadingTime = (text: string): string => {
     const wordsPerMinute = 200;
@@ -37,7 +38,7 @@ export const coursesData: Course[] = [
         level: "Beginner",
         duration: "4 Weeks",
         mode: "Offline",
-        image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80",
         highlights: ["Public Speaking Mastery", "Team Building Activities", "Community Service Project", "Certificate of Completion"],
         price: "Free"
     },
@@ -76,7 +77,7 @@ export const coursesData: Course[] = [
         level: "Beginner",
         duration: "2 Weeks",
         mode: "Offline",
-        image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1459908676235-d5f02a50184b?auto=format&fit=crop&w=800&q=80",
         highlights: ["Learn from Master Artisans", "Materials Provided", "Take Home Your Art", "Exhibition Opportunity"],
         price: "₹1,499"
     },
@@ -89,7 +90,7 @@ export const coursesData: Course[] = [
         level: "Advanced",
         duration: "8 Weeks",
         mode: "Offline",
-        image: "https://images.unsplash.com/photo-1555597673-b21d5c935865?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=800&q=80",
         highlights: ["Situational Awareness", "Multiple Attacker Scenarios", "Pressure Point Control", "Legal Aspects of Self-Defense"],
         price: "₹2,999"
     },
@@ -102,7 +103,7 @@ export const coursesData: Course[] = [
         level: "Intermediate",
         duration: "5 Weeks",
         mode: "Online",
-        image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80",
         highlights: ["Volunteer Management", "Fundraising Basics", "Event Planning Logic", "Social Impact Measurement"],
         price: "Free"
     }
@@ -131,7 +132,7 @@ export const eventsData: Event[] = [
         displayDate: "Jan 15, 2025",
         location: "New Delhi, India",
         description: "A strategic gathering of 500+ student leaders to discuss policy reform and national development.",
-        image: "https://images.unsplash.com/photo-1475721027767-f753c9138030?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
         status: 'Upcoming',
         price: '₹500'
     },
@@ -289,7 +290,7 @@ Knowledge without integrity is dangerous. Our curriculum heavily emphasizes valu
 ### Success Stories
 From a shy student in a rural school to a confident community organizer, we have witnessed remarkable transformations. This validates our belief that education must extend beyond the four walls of a classroom.`,
         url: "/blog/education-beyond-classrooms",
-        image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
         author: "MASA Education Wing",
         tags: ["Education", "Skills", "Future"]
     },

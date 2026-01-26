@@ -13,7 +13,7 @@ const ConferencesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 subtitle: "Engaging dialogue to enlighten minds and solve national issues.",
                 primaryCtaLabel: "Register Interest",
                 primaryCtaAction: () => navigateTo('contact'),
-                bgImage: "https://picsum.photos/1600/900?grayscale&blur=2&random=60"
+                bgImage: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1600&q=80"
             }}
             overviewData={{
                 title: "Addressing National Issues Through Dialogue",
@@ -38,21 +38,21 @@ const ConferencesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     title: "National Youth Conclave",
                     date: "Jan 2025",
                     location: "New Delhi",
-                    image: "https://picsum.photos/600/400?random=61",
+                    image: "https://images.unsplash.com/photo-1475721027767-f753c9138030?auto=format&fit=crop&w=600&q=80",
                     status: "Upcoming"
                 },
                 {
                     title: "Rural Development Summit",
                     date: "March 2024",
                     location: "Bhopal",
-                    image: "https://picsum.photos/600/400?random=62",
+                    image: "https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=600&q=80",
                     status: "Past Event"
                 },
                 {
                     title: "Women in Leadership Forum",
                     date: "Nov 2023",
                     location: "Bangalore",
-                    image: "https://picsum.photos/600/400?random=63",
+                    image: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=600&q=80",
                     status: "Completed"
                 },
             ]}
