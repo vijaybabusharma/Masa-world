@@ -38,7 +38,7 @@ const TrainingsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     title: "Youth Leadership Bootcamp",
                     date: "Monthly",
                     location: "Regional Centers",
-                    image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=600&q=80",
+                    image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=600&q=80",
                     status: "Current Training"
                 },
                 {

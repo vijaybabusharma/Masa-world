@@ -1,30 +1,21 @@
 
 import React, { useState, useEffect } from 'react';
-import { Page } from '../types';
+import { Page, NavItem, DropdownNavItem, MenuItem } from '../types';
 import { MenuIcon, XIcon, ChevronDownIcon } from './icons/UiIcons';
 import { HeartIcon } from './icons/FeatureIcons';
+import { ContentManager } from '../utils/contentManager';
 
 interface HeaderProps {
   navigateTo: (page: Page) => void;
   currentPage: Page;
 }
 
-interface NavItem {
-  label: string;
-  page: Page;
-}
-
-interface DropdownNavItem {
-    label: string;
-    page: Page;
-    subItems: NavItem[];
-}
-
-function isDropdown(item: NavItem | DropdownNavItem): item is DropdownNavItem {
+function isDropdown(item: MenuItem): item is DropdownNavItem {
     return 'subItems' in item && Array.isArray((item as DropdownNavItem).subItems);
 }
 
 const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
+  const [navItems, setNavItems] = useState<MenuItem[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -33,29 +24,19 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const navItems: (NavItem | DropdownNavItem)[] = [
-    { label: 'Home', page: 'home' },
-    { label: 'About Us', page: 'about' },
-    { label: 'Initiatives', page: 'initiatives' },
-    { label: 'Courses', page: 'courses' },
-    { label: 'Events', page: 'events' },
-    { 
-      label: 'Get Involved', 
-      page: 'get-involved',
-      subItems: [
-        { label: 'Overview', page: 'get-involved' },
-        { label: 'Volunteer', page: 'volunteer' },
-        { label: 'Become a Member', page: 'membership' },
-        { label: 'Careers & Internships', page: 'careers' },
-        { label: 'Partner With Us', page: 'contact' }
-      ]
-    },
-  ];
+  
+  useEffect(() => {
+    const loadNav = () => {
+        const settings = ContentManager.getSettings();
+        setNavItems(settings.navigation.headerMenu);
+    };
+    loadNav();
+    window.addEventListener('masa-settings-updated', loadNav);
+    return () => window.removeEventListener('masa-settings-updated', loadNav);
+  }, []);
 
   const handleNavClick = (page: Page) => {
     navigateTo(page);
@@ -98,7 +79,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
             <nav className="flex items-center space-x-2">
               {navItems.map((item) => (
                 isDropdown(item) ? (
-                  <div key={item.label} className="relative group">
+                  <div key={item.id} className="relative group">
                     <button
                       onClick={() => handleNavClick(item.page)}
                       className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${
@@ -113,7 +94,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                     <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto invisible group-hover:visible border border-gray-100">
                       {item.subItems.map(subItem => (
                         <button
-                          key={subItem.label}
+                          key={subItem.id}
                           onClick={() => handleNavClick(subItem.page)}
                           className="block w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-masa-orange transition-colors"
                         >
@@ -124,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                   </div>
                 ) : (
                   <button
-                    key={item.label}
+                    key={item.id}
                     onClick={() => handleNavClick(item.page)}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${
                       currentPage === item.page
@@ -166,7 +147,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
           <div className="px-4 pt-4 pb-20 space-y-2">
             {navItems.map((item) => (
               isDropdown(item) ? (
-                <div key={item.label} className="border-b border-gray-50 pb-2">
+                <div key={item.id} className="border-b border-gray-50 pb-2">
                   <button
                     onClick={() => toggleMobileSubMenu(item.label)}
                     className={`w-full text-left px-4 py-3 rounded-md text-base font-medium flex justify-between items-center ${
@@ -180,7 +161,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                     <div className="pl-6 pr-2 pt-2 pb-2 space-y-1 bg-gray-50 rounded-b-lg">
                       {item.subItems.map(subItem => (
                         <button
-                          key={subItem.label}
+                          key={subItem.id}
                           onClick={() => handleNavClick(subItem.page)}
                           className="block w-full text-left px-4 py-3 rounded-md text-sm font-medium text-gray-600 hover:bg-white hover:text-masa-orange transition-colors"
                         >
@@ -192,7 +173,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                 </div>
               ) : (
                 <button
-                  key={item.label}
+                  key={item.id}
                   onClick={() => handleNavClick(item.page)}
                   className={`block w-full text-left px-4 py-3 rounded-md text-base font-medium flex items-center gap-2 border-b border-gray-50 last:border-0 ${
                     currentPage === item.page ? 'text-masa-orange bg-orange-50' : 'text-gray-800 hover:bg-gray-50'

@@ -870,8 +870,8 @@ const AdminLogin: React.FC<{ onLogin: (user: AdminUser) => void }> = ({ onLogin 
                     </button>
                 </form>
                 <div className="mt-6 text-center text-xs text-gray-400">
-                    <p>Default Admin: masaworldfoundation@gmail.com</p>
-                    <p>Password: admin123</p>
+                    <p>Default Admin: vijaybabusharma0@gmail.com</p>
+                    <p>Password: Masa@world@vijay123</p>
                 </div>
             </div>
         </div>

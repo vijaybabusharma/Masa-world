@@ -62,7 +62,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
         {
             headline: "Empowering Youth. Strengthening Communities.",
             subtext: "We believe in building a stronger future through holistic development, discipline, and shared values.",
-            image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=1800&q=80",
+            image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Get Involved", page: "get-involved", primary: true },
                 { label: "Donate Now", page: "donate", primary: false }
@@ -71,7 +71,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
         {
             headline: "Sports, Education & Culture for Real Impact",
             subtext: "A proven model for character building, social unity, and creating responsible citizens.",
-            image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1800&q=80",
+            image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Explore Programs", page: "programs-overview", primary: true },
                 { label: "Volunteer", page: "volunteer", primary: false }
@@ -80,7 +80,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
         {
             headline: "From Grassroots to Global Change",
             subtext: "Local actions creating ripples across the world. Connecting communities beyond borders.",
-            image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1800&q=80",
+            image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Our Story", page: "about", primary: true },
                 { label: "Our Initiatives", page: "initiatives", primary: false }
@@ -89,7 +89,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
         {
             headline: "Building Leaders. Creating Opportunities.",
             subtext: "Nurturing talent, discipline, and leadership skills in every child, regardless of background.",
-            image: "https://images.unsplash.com/photo-1514222709107-a180c68d72b4?auto=format&fit=crop&w=1800&q=80",
+            image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Trainings", page: "trainings", primary: true },
                 { label: "Membership", page: "membership", primary: false }
@@ -98,7 +98,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
         {
             headline: "Action Today. Impact Tomorrow.",
             subtext: "Join the movement that transforms lives daily. Your support makes it possible.",
-            image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1800&q=80",
+            image: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Donate Now", page: "donate", primary: true },
                 { label: "Join Us", page: "membership", primary: false }
@@ -777,19 +777,19 @@ const TestimonialSlider: React.FC = () => {
             quote: "Volunteering with MASA has been a life-changing experience. It’s more than just service; it’s about becoming part of a family that genuinely cares for the community.",
             name: "Priya Sharma",
             role: "Volunteer, Delhi",
-            image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80"
+            image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=150&q=80"
         },
         {
             quote: "As a Life Member, I’ve seen firsthand how my contributions are creating sustainable impact. The transparency and dedication of the team are truly commendable.",
             name: "Rajesh Kumar",
             role: "Life Member, Mumbai",
-            image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80"
+            image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=150&q=80"
         },
         {
             quote: "The leadership bootcamp changed my perspective on what I can achieve. I feel more confident and equipped to make a difference in my village.",
             name: "Anjali Singh",
             role: "Beneficiary, Youth Program",
-            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80"
+            image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80"
         }
     ];
 

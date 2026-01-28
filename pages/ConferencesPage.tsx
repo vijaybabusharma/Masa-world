@@ -38,14 +38,14 @@ const ConferencesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     title: "National Youth Conclave",
                     date: "Jan 2025",
                     location: "New Delhi",
-                    image: "https://images.unsplash.com/photo-1475721027767-f753c9138030?auto=format&fit=crop&w=600&q=80",
+                    image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=80",
                     status: "Upcoming"
                 },
                 {
                     title: "Rural Development Summit",
                     date: "March 2024",
                     location: "Bhopal",
-                    image: "https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=600&q=80",
+                    image: "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?auto=format&fit=crop&w=600&q=80",
                     status: "Past Event"
                 },
                 {

@@ -1,10 +1,10 @@
 
 import React, { useEffect } from 'react';
 import { NavigationProps } from '../types';
-import { CheckIcon, ArrowRightIcon, HeartIcon, UsersIcon, GlobeIcon, BriefcaseIcon, CalendarDaysIcon } from '../components/icons/FeatureIcons';
+import { CheckIcon, ArrowRightIcon, HeartIcon, UsersIcon, GlobeIcon, BriefcaseIcon, CalendarDaysIcon, ShieldCheckIcon } from '../components/icons/FeatureIcons';
 
 interface ThankYouPageProps extends NavigationProps {
-    type: 'volunteer' | 'donate' | 'membership' | 'career' | 'contact' | 'event';
+    type: 'volunteer' | 'donate' | 'membership' | 'career' | 'contact' | 'event' | 'pledge';
 }
 
 const contentConfig = {
@@ -67,7 +67,19 @@ const contentConfig = {
         icon: CalendarDaysIcon,
         color: "text-masa-orange",
         bg: "bg-orange-50"
+    },
+//- FIX START
+    pledge: {
+        title: "Thank You for Taking the Pledge!",
+        subtitle: "Your commitment makes a world of difference.",
+        message: "You have successfully taken the pledge. Your official digital certificate is now available. You can download it anytime from our website.",
+        primaryBtn: "Verify/Download Certificate",
+        primaryAction: "pledge",
+        icon: ShieldCheckIcon,
+        color: "text-purple-600",
+        bg: "bg-purple-50"
     }
+//- FIX END
 };
 
 const ThankYouPage: React.FC<ThankYouPageProps> = ({ navigateTo, type }) => {

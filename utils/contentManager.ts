@@ -1,6 +1,6 @@
 
 import { eventsData, postsData, coursesData, Event, Course } from './data';
-import { Post, GlobalSettings, PageMetadata, Page } from '../types';
+import { Post, GlobalSettings, PageMetadata, Page, MenuItem, NavItem } from '../types';
 
 // Keys for LocalStorage
 const KEYS = {
@@ -11,6 +11,81 @@ const KEYS = {
     PAGES: 'masa_content_pages'
 };
 
+// Default Navigation Menus
+const defaultHeaderMenu: MenuItem[] = [
+    { id: 'nav-home', label: 'Home', page: 'home' },
+    { 
+        id: 'nav-about', label: 'About Us', page: 'about',
+        subItems: [
+            { id: 'nav-about-sub', label: 'Our Story', page: 'about' },
+            { id: 'nav-mission', label: 'Mission & Vision', page: 'mission-vision' },
+            { id: 'nav-values', label: 'Core Values', page: 'core-values' },
+            { id: 'nav-founder', label: 'Founder\'s Message', page: 'founder-message' },
+            { id: 'nav-governance', label: 'Governance', page: 'governance' },
+        ]
+    },
+    { 
+        id: 'nav-programs', label: 'Our Work', page: 'programs-overview',
+        subItems: [
+            { id: 'nav-prog-overview', label: 'Programs Overview', page: 'programs-overview' },
+            { id: 'nav-sports', label: 'Sports', page: 'sports' },
+            { id: 'nav-education', label: 'Education', page: 'education' },
+            { id: 'nav-culture', label: 'Culture', page: 'culture' },
+            { id: 'nav-initiatives', label: 'Social Initiatives', page: 'initiatives' },
+            { id: 'nav-impact-stories', label: 'Impact Stories', page: 'impact-stories' },
+        ]
+    },
+    { 
+        id: 'nav-media', label: 'Media & Resources', page: 'media-reports',
+        subItems: [
+            { id: 'nav-media-highlights', label: 'Media Highlights', page: 'media-highlights' },
+            { id: 'nav-gallery', label: 'Gallery', page: 'gallery' },
+            { id: 'nav-reports', label: 'Annual Reports', page: 'media-reports' },
+            { id: 'nav-courses', label: 'Courses & Trainings', page: 'courses' },
+            { id: 'nav-events', label: 'Events', page: 'events' },
+        ]
+    },
+    { 
+        id: 'nav-get-involved', label: 'Get Involved', page: 'get-involved',
+        subItems: [
+            { id: 'nav-donate', label: 'Donate Now', page: 'donate' },
+            { id: 'nav-volunteer', label: 'Volunteer', page: 'volunteer' },
+            { id: 'nav-membership', label: 'Become a Member', page: 'membership' },
+            { id: 'nav-careers', label: 'Careers & Internships', page: 'careers' },
+            { id: 'nav-pledge', label: 'Take a Pledge', page: 'pledge' },
+        ]
+    },
+    { id: 'nav-blog', label: 'Blog', page: 'blog' },
+    { id: 'nav-contact', label: 'Contact', page: 'contact' },
+];
+
+const defaultFooterLinks: { about: NavItem[], involved: NavItem[], resources: NavItem[], policies: NavItem[] } = {
+    about: [
+        { id: 'footer-about', label: 'About MASA', page: 'about' },
+        { id: 'footer-mission', label: 'Mission & Vision', page: 'mission-vision' },
+        { id: 'footer-founder', label: 'Founder\'s Message', page: 'founder-message' },
+        { id: 'footer-careers', label: 'Careers', page: 'careers' },
+    ],
+    involved: [
+        { id: 'footer-volunteer', label: 'Volunteer', page: 'volunteer' },
+        { id: 'footer-member', label: 'Membership', page: 'membership' },
+        { id: 'footer-donate', label: 'Donate', page: 'donate' },
+        { id: 'footer-contact', label: 'Contact Us', page: 'contact' },
+    ],
+    resources: [
+        { id: 'footer-blog', label: 'Blog', page: 'blog' },
+        { id: 'footer-events', label: 'Events', page: 'events' },
+        { id: 'footer-reports', label: 'Reports', page: 'media-reports' },
+        { id: 'footer-gallery', label: 'Gallery', page: 'gallery' },
+    ],
+    policies: [
+        { id: 'footer-privacy', label: 'Privacy Policy', page: 'privacy-policy' },
+        { id: 'footer-terms', label: 'Terms & Conditions', page: 'terms-and-conditions' },
+        { id: 'footer-disclaimer', label: 'Disclaimer', page: 'disclaimer' },
+    ]
+};
+
+
 // Default Settings
 const defaultSettings: GlobalSettings = {
     general: {
@@ -18,6 +93,13 @@ const defaultSettings: GlobalSettings = {
         contactEmail: 'masaworldfoundation@gmail.com',
         enableRegistrations: true,
         maintenanceMode: false,
+    },
+    navigation: {
+        headerMenu: defaultHeaderMenu,
+        footerAboutLinks: defaultFooterLinks.about,
+        footerInvolvedLinks: defaultFooterLinks.involved,
+        footerResourceLinks: defaultFooterLinks.resources,
+        footerPolicyLinks: defaultFooterLinks.policies,
     },
     social: [
         { id: 'fb', platform: 'facebook', url: 'https://facebook.com/masaworldfoundation', enabled: true },
@@ -37,29 +119,36 @@ const defaultSettings: GlobalSettings = {
         googleSearchConsole: '',
         customHead: '',
         enableCustomHead: false,
-        customBody: '',
-        enableCustomBody: false,
-        customFooter: '',
-        enableCustomFooter: false,
+        customBodyStart: '',
+        enableCustomBodyStart: false,
+        customBodyEnd: '',
+        enableCustomBodyEnd: false,
     },
     appearance: {
         customCss: '',
-        customJs: '',
+        enableCustomCss: false,
     },
     payments: {
         currency: 'INR',
         razorpayEnabled: true,
         razorpayKey: '',
         stripeEnabled: false,
+        stripeKey: '',
         paypalEnabled: false,
+        paypalClientId: '',
         manualPaymentEnabled: true,
-        donationReceiptEmail: true,
+        manualPaymentInstructions: 'Please contact us for bank transfer details.',
+        donationSuccessMessage: 'Thank you for your generous donation! A receipt has been sent to your email.',
+        donationFailureMessage: 'Your donation could not be processed. Please try again or contact support.',
     },
     features: {
         blogEnabled: true,
         eventsEnabled: true,
         coursesEnabled: true,
         ngoHelpDeskEnabled: true,
+        pledgePlatformEnabled: true,
+        whatsAppIntegrationEnabled: false,
+        whatsAppNumber: '',
     }
 };
 
@@ -87,11 +176,21 @@ const initializeData = () => {
     } else {
         // Migration: Ensure new fields exist if loading old settings
         const current = JSON.parse(localStorage.getItem(KEYS.SETTINGS) || '{}');
-        if (!current.scripts || !current.social) {
-            const merged = { ...defaultSettings, ...current };
-            // Ensure social/scripts structure matches new type
-            merged.social = current.social || defaultSettings.social;
-            merged.scripts = { ...defaultSettings.scripts, ...current.monetization }; // migrate old monetization to scripts partially
+        // A simple check for a deeply nested property to guess if it's an old version
+        if (!current.features?.pledgePlatformEnabled) { 
+            // A deep merge would be better, but for this case, we'll merge top-level keys
+            const merged = { 
+                ...defaultSettings, 
+                ...current,
+                // Ensure nested objects are also merged to prevent losing old data while adding new keys
+                general: { ...defaultSettings.general, ...current.general },
+                navigation: { ...defaultSettings.navigation, ...current.navigation },
+                social: current.social || defaultSettings.social,
+                scripts: { ...defaultSettings.scripts, ...current.scripts },
+                appearance: { ...defaultSettings.appearance, ...current.appearance },
+                payments: { ...defaultSettings.payments, ...current.payments },
+                features: { ...defaultSettings.features, ...current.features },
+            };
             localStorage.setItem(KEYS.SETTINGS, JSON.stringify(merged));
         }
     }

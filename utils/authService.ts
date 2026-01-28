@@ -15,10 +15,10 @@ const DEFAULT_USERS = [
     { 
         id: 'u1', 
         name: 'Super Admin', 
-        email: 'masaworldfoundation@gmail.com', 
+        email: 'vijaybabusharma0@gmail.com', 
         role: 'Super Admin', 
-        passwordHash: hash('admin123'), // Password: admin123
-        avatar: 'https://i.pravatar.cc/150?u=masa_admin' 
+        passwordHash: hash('Masa@world@vijay123'), // Password: Masa@world@vijay123
+        avatar: 'https://ui-avatars.com/api/?name=Super+Admin&background=1E3A8A&color=fff' 
     },
     { 
         id: 'u2', 
@@ -26,7 +26,7 @@ const DEFAULT_USERS = [
         email: 'editor@masa.world', 
         role: 'Editor', 
         passwordHash: hash('editor@123'), // Password: editor@123
-        avatar: 'https://i.pravatar.cc/150?u=editor' 
+        avatar: 'https://ui-avatars.com/api/?name=Content+Editor&background=F97316&color=fff' 
     },
     { 
         id: 'u3', 
@@ -34,7 +34,7 @@ const DEFAULT_USERS = [
         email: 'event@masa.world', 
         role: 'Event Manager', 
         passwordHash: hash('event@123'), // Password: event@123
-        avatar: 'https://i.pravatar.cc/150?u=event' 
+        avatar: 'https://ui-avatars.com/api/?name=Event+Manager&background=10B981&color=fff'
     }
 ];
 

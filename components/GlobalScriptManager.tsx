@@ -12,7 +12,7 @@ const GlobalScriptManager: React.FC = () => {
             document.querySelectorAll('[data-masa-injected]').forEach(el => el.remove());
 
             // --- 2. CUSTOM CSS ---
-            if (appearance.customCss) {
+            if (appearance.enableCustomCss && appearance.customCss) {
                 const style = document.createElement('style');
                 style.setAttribute('data-masa-injected', 'css');
                 style.innerHTML = appearance.customCss;
@@ -21,7 +21,6 @@ const GlobalScriptManager: React.FC = () => {
 
             // --- 3. GOOGLE SEARCH CONSOLE ---
             if (scripts.googleSearchConsole) {
-                // Check if existing meta tag exists to update, else create
                 let meta = document.querySelector('meta[name="google-site-verification"]');
                 if (!meta) {
                     meta = document.createElement('meta');
@@ -29,18 +28,17 @@ const GlobalScriptManager: React.FC = () => {
                     document.head.appendChild(meta);
                 }
                 meta.setAttribute('content', scripts.googleSearchConsole);
+                meta.setAttribute('data-masa-injected', 'gsc');
             }
 
             // --- 4. GOOGLE ANALYTICS (GA4) ---
             if (scripts.enableAnalytics && scripts.googleAnalyticsId) {
-                // GA script loader
                 const gaScript = document.createElement('script');
                 gaScript.setAttribute('data-masa-injected', 'ga');
                 gaScript.async = true;
                 gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${scripts.googleAnalyticsId}`;
                 document.head.appendChild(gaScript);
 
-                // GA Config
                 const gaConfig = document.createElement('script');
                 gaConfig.setAttribute('data-masa-injected', 'ga-config');
                 gaConfig.innerHTML = `
@@ -73,7 +71,6 @@ const GlobalScriptManager: React.FC = () => {
 
             // --- 6. GOOGLE ADSENSE ---
             if (scripts.enableAdsense && scripts.googleAdsenseCode) {
-                // If it's just the CA-PUB ID
                 if (scripts.googleAdsenseCode.startsWith('ca-pub')) {
                     const adScript = document.createElement('script');
                     adScript.setAttribute('data-masa-injected', 'adsense');
@@ -82,75 +79,42 @@ const GlobalScriptManager: React.FC = () => {
                     adScript.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${scripts.googleAdsenseCode}`;
                     document.head.appendChild(adScript);
                 } else {
-                    // Assume it's a full script tag string, inject safely (User beware)
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = scripts.googleAdsenseCode;
-                    const script = tempDiv.querySelector('script');
-                    if (script) {
-                        const adScript = document.createElement('script');
-                        adScript.setAttribute('data-masa-injected', 'adsense-custom');
-                        // Copy attributes
-                        Array.from(script.attributes).forEach(attr => adScript.setAttribute(attr.name, attr.value));
-                        adScript.innerHTML = script.innerHTML;
-                        document.head.appendChild(adScript);
-                    }
+                    injectRawHtml(scripts.googleAdsenseCode, document.head, 'adsense-custom');
                 }
             }
 
             // --- 7. CUSTOM HEAD SCRIPTS ---
             if (scripts.enableCustomHead && scripts.customHead) {
-                injectRawScript(scripts.customHead, document.head, 'custom-head');
+                injectRawHtml(scripts.customHead, document.head, 'custom-head');
             }
 
             // --- 8. CUSTOM BODY SCRIPTS (Start of Body) ---
-            if (scripts.enableCustomBody && scripts.customBody) {
-                injectRawScript(scripts.customBody, document.body, 'custom-body');
+            if (scripts.enableCustomBodyStart && scripts.customBodyStart) {
+                injectRawHtml(scripts.customBodyStart, document.body, 'custom-body-start', false);
             }
 
             // --- 9. CUSTOM FOOTER SCRIPTS (End of Body) ---
-            if (scripts.enableCustomFooter && scripts.customFooter) {
-                injectRawScript(scripts.customFooter, document.body, 'custom-footer', true);
+            if (scripts.enableCustomBodyEnd && scripts.customBodyEnd) {
+                injectRawHtml(scripts.customBodyEnd, document.body, 'custom-body-end', true);
             }
         };
 
-        // Helper to inject raw script content
-        const injectRawScript = (content: string, target: HTMLElement, id: string, appendToEnd: boolean = false) => {
-            try {
-                // Create a temporary container to parse HTML
-                const div = document.createElement('div');
-                div.innerHTML = content;
-                
-                const nodes = Array.from(div.childNodes);
-                
-                nodes.forEach((node, index) => {
-                    if (node.nodeName === 'SCRIPT') {
-                        const script = document.createElement('script');
-                        script.setAttribute('data-masa-injected', `${id}-${index}`);
-                        // Copy attributes
-                        Array.from((node as Element).attributes).forEach(attr => script.setAttribute(attr.name, attr.value));
-                        script.innerHTML = (node as Element).innerHTML;
-                        if (appendToEnd) target.appendChild(script);
-                        else target.insertBefore(script, target.firstChild);
-                    } else {
-                        // For non-script tags (like noscript, style, or tracking pixels in img)
-                        const clonedNode = node.cloneNode(true);
-                        // Add identifier if it's an element
-                        if (clonedNode instanceof Element) {
-                            clonedNode.setAttribute('data-masa-injected', `${id}-${index}`);
-                        }
-                        if (appendToEnd) target.appendChild(clonedNode);
-                        else target.insertBefore(clonedNode, target.firstChild);
-                    }
-                });
-            } catch (e) {
-                console.error(`Error injecting ${id}:`, e);
+        const injectRawHtml = (content: string, target: HTMLElement, id: string, appendToEnd: boolean = false) => {
+            const container = document.createRange().createContextualFragment(content);
+            container.childNodes.forEach((node, index) => {
+                if (node instanceof Element) {
+                    node.setAttribute('data-masa-injected', `${id}-${index}`);
+                }
+            });
+            if (appendToEnd) {
+                target.appendChild(container);
+            } else {
+                target.insertBefore(container, target.firstChild);
             }
         };
 
-        // Apply immediately on mount
         applySettings();
 
-        // Listen for updates from Admin Dashboard
         window.addEventListener('masa-settings-updated', applySettings);
         return () => window.removeEventListener('masa-settings-updated', applySettings);
     }, []);

@@ -4,7 +4,7 @@ import { Post } from '../types';
 import { UsersIcon, GlobeIcon, HeartIcon, ShieldCheckIcon } from '../components/icons/FeatureIcons';
 
 // Replaced with a professional placeholder representing leadership
-export const FOUNDER_IMAGE_URL = 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80';
+export const FOUNDER_IMAGE_URL = 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=782,fit=crop/AMq4Dg7v0wH5yKM1/founder-B9OrhqqUN6Kq3Qir.jpeg';
 
 export const calculateReadingTime = (text: string): string => {
     const wordsPerMinute = 200;
@@ -38,7 +38,7 @@ export const coursesData: Course[] = [
         level: "Beginner",
         duration: "4 Weeks",
         mode: "Offline",
-        image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80",
         highlights: ["Public Speaking Mastery", "Team Building Activities", "Community Service Project", "Certificate of Completion"],
         price: "Free"
     },
@@ -144,13 +144,13 @@ export const eventsData: Event[] = [
         displayDate: "Nov 10, 2024",
         location: "Mumbai, Maharashtra",
         description: "Empowering women with essential self-defense techniques and situational awareness skills.",
-        image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1598426359399-7d08b8b98150?auto=format&fit=crop&w=800&q=80",
         status: 'Upcoming',
         price: 'Free'
     },
     {
         id: 'evt-003',
-        title: "Annual Sports Day 2024",
+        title: "MASA Sports Meet",
         category: "Sports",
         date: "2024-08-15",
         displayDate: "Aug 15, 2024",
@@ -219,7 +219,7 @@ export const postsData: Post[] = [
     { 
         id: 10,
         title: "Building a Global Community Through Sports, Education, and Culture", 
-        date: "May 20, 2024", 
+        date: "2024-05-20", 
         category: "NGO Updates",
         summary: "An overview of the MASA vision: connecting the world through three powerful pillars of human development.",
         content: `The challenges facing humanity today require more than just isolated solutions; they demand a holistic approach that nurtures the body, mind, and spirit. At MASA World Foundation, we have identified three pillars—Sports, Education, and Culture—that act as catalysts for sustainable development.
@@ -249,7 +249,7 @@ By weaving these three elements together, MASA World Foundation is building a gl
     { 
         id: 1,
         title: "How Sports Build Discipline, Leadership, and Strong Character in Youth", 
-        date: "October 12, 2024", 
+        date: "2024-10-12", 
         category: "Sports",
         summary: "Sports are more than just games; they are a training ground for life. Discover how athletic training instills the discipline needed for future leaders.",
         content: `At MASA World Foundation, we view sports as a fundamental tool for character building. It is on the playground that children learn their first lessons in equality, fair play, and resilience.
@@ -273,7 +273,7 @@ We have seen school attendance rise and delinquency fall in communities where we
     { 
         id: 2,
         title: "Education Beyond Classrooms: Preparing Youth for Real-World Challenges", 
-        date: "September 28, 2024", 
+        date: "2024-09-28", 
         category: "Education",
         summary: "True education goes beyond textbooks. We explore why leadership, ethics, and communication skills are essential for the modern world.",
         content: `Education in India has made great strides, but access to quality 'life education' remains uneven. At MASA, we believe in an education that prepares you for life, not just exams.
@@ -297,7 +297,7 @@ From a shy student in a rural school to a confident community organizer, we have
     { 
         id: 3,
         title: "The Role of Culture in Building Unity and Social Harmony", 
-        date: "September 15, 2024", 
+        date: "2024-09-15", 
         category: "Culture",
         summary: "In a diverse world, culture is the bridge that connects us. Learn how preserving heritage fosters peace and mutual respect.",
         content: `Culture is the soul of a community. It is the language of our ancestors and the foundation of our identity. MASA World Foundation is dedicated to preserving this heritage while using it as a tool for unity.
@@ -318,7 +318,7 @@ When people share food, music, and art, barriers dissolve. Cultural exchange pro
     { 
         id: 4,
         title: "Why Recognizing Real Heroes Matters More Than Celebrating Celebrities", 
-        date: "August 30, 2024", 
+        date: "2024-08-30", 
         category: "Awards",
         summary: "Society often idolizes fame, but the real changemakers are among us. We explain MASA’s philosophy of honoring everyday heroes.",
         content: `We live in an era of celebrity worship. While entertainers have their place, MASA believes that the true heroes are those who silently build our communities.
@@ -339,7 +339,7 @@ We encourage everyone to look around their community. Identify these heroes. Nom
     { 
         id: 5,
         title: "Recap: Our Annual City Cleanliness Drive", 
-        date: "August 12, 2024", 
+        date: "2024-08-12", 
         category: "Events",
         summary: "A look back at our most successful community cleanliness drive, which brought together over 500 volunteers.",
         content: `It is easy to complain about dirty streets; it is harder to pick up a broom. Last week, over 500 MASA volunteers chose the latter.

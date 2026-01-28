@@ -49,6 +49,7 @@ import EthicalUsePolicyPage from './pages/EthicalUsePolicyPage';
 
 // Import new interactive pages
 import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
+import PledgePlatformPage from './pages/PledgePlatformPage';
 
 // Import new content pages
 import ImpactStoriesPage from './pages/ImpactStoriesPage';
@@ -121,6 +122,9 @@ const App: React.FC = () => {
       
       // New Interactive Pages
       case 'ngo-help-desk': return <NgoHelpDeskPage navigateTo={navigateTo} />;
+//- FIX START
+      case 'pledge': return <PledgePlatformPage navigateTo={navigateTo} />;
+//- FIX END
 
       // New Content Pages
       case 'impact-stories': return <ImpactStoriesPage navigateTo={navigateTo} />;
@@ -135,10 +139,14 @@ const App: React.FC = () => {
       case 'thank-you-career': return <ThankYouPage navigateTo={navigateTo} type="career" />;
       case 'thank-you-contact': return <ThankYouPage navigateTo={navigateTo} type="contact" />;
       case 'thank-you-event': return <ThankYouPage navigateTo={navigateTo} type="event" />;
+//- FIX START
+      case 'thank-you-pledge': return <ThankYouPage navigateTo={navigateTo} type="pledge" />;
+//- FIX END
       
       // Admin
-      case 'admin-dashboard': return <AdminDashboardPage />;
-      case 'admin-login': return <AdminDashboardPage />; // Alias
+      case 'admin-dashboard':
+      case 'admin-login':
+        return <AdminDashboardPage />;
 
       // Member login and dashboard
       case 'login': return <LoginPage navigateTo={navigateTo} />;
@@ -158,11 +166,10 @@ const App: React.FC = () => {
     }
   };
 
-  // Hide header/footer for Admin Dashboard
   const isDashboard = currentPage === 'admin-dashboard' || currentPage === 'admin-login';
 
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col font-sans text-masa-charcoal">
+    <div className={`bg-gray-50 min-h-screen flex flex-col font-sans ${isDashboard ? 'text-gray-800' : 'text-masa-charcoal'}`}>
       <GlobalScriptManager />
       {!isDashboard && <Header navigateTo={navigateTo} currentPage={currentPage} />}
       <main className="flex-grow">
@@ -171,9 +178,9 @@ const App: React.FC = () => {
       {!isDashboard && <TrustSection navigateTo={navigateTo} />}
       {!isDashboard && <Footer navigateTo={navigateTo} />}
       
-      <ScrollToTopButton />
-      <AccessibilityWidget />
-      <LiveActivityToast />
+      {!isDashboard && <ScrollToTopButton />}
+      {!isDashboard && <AccessibilityWidget />}
+      {!isDashboard && <LiveActivityToast />}
     </div>
   );
 };

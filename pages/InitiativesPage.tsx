@@ -45,14 +45,14 @@ const InitiativesPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     title: "Rural Health Checkup Camp",
                     date: "Monthly",
                     location: "Uttar Pradesh",
-                    image: "https://images.unsplash.com/photo-1579684385183-1b60fe37e965?auto=format&fit=crop&w=600&q=80",
+                    image: "https://images.unsplash.com/photo-1628348070889-cb656235b487?auto=format&fit=crop&w=600&q=80",
                     status: "Active"
                 },
                 {
                     title: "Youth Vocational Training",
                     date: "Quarterly Batches",
                     location: "Multiple Centers",
-                    image: "https://images.unsplash.com/photo-1581092921461-eab62e97a782?auto=format&fit=crop&w=600&q=80",
+                    image: "https://images.unsplash.com/photo-1591115765324-212b189a1969?auto=format&fit=crop&w=600&q=80",
                     status: "Enrolling"
                 },
             ]}

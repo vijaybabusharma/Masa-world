@@ -1,55 +1,30 @@
 
 import React, { useState, useEffect } from 'react';
-import { NavigationProps, Page, SocialLink } from '../types';
+import { NavigationProps, Page, SocialLink, NavItem } from '../types';
 import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon, YouTubeIcon } from './icons/SocialIcons';
 import { EnvelopeIcon, MapPinIcon, ArrowRightIcon } from './icons/FeatureIcons';
 import { ContentManager } from '../utils/contentManager';
 
 const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
+  const [aboutLinks, setAboutLinks] = useState<NavItem[]>([]);
+  const [involvedLinks, setInvolvedLinks] = useState<NavItem[]>([]);
+  const [resourceLinks, setResourceLinks] = useState<NavItem[]>([]);
+  const [policyLinks, setPolicyLinks] = useState<NavItem[]>([]);
 
   useEffect(() => {
-      // Load social links from settings on mount and listen for updates
       const loadSettings = () => {
           const settings = ContentManager.getSettings();
           setSocialLinks(settings.social || []);
+          setAboutLinks(settings.navigation.footerAboutLinks || []);
+          setInvolvedLinks(settings.navigation.footerInvolvedLinks || []);
+          setResourceLinks(settings.navigation.footerResourceLinks || []);
+          setPolicyLinks(settings.navigation.footerPolicyLinks || []);
       };
       loadSettings();
       window.addEventListener('masa-settings-updated', loadSettings);
       return () => window.removeEventListener('masa-settings-updated', loadSettings);
   }, []);
-
-  const aboutLinks: { label: string; page: Page }[] = [
-    { label: 'Our Story', page: 'about' },
-    { label: 'Mission & Vision', page: 'mission-vision' },
-    { label: 'Governance', page: 'governance' },
-    { label: 'Global Impact', page: 'global-impact' },
-  ];
-
-  const involvedLinks: { label: string; page: Page }[] = [
-    { label: 'Overview', page: 'get-involved' },
-    { label: 'Careers', page: 'careers' },
-    { label: 'Volunteer', page: 'volunteer' },
-    { label: 'Membership', page: 'membership' },
-    { label: 'Donate', page: 'donate' },
-  ];
-
-  const resourceLinks: { label: string; page: Page }[] = [
-    { label: 'Blog & News', page: 'blog' },
-    { label: 'Events', page: 'events' },
-    { label: 'Gallery', page: 'gallery' },
-    { label: 'Media & Reports', page: 'media-reports' },
-    { label: 'Courses', page: 'courses' },
-  ];
-  
-  const policyLinks: { label: string; page: Page }[] = [
-    { label: 'Disclaimer', page: 'disclaimer' },
-    { label: 'Terms & Conditions', page: 'terms-and-conditions' },
-    { label: 'Privacy Policy', page: 'privacy-policy' },
-    { label: 'Copyright Policy', page: 'copyright-policy' },
-    { label: 'Editorial Policy', page: 'editorial-policy' },
-    { label: 'Ethical Use Policy', page: 'ethical-use-policy' },
-  ];
 
   const getSocialIcon = (platform: string) => {
       switch(platform) {
@@ -98,7 +73,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
             <h4 className="font-semibold tracking-wider uppercase text-gray-400 text-sm mb-4">About Us</h4>
             <ul className="space-y-2">
               {aboutLinks.map((link) => (
-                <li key={link.page}>
+                <li key={link.id}>
                   <button onClick={() => navigateTo(link.page)} className="text-gray-300 hover:text-masa-orange transition-colors duration-300 text-sm">
                     {link.label}
                   </button>
@@ -112,7 +87,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
             <h4 className="font-semibold tracking-wider uppercase text-gray-400 text-sm mb-4">Get Involved</h4>
             <ul className="space-y-2">
               {involvedLinks.map((link) => (
-                <li key={link.page}>
+                <li key={link.id}>
                   <button onClick={() => navigateTo(link.page)} className="text-gray-300 hover:text-masa-orange transition-colors duration-300 text-sm">
                     {link.label}
                   </button>
@@ -126,7 +101,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
             <h4 className="font-semibold tracking-wider uppercase text-gray-400 text-sm mb-4">Resources</h4>
             <ul className="space-y-2">
               {resourceLinks.map((link) => (
-                <li key={link.page}>
+                <li key={link.id}>
                   <button onClick={() => navigateTo(link.page)} className="text-gray-300 hover:text-masa-orange transition-colors duration-300 text-sm">
                     {link.label}
                   </button>
@@ -171,18 +146,16 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
         <div className="mt-16 border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
           <p className="mb-4 md:mb-0">&copy; {new Date().getFullYear()} Masa World Foundation. All Rights Reserved.</p>
           
-          {/* Policy Links moved here for cleaner layout */}
           <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
              {policyLinks.map((link) => (
                 <button 
-                    key={link.page} 
+                    key={link.id} 
                     onClick={() => navigateTo(link.page)} 
                     className="hover:text-masa-orange transition-colors duration-200 text-xs"
                 >
                     {link.label}
                 </button>
              ))}
-             {/* Admin Login Link */}
              <button 
                 onClick={() => navigateTo('admin-login')} 
                 className="hover:text-masa-orange transition-colors duration-200 text-xs"
