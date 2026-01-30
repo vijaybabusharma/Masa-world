@@ -121,6 +121,47 @@ export interface DropdownNavItem extends NavItem {
 
 export type MenuItem = NavItem | DropdownNavItem;
 
+// --- Homepage Settings Types ---
+export interface SliderItem {
+    id: string;
+    headline: string;
+    subtext: string;
+    image: string;
+    ctas: { label: string; page: Page; primary: boolean }[];
+}
+
+export interface HomepageSection {
+    visible: boolean;
+    title?: string;
+    subtitle?: string;
+    // other section-specific properties
+}
+
+export interface HomepageSettings {
+    slider: {
+        slides: SliderItem[];
+        autoplaySpeed: number;
+    };
+    sections: {
+        impactSnapshot: HomepageSection;
+        featuredEvent: HomepageSection;
+        whyMasa: HomepageSection;
+        programIcons: HomepageSection;
+        pledgeSnapshot: HomepageSection;
+        eventsHighlight: HomepageSection;
+        featuredCourses: HomepageSection;
+        latestBlogs: HomepageSection;
+        pillars: HomepageSection;
+        keyInitiatives: HomepageSection;
+        founderMessage: HomepageSection;
+        credibilityStrip: HomepageSection;
+        getInvolved: HomepageSection;
+        accountability: HomepageSection;
+        testimonials: HomepageSection;
+        finalCta: HomepageSection;
+    };
+}
+
 // --- Global Settings & Modules ---
 export interface GlobalSettings {
     general: {
@@ -129,6 +170,7 @@ export interface GlobalSettings {
         enableRegistrations: boolean;
         maintenanceMode: boolean;
     };
+    homepage: HomepageSettings;
     navigation: {
         headerMenu: MenuItem[];
         footerAboutLinks: NavItem[];
@@ -177,5 +219,11 @@ export interface GlobalSettings {
         pledgePlatformEnabled: boolean;
         whatsAppIntegrationEnabled: boolean;
         whatsAppNumber: string;
+        aiFeaturesEnabled: boolean;
+    };
+    certificates: {
+        generationEnabled: boolean;
+        logoUrl: string;
+        signatureUrl: string;
     };
 }

@@ -1,6 +1,6 @@
 
 import { eventsData, postsData, coursesData, pledgeData } from './data';
-import { Post, GlobalSettings, PageMetadata, Event, Course, Pledge, MenuItem, NavItem } from '../types';
+import { Post, GlobalSettings, PageMetadata, Event, Course, Pledge, MenuItem, NavItem, SliderItem } from '../types';
 
 // Keys for LocalStorage
 const KEYS = {
@@ -87,14 +87,34 @@ const defaultFooterLinks: { about: NavItem[], involved: NavItem[], resources: Na
     ]
 };
 
+const defaultSliderItems: SliderItem[] = [
+    { id: 'slide1', headline: "Empowering Youth. Building Nations.", subtext: "We forge future leaders through sports, education, and culture.", image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1800&q=80", ctas: [{ label: "Get Involved", page: "get-involved", primary: true }, { label: "Donate Now", page: "donate", primary: false }] },
+    { id: 'slide2', headline: "Action Today. Impact for Generations.", subtext: "Our model builds character, fosters social unity, and nurtures responsible citizens.", image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=80", ctas: [{ label: "Explore Programs", page: "programs-overview", primary: true }, { label: "Volunteer", page: "volunteer", primary: false }] },
+];
 
 // Default Settings
 const defaultSettings: GlobalSettings = {
-    general: {
-        siteName: 'MASA World Foundation',
-        contactEmail: 'masaworldfoundation@gmail.com',
-        enableRegistrations: true,
-        maintenanceMode: false,
+    general: { siteName: 'MASA World Foundation', contactEmail: 'masaworldfoundation@gmail.com', enableRegistrations: true, maintenanceMode: false },
+    homepage: {
+        slider: { slides: defaultSliderItems, autoplaySpeed: 7000 },
+        sections: {
+            impactSnapshot: { visible: true },
+            featuredEvent: { visible: true },
+            whyMasa: { visible: true, title: "Our Guiding Principles", subtitle: "Driven by a commitment to genuine social transformation." },
+            programIcons: { visible: true },
+            pledgeSnapshot: { visible: true },
+            eventsHighlight: { visible: true, title: "Upcoming & Recent Events", subtitle: "Explore our national and international programs." },
+            featuredCourses: { visible: true, title: "Featured Courses & Programs", subtitle: "Unlock your potential with our expert-led trainings." },
+            latestBlogs: { visible: true },
+            pillars: { visible: true },
+            keyInitiatives: { visible: true },
+            founderMessage: { visible: true },
+            credibilityStrip: { visible: true },
+            getInvolved: { visible: true },
+            accountability: { visible: true },
+            testimonials: { visible: true },
+            finalCta: { visible: true },
+        },
     },
     navigation: {
         headerMenu: defaultHeaderMenu,
@@ -103,101 +123,50 @@ const defaultSettings: GlobalSettings = {
         footerResourceLinks: defaultFooterLinks.resources,
         footerPolicyLinks: defaultFooterLinks.policies,
     },
-    social: [
-        { id: 'fb', platform: 'facebook', url: 'https://facebook.com/masaworldfoundation', enabled: true },
-        { id: 'ig', platform: 'instagram', url: 'https://instagram.com/masaworldfoundation', enabled: true },
-        { id: 'tw', platform: 'twitter', url: 'https://twitter.com/masaworldfoundation', enabled: true },
-        { id: 'li', platform: 'linkedin', url: 'https://www.linkedin.com/company/masaworld-foundation/', enabled: true },
-        { id: 'yt', platform: 'youtube', url: 'https://youtube.com/MASAWORLDFoundation', enabled: true },
-        { id: 'wa', platform: 'whatsapp', url: 'https://wa.me/919876543210', enabled: false },
-    ],
-    scripts: {
-        googleAnalyticsId: '',
-        enableAnalytics: false,
-        facebookPixelId: '',
-        enablePixel: false,
-        googleAdsenseCode: '',
-        enableAdsense: false,
-        googleSearchConsole: '',
-        customHead: '',
-        enableCustomHead: false,
-        customBodyStart: '',
-        enableCustomBodyStart: false,
-        customBodyEnd: '',
-        enableCustomBodyEnd: false,
-    },
-    appearance: {
-        customCss: '',
-        enableCustomCss: false,
-    },
-    payments: {
-        currency: 'INR',
-        razorpayEnabled: true,
-        razorpayKey: '',
-        stripeEnabled: false,
-        stripeKey: '',
-        paypalEnabled: false,
-        paypalClientId: '',
-        manualPaymentEnabled: true,
-        manualPaymentInstructions: 'Please contact us for bank transfer details.',
-        donationSuccessMessage: 'Thank you for your generous donation! A receipt has been sent to your email.',
-        donationFailureMessage: 'Your donation could not be processed. Please try again or contact support.',
-    },
-    features: {
-        blogEnabled: true,
-        eventsEnabled: true,
-        coursesEnabled: true,
-        ngoHelpDeskEnabled: true,
-        pledgePlatformEnabled: true,
-        whatsAppIntegrationEnabled: false,
-        whatsAppNumber: '',
-    }
+    social: [{ id: 'fb', platform: 'facebook', url: 'https://facebook.com', enabled: true }, { id: 'ig', platform: 'instagram', url: 'https://instagram.com', enabled: true }, { id: 'tw', platform: 'twitter', url: 'https://twitter.com', enabled: true }],
+    scripts: { googleAnalyticsId: '', enableAnalytics: false, facebookPixelId: '', enablePixel: false, googleAdsenseCode: '', enableAdsense: false, googleSearchConsole: '', customHead: '', enableCustomHead: false, customBodyStart: '', enableCustomBodyStart: false, customBodyEnd: '', enableCustomBodyEnd: false },
+    appearance: { customCss: '', enableCustomCss: false },
+    payments: { currency: 'INR', razorpayEnabled: true, razorpayKey: '', stripeEnabled: false, stripeKey: '', paypalEnabled: false, paypalClientId: '', manualPaymentEnabled: true, manualPaymentInstructions: 'Contact for details.', donationSuccessMessage: 'Thank you!', donationFailureMessage: 'Payment failed.' },
+    features: { blogEnabled: true, eventsEnabled: true, coursesEnabled: true, ngoHelpDeskEnabled: true, pledgePlatformEnabled: true, whatsAppIntegrationEnabled: false, whatsAppNumber: '', aiFeaturesEnabled: true },
+    certificates: { generationEnabled: true, logoUrl: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png', signatureUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/Signature_sample.svg' },
 };
 
 const defaultPages: PageMetadata[] = [
     { id: 'home', title: 'Home - MASA World', description: 'Empowering Youth Through Sports, Education & Culture.', lastModified: new Date().toISOString() },
-    { id: 'about', title: 'About Us - MASA World', description: 'Learn about our history, mission, and vision.', lastModified: new Date().toISOString() },
-    { id: 'initiatives', title: 'Our Initiatives', description: 'Explore our key programs and social impact projects.', lastModified: new Date().toISOString() },
-    { id: 'contact', title: 'Contact Us', description: 'Get in touch with the MASA World Foundation team.', lastModified: new Date().toISOString() },
-    { id: 'donate', title: 'Donate', description: 'Support our cause and make a difference.', lastModified: new Date().toISOString() },
 ];
 
 // Helper to initialize data if empty
 const initializeData = () => {
-    if (!localStorage.getItem(KEYS.EVENTS)) {
-        localStorage.setItem(KEYS.EVENTS, JSON.stringify(eventsData));
-    }
-    if (!localStorage.getItem(KEYS.BLOGS)) {
-        localStorage.setItem(KEYS.BLOGS, JSON.stringify(postsData));
-    }
-    if (!localStorage.getItem(KEYS.COURSES)) {
-        localStorage.setItem(KEYS.COURSES, JSON.stringify(coursesData));
-    }
-    if (!localStorage.getItem(KEYS.PLEDGES)) {
-        localStorage.setItem(KEYS.PLEDGES, JSON.stringify(pledgeData));
-    }
-    if (!localStorage.getItem(KEYS.SETTINGS)) {
-        localStorage.setItem(KEYS.SETTINGS, JSON.stringify(defaultSettings));
-    } else {
-        const current = JSON.parse(localStorage.getItem(KEYS.SETTINGS) || '{}');
-        if (!current.features?.pledgePlatformEnabled) { 
-            const merged = { 
-                ...defaultSettings, 
-                ...current,
-                general: { ...defaultSettings.general, ...current.general },
-                navigation: { ...defaultSettings.navigation, ...current.navigation },
-                social: current.social || defaultSettings.social,
-                scripts: { ...defaultSettings.scripts, ...current.scripts },
-                appearance: { ...defaultSettings.appearance, ...current.appearance },
-                payments: { ...defaultSettings.payments, ...current.payments },
-                features: { ...defaultSettings.features, ...current.features },
-            };
-            localStorage.setItem(KEYS.SETTINGS, JSON.stringify(merged));
-        }
-    }
-    if (!localStorage.getItem(KEYS.PAGES)) {
-        localStorage.setItem(KEYS.PAGES, JSON.stringify(defaultPages));
-    }
+    if (typeof window === 'undefined') return;
+
+    const initKey = (key: string, data: any) => {
+        if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(data));
+    };
+
+    initKey(KEYS.EVENTS, eventsData);
+    initKey(KEYS.BLOGS, postsData);
+    initKey(KEYS.COURSES, coursesData);
+    initKey(KEYS.PLEDGES, pledgeData);
+    initKey(KEYS.PAGES, defaultPages);
+    
+    // Smartly merge settings to add new fields without overwriting user changes
+    const existingSettings = JSON.parse(localStorage.getItem(KEYS.SETTINGS) || '{}');
+    const mergedSettings = {
+        ...defaultSettings,
+        ...existingSettings,
+        general: { ...defaultSettings.general, ...existingSettings.general },
+        homepage: {
+            ...defaultSettings.homepage,
+            ...(existingSettings.homepage || {}),
+            slider: { ...defaultSettings.homepage.slider, ...(existingSettings.homepage?.slider || {}) },
+            sections: { ...defaultSettings.homepage.sections, ...(existingSettings.homepage?.sections || {}) },
+        },
+        navigation: { ...defaultSettings.navigation, ...existingSettings.navigation },
+        scripts: { ...defaultSettings.scripts, ...existingSettings.scripts },
+        features: { ...defaultSettings.features, ...existingSettings.features },
+        certificates: { ...defaultSettings.certificates, ...existingSettings.certificates },
+    };
+    localStorage.setItem(KEYS.SETTINGS, JSON.stringify(mergedSettings));
 };
 
 if (typeof window !== 'undefined') {
@@ -207,10 +176,12 @@ if (typeof window !== 'undefined') {
 export const ContentManager = {
     // --- SETTINGS ---
     getSettings: (): GlobalSettings => {
+        if (typeof window === 'undefined') return defaultSettings;
         const data = localStorage.getItem(KEYS.SETTINGS);
         return data ? JSON.parse(data) : defaultSettings;
     },
     saveSettings: (settings: GlobalSettings) => {
+        if (typeof window === 'undefined') return;
         localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings));
         window.dispatchEvent(new Event('masa-settings-updated'));
     },

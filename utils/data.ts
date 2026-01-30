@@ -24,7 +24,7 @@ export const coursesData = [
         level: "Beginner",
         duration: "4 Weeks",
         mode: "Offline",
-        image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
         highlights: ["Public Speaking Mastery", "Team Building Activities", "Community Service Project", "Certificate of Completion"],
         price: "Free"
     },
@@ -37,7 +37,7 @@ export const coursesData = [
         level: "Intermediate",
         duration: "3 Months",
         mode: "Hybrid",
-        image: "https://images.unsplash.com/photo-1517466787929-bc90951d6428?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=800&q=80",
         highlights: ["FIFA Grassroots Methodology", "Practical Field Sessions", "Player Psychology", "License upon passing exam"],
         price: "₹4,999"
     },
@@ -50,7 +50,7 @@ export const coursesData = [
         level: "Beginner",
         duration: "6 Weeks",
         mode: "Online",
-        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&w=800&q=80",
         highlights: ["Internet Safety & Security", "Smartphone Usage", "Government E-Services", "Basic Office Tools"],
         price: "Free"
     },
@@ -105,7 +105,7 @@ export const eventsData = [
         displayDate: "Jan 15, 2025",
         location: "New Delhi, India",
         description: "A strategic gathering of 500+ student leaders to discuss policy reform and national development.",
-        image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
         status: 'Upcoming',
         price: '₹500'
     },
@@ -117,7 +117,7 @@ export const eventsData = [
         displayDate: "Nov 10, 2024",
         location: "Mumbai, Maharashtra",
         description: "Empowering women with essential self-defense techniques and situational awareness skills.",
-        image: "https://images.unsplash.com/photo-1598426359399-7d08b8b98150?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1515526188328-35a027959d9a?auto=format&fit=crop&w=800&q=80",
         status: 'Upcoming',
         price: 'Free'
     },
@@ -129,7 +129,7 @@ export const eventsData = [
         displayDate: "Aug 15, 2024",
         location: "National Stadium, Delhi",
         description: "Celebrating sportsmanship and athletic excellence with over 1000 young participants.",
-        image: "https://images.unsplash.com/photo-1561917403-c6990175a503?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=800&q=80",
         status: 'Completed',
         price: 'Free'
     },
@@ -141,7 +141,7 @@ export const eventsData = [
         displayDate: "July 20, 2024",
         location: "Varanasi, UP",
         description: "Providing free medical consultations and basic medicines to underserved rural communities.",
-        image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1618498082410-b4aa22193b38?auto=format&fit=crop&w=800&q=80",
         status: 'Completed',
         price: 'Free'
     }
