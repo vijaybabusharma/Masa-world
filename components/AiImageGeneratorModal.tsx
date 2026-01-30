@@ -130,7 +130,6 @@ const AiImageGeneratorModal: React.FC<AiImageGeneratorModalProps> = ({ onClose, 
                     )}
                 </div>
             </div>
-            {/* FIX: Replaced non-standard 'jsx' style tag with a standard style tag. */}
             <style>{`
                 .input-field { border: 1px solid #D1D5DB; border-radius: 0.375rem; padding: 0.5rem 0.75rem; }
                 .input-field:focus { outline: 2px solid transparent; outline-offset: 2px; --tw-ring-color: #F97316; border-color: var(--tw-ring-color); }

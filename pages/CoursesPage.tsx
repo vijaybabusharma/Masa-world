@@ -1,5 +1,5 @@
+
 import React, { useState, useEffect } from 'react';
-// FIX: The Course type is defined in `../types`, not `../utils/data`.
 import { NavigationProps, Course } from '../types';
 import { 
     ClockIcon, 

@@ -110,7 +110,6 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({ categories, onC
                     )}
                 </div>
             </div>
-             {/* FIX: Replaced non-standard 'jsx' style tag with a standard style tag. */}
              <style>{`
                 .input-field { border: 1px solid #D1D5DB; border-radius: 0.375rem; padding: 0.5rem 0.75rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
                 .input-field:focus { outline: 2px solid transparent; outline-offset: 2px; --tw-ring-color: #1E3A8A; border-color: var(--tw-ring-color); }

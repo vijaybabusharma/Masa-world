@@ -119,7 +119,6 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ navigateTo, type }) => {
                     </button>
                 </div>
             </div>
-             {/* FIX: Replaced non-standard 'jsx' style tag with a standard style tag. */}
              <style>{`
                 @keyframes fade-in-up {
                     from { opacity: 0; transform: translateY(20px); }
