@@ -70,8 +70,8 @@ const contentConfig = {
     },
     pledge: {
         title: "Thank You for Your Commitment!",
-        subtitle: "Your pledge is a powerful statement for positive change.",
-        message: "You have successfully taken the pledge. Your official digital certificate is now available for download. Thank you for being a responsible and active citizen.",
+        subtitle: "Your pledge is complete and your certificate is on its way.",
+        message: "You have successfully taken the pledge. Your official A4 PDF certificate has been sent to your registered email and a download link to your WhatsApp. You can also verify and download it anytime from our pledge platform.",
         primaryBtn: "Verify/Download Certificate",
         primaryAction: "pledge",
         icon: ShieldCheckIcon,

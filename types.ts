@@ -59,7 +59,7 @@ export interface Pledge {
     description: string;
     statement: string;
     icon: string; // Storing icon name as string
-    category: 'Civic Duty' | 'Environment' | 'Social' | 'Digital';
+    category: string;
     oathText: string;
     imageUrl: string;
 }

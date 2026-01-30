@@ -18,7 +18,7 @@ import { getStats } from '../utils/mockBackend';
 import ImpactSnapshot from '../components/ImpactSnapshot';
 
 // --- SEO SCHEMA COMPONENT ---
-const SchemaMarkup = () => {
+const SchemaMarkup: React.FC = () => {
     // Fetch dynamic events for schema
     const eventsData = ContentManager.getEvents();
     
@@ -60,8 +60,8 @@ const SchemaMarkup = () => {
 const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
     const slides = [
         {
-            headline: "Empowering Youth. Strengthening Communities.",
-            subtext: "Fostering holistic development, instilling discipline, and promoting shared values to build a stronger future.",
+            headline: "Empowering Youth. Building Nations.",
+            subtext: "We forge future leaders and stronger communities through the transformative power of sports, education, and culture.",
             image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Get Involved", page: "get-involved", primary: true },
@@ -69,8 +69,8 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
             ]
         },
         {
-            headline: "Sports, Education & Culture for Real Impact",
-            subtext: "Our proven model builds character, fosters social unity, and nurtures responsible citizens for a better world.",
+            headline: "Action Today. Impact for Generations.",
+            subtext: "Our model builds character, fosters social unity, and nurtures responsible citizens for a better world.",
             image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Explore Programs", page: "programs-overview", primary: true },
@@ -78,8 +78,8 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
             ]
         },
         {
-            headline: "From Grassroots to Global Change",
-            subtext: "Creating global impact through local action. We connect communities beyond borders to build a unified world.",
+            headline: "From Local Fields to Global Forums.",
+            subtext: "We create global impact through local action, connecting communities to build a unified world.",
             image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Our Story", page: "about", primary: true },
@@ -87,8 +87,8 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
             ]
         },
         {
-            headline: "Building Leaders. Creating Opportunities.",
-            subtext: "We nurture talent, discipline, and leadership in every young person, creating a world of opportunity for all.",
+            headline: "Unlocking Potential. Creating Opportunity.",
+            subtext: "We nurture talent and leadership in every young person, creating a world of opportunity for all.",
             image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Trainings", page: "trainings", primary: true },
@@ -96,8 +96,8 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
             ]
         },
         {
-            headline: "Action Today. Impact Tomorrow.",
-            subtext: "Join the movement that transforms lives daily. Your support makes it possible.",
+            headline: "Join a Movement of Purpose.",
+            subtext: "Your support fuels a movement that transforms lives daily. Be part of the change.",
             image: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Donate Now", page: "donate", primary: true },
@@ -143,7 +143,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
                             {slides[currentSlide].headline}
                         </h1>
-                        <p className="mt-6 text-lg md:text-xl text-gray-100 font-light max-w-3xl leading-relaxed drop-shadow-md border-l-4 border-masa-orange pl-4 text-justify">
+                        <p className="mt-6 text-lg md:text-xl text-gray-100 font-light max-w-3xl leading-relaxed drop-shadow-md border-l-4 border-masa-orange pl-4">
                             {slides[currentSlide].subtext}
                         </p>
                         <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4">
@@ -241,7 +241,7 @@ const EventsHighlightSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div className="text-center md:text-left">
                         <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Upcoming & Recent Events</h2>
-                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base text-justify">
+                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base">
                             Explore our national and international programs, trainings, conferences, and community initiatives.
                         </p>
                     </div>
@@ -306,7 +306,7 @@ const FeaturedCoursesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div className="text-center md:text-left">
                         <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Featured Courses & Programs</h2>
-                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base text-justify">
+                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base">
                             Unlock your potential with our expert-led trainings, leadership bootcamps, and skill development workshops.
                         </p>
                     </div>
@@ -378,7 +378,7 @@ const LatestBlogsSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div className="text-center md:text-left">
                         <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Latest Stories & Updates</h2>
-                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base text-justify">
+                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base">
                             Read our stories of change, impact reports, and updates from the ground.
                         </p>
                     </div>
@@ -433,22 +433,22 @@ const WhyMasaSection: React.FC = () => {
         {
             icon: UsersIcon,
             title: "Grassroots Centric",
-            desc: "We work directly with communities, identifying and solving real problems from the ground up."
+            desc: "We work directly with communities, identifying and solving real-world problems from the ground up."
         },
         {
             icon: ShieldCheckIcon,
             title: "Discipline-Based",
-            desc: "Our programs are designed to instill discipline, integrity, and leadership in every participant."
+            desc: "Our programs are designed to instill discipline, integrity, and leadership—the cornerstones of character."
         },
         {
             icon: EyeIcon,
             title: "Full Transparency",
-            desc: "We maintain complete financial and operational openness with our donors, partners, and community."
+            desc: "We maintain complete financial and operational openness, ensuring our partners' and donors' absolute trust."
         },
         {
             icon: SparklesIcon,
             title: "Measurable Impact",
-            desc: "Our focus is on creating measurable, lasting change that empowers individuals and strengthens society."
+            desc: "Our focus is on creating tangible, lasting change that empowers individuals and strengthens society."
         }
     ];
 
@@ -456,9 +456,9 @@ const WhyMasaSection: React.FC = () => {
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Why Choose MASA?</h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">
-                        We are driven by a commitment to genuine social transformation through actionable values and complete transparency.
+                    <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Our Guiding Principles</h2>
+                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                        We are driven by a commitment to genuine social transformation, founded on actionable values and complete transparency.
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -491,8 +491,8 @@ const ProgramIconStrip: React.FC<NavigationProps> = ({ navigateTo }) => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center max-w-3xl mx-auto">
                     <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">A Spectrum of Impact</h2>
-                    <p className="mt-4 text-lg text-gray-300 leading-relaxed text-justify">
-                        From local fields to global forums, we host diverse activities across our core pillars to engage communities and drive our mission forward.
+                    <p className="mt-4 text-lg text-gray-300 leading-relaxed">
+                        From local fields to global forums, our diverse activities engage communities and drive our mission forward.
                     </p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-16 max-w-6xl mx-auto">
@@ -513,14 +513,14 @@ const ProgramIconStrip: React.FC<NavigationProps> = ({ navigateTo }) => {
 // --- 3. OUR PILLARS SECTION ---
 const PillarsSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     const pillars = [
-        { icon: TrophyIcon, title: 'Sports', subtitle: 'Action', desc: 'Promoting physical fitness, discipline, and team spirit through structured sports programs and competitive tournaments.', page: 'sports' },
-        { icon: AcademicCapIcon, title: 'Education', subtitle: 'Knowledge', desc: 'Empowering minds through leadership workshops, skill development trainings, and value-based learning initiatives.', page: 'education' },
-        { icon: GlobeIcon, title: 'Culture', subtitle: 'Heritage', desc: 'Preserving heritage and fostering social harmony through vibrant cultural events, arts, and community celebrations.', page: 'culture' }
+        { icon: TrophyIcon, title: 'Sports', subtitle: 'Action', desc: 'Promoting physical fitness, discipline, and teamwork through structured sports programs and tournaments.', page: 'sports' },
+        { icon: AcademicCapIcon, title: 'Education', subtitle: 'Knowledge', desc: 'Empowering minds through leadership workshops, skill development, and value-based learning.', page: 'education' },
+        { icon: GlobeIcon, title: 'Culture', subtitle: 'Heritage', desc: 'Preserving heritage and fostering social harmony through vibrant cultural events and community celebrations.', page: 'culture' }
     ];
     return (
         <section className="py-24 bg-gray-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16"><span className="text-masa-blue font-bold uppercase tracking-widest text-sm">Our Pillars</span><h2 className="text-3xl font-bold text-masa-charcoal mt-2">Holistic Development Ecosystem</h2><p className="mt-4 text-base text-gray-600 max-w-3xl mx-auto leading-relaxed text-justify">We build a connected ecosystem where sports, education, and culture work in synergy to create profound and lasting change.</p></div>
+                <div className="text-center mb-16"><span className="text-masa-blue font-bold uppercase tracking-widest text-sm">Our Pillars</span><h2 className="text-3xl font-bold text-masa-charcoal mt-2">Our Ecosystem of Change</h2><p className="mt-4 text-base text-gray-600 max-w-3xl mx-auto leading-relaxed">We build a connected ecosystem where sports, education, and culture work in synergy to create profound and lasting change.</p></div>
                 <div className="relative grid md:grid-cols-3 gap-12 md:gap-8">
                     <div className="hidden md:block absolute top-12 left-1/3 w-1/3 h-1 bg-gray-200"></div>
                     {pillars.map(pillar => (
@@ -548,19 +548,19 @@ const KeyInitiativesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
         { 
             icon: TrophyIcon, 
             title: "Youth Empowerment & Discipline", 
-            description: "Building character, leadership, and resilience in youth through structured sports, physical training, and mentorship programs.",
+            description: "Building character and resilience in youth through structured sports, training, and mentorship.",
             page: 'sports' 
         },
         { 
             icon: HeartIcon, 
             title: "Social Awareness & Reform", 
-            description: "Driving positive social change through impactful awareness campaigns on health, civic duties, and community well-being.",
+            description: "Driving positive social change through impactful campaigns on health, civic duties, and community well-being.",
             page: 'initiatives' 
         },
         { 
             icon: SparklesIcon, 
             title: "Real Hero Recognition", 
-            description: "Identifying and honoring the unsung heroes of our society to inspire the next generation through our prestigious awards.",
+            description: "Identifying and honoring unsung community heroes to inspire the next generation through our national awards.",
             page: 'awards' 
         },
     ];
@@ -569,8 +569,8 @@ const KeyInitiativesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold text-masa-charcoal">Our Key Initiatives</h2>
-                    <p className="mt-4 text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">
+                    <h2 className="text-3xl font-bold text-masa-charcoal">Our Core Initiatives</h2>
+                    <p className="mt-4 text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
                         Our work is focused on three core areas designed to create a comprehensive, positive impact on society.
                     </p>
                 </div>
@@ -641,12 +641,12 @@ const FounderMessageSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                             <QuoteIcon className="h-3 w-3" /> Founder's Vision
                         </div>
                         <h2 className="text-3xl lg:text-4xl font-extrabold text-masa-charcoal mb-6">A Message from the Founder</h2>
-                        <blockquote className="text-lg text-gray-700 leading-relaxed italic border-l-4 border-masa-orange pl-6 mb-6 relative text-justify">
+                        <blockquote className="text-lg text-gray-700 leading-relaxed italic border-l-4 border-masa-orange pl-6 mb-6 relative">
                             <span className="absolute top-0 left-2 text-6xl text-gray-100 -z-10 font-serif">"</span>
-                            "MASA World Foundation was established with a clear belief—that sports, education, and culture are among the strongest tools for building disciplined individuals, empowered youth, and responsible communities."
+                            "MASA was founded on a simple belief: sports, education, and culture are the most powerful tools for building disciplined individuals and responsible communities."
                         </blockquote>
-                        <p className="text-base text-gray-600 leading-relaxed mb-8 text-justify">
-                            Sports teach discipline, teamwork, resilience, and confidence. Education builds knowledge, leadership, and critical thinking. Culture connects us to our roots while opening doors to global understanding. At MASA, we integrate all three to help individuals grow—not just as athletes or students, but as strong, ethical, and confident human beings.
+                        <p className="text-base text-gray-600 leading-relaxed mb-8">
+                            Our mission is to empower youth, recognize real heroes, and create lasting impact through disciplined action. We invite you to join this movement of positive change.
                         </p>
                         
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-6 border-t border-gray-100">
@@ -708,15 +708,15 @@ const CredibilityStrip: React.FC<NavigationProps> = ({ navigateTo }) => {
 // --- 5. GET INVOLVED SECTION ---
 const GetInvolvedSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     const actions = [
-        { icon: HeartIcon, title: "Volunteer With Us", desc: "Contribute your time, skills, and passion to create real impact on the ground.", page: 'volunteer', buttonText: "Volunteer Registration" },
-        { icon: UsersIcon, title: "Become a Member", desc: "Join our growing community and support our mission long-term.", page: 'membership', buttonText: "Explore Memberships" },
-        { icon: HandshakeIcon, title: "Partner / Collaborate", desc: "Institutions, NGOs, corporates, and schools can collaborate with us on initiatives.", page: 'contact', buttonText: "Partner With Us" },
-        { icon: SparklesIcon, title: "Donate & Support", desc: "Support our work financially and help scale impact across communities.", page: 'donate', buttonText: "Donate Now" }
+        { icon: HeartIcon, title: "Volunteer With Us", desc: "Contribute your time and skills to create real impact on the ground.", page: 'volunteer', buttonText: "Volunteer Registration" },
+        { icon: UsersIcon, title: "Become a Member", desc: "Join our global community and support our long-term mission.", page: 'membership', buttonText: "Explore Memberships" },
+        { icon: HandshakeIcon, title: "Partner / Collaborate", desc: "Institutions and corporations can collaborate with us to scale social impact.", page: 'contact', buttonText: "Partner With Us" },
+        { icon: SparklesIcon, title: "Donate & Support", desc: "Fuel our work financially and help empower communities.", page: 'donate', buttonText: "Donate Now" }
     ];
     return (
         <section className="py-24 bg-gray-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16"><h2 className="text-3xl font-bold text-masa-charcoal">Join Our Community!</h2><p className="mt-4 text-base text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">Whether you offer your time, skills, or support, there’s a place for you at MASA World Foundation.</p></div>
+                <div className="text-center mb-16"><h2 className="text-3xl font-bold text-masa-charcoal">Join Our Community</h2><p className="mt-4 text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">Whether you offer time, skills, or support, there’s a place for you at MASA World Foundation.</p></div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {actions.map((a, index) => (
                         <div key={a.title} className={`p-8 rounded-2xl shadow-lg flex flex-col text-center items-center group transition-all duration-300 ${index === 3 ? 'bg-masa-orange text-white' : 'bg-white border border-gray-200'}`}>
@@ -741,14 +741,14 @@ const GetInvolvedSection: React.FC<NavigationProps> = ({ navigateTo }) => {
 const AccountabilityInfographic: React.FC = () => {
     const steps = [
         { title: "Contribution", desc: "Donations are received via secure channels with instant receipts.", icon: null },
-        { title: "Allocation", desc: "Funds are allocated to specific programs with strict oversight.", icon: ShieldCheckIcon },
+        { title: "Allocation", desc: "Funds are allocated to approved programs with strict oversight.", icon: ShieldCheckIcon },
         { title: "Action", desc: "Volunteers execute programs on the ground for maximum impact.", icon: SparklesIcon },
-        { title: "Reporting", desc: "Impact reports and financial statements are shared publicly.", icon: CheckIcon }
+        { title: "Reporting", desc: "Detailed impact reports and financials are shared publicly.", icon: CheckIcon }
     ];
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16"><span className="text-masa-blue font-bold uppercase tracking-widest text-sm">Our Accountability</span><h2 className="text-3xl font-bold text-masa-charcoal mt-2">The Cycle of Trust</h2><p className="mt-4 text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">Transparency is not just a promise; it is built into every step of our process.</p></div>
+                <div className="text-center mb-16"><span className="text-masa-blue font-bold uppercase tracking-widest text-sm">Our Accountability</span><h2 className="text-3xl font-bold text-masa-charcoal mt-2">The Cycle of Trust</h2><p className="mt-4 text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">Transparency is not just a promise; it’s built into every step of our process.</p></div>
                 <div className="relative max-w-5xl mx-auto">
                     <div className="hidden md:block absolute top-8 left-0 w-full h-1 bg-gray-200"></div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 relative">
@@ -794,7 +794,7 @@ const PledgeSnapshotSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                             <span>Masa Sapath</span>
                         </div>
                         <h3 className="text-2xl font-bold text-masa-charcoal">Join the Movement</h3>
-                        <p className="text-base text-gray-600 mt-1 leading-relaxed text-justify">Take a pledge and commit to positive action for a better India.</p>
+                        <p className="text-base text-gray-600 mt-1 leading-relaxed">Take a pledge and commit to positive action for a better India.</p>
                     </div>
                     <div className="flex gap-8">
                         <div className="text-center">
@@ -823,19 +823,19 @@ const PledgeSnapshotSection: React.FC<NavigationProps> = ({ navigateTo }) => {
 const TestimonialSlider: React.FC = () => {
     const testimonials = [
         {
-            quote: "Volunteering with MASA has been a life-changing experience. It’s more than just service; it’s about becoming part of a family that genuinely cares for the community.",
+            quote: "Volunteering with MASA has been life-changing. It’s more than service; it’s becoming part of a family that genuinely cares for the community.",
             name: "Priya Sharma",
             role: "Volunteer, Delhi",
             image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=150&q=80"
         },
         {
-            quote: "As a Life Member, I’ve seen firsthand how my contributions are creating sustainable impact. The transparency and dedication of the team are truly commendable.",
+            quote: "As a Life Member, I see how my contributions create sustainable impact. The transparency and dedication of the team are truly commendable.",
             name: "Rajesh Kumar",
             role: "Life Member, Mumbai",
             image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=150&q=80"
         },
         {
-            quote: "The leadership bootcamp changed my perspective on what I can achieve. I feel more confident and equipped to make a difference in my village.",
+            quote: "The leadership bootcamp changed my entire perspective. I feel more confident and equipped to make a real difference in my village.",
             name: "Anjali Singh",
             role: "Beneficiary, Youth Program",
             image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80"
@@ -862,7 +862,7 @@ const TestimonialSlider: React.FC = () => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl font-bold text-masa-charcoal">Voices of Our Community</h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">Real stories from the people who make our mission possible.</p>
+                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">Real stories from the people who make our mission possible.</p>
                 </div>
 
                 <div className="relative max-w-3xl mx-auto min-h-[22rem] flex items-center justify-center">
@@ -874,7 +874,7 @@ const TestimonialSlider: React.FC = () => {
                             <div className="flex flex-col items-center text-center p-4">
                                 <img src={testimonial.image} alt={testimonial.name} loading="lazy" className="w-24 h-24 rounded-full shadow-lg mb-6 border-4 border-white" />
                                 <QuoteIcon className="h-16 w-16 text-gray-200 absolute top-12 left-1/2 transform -translate-x-1/2 -z-10" />
-                                <blockquote className="text-xl italic text-gray-700 leading-loose max-w-2xl relative z-10 text-justify">
+                                <blockquote className="text-xl italic text-gray-700 leading-loose max-w-2xl relative z-10">
                                     "{testimonial.quote}"
                                 </blockquote>
                                 <div className="mt-6">

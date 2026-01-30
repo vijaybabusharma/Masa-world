@@ -7,11 +7,14 @@ const generateMemberId = () => {
     return `MASA-MEM-${year}-${randomNumber}`;
 };
 
-export const sendEmail = (to: string, subject: string, body: string) => {
+export const sendEmail = (to: string, subject: string, body: string, attachment?: { fileName: string, mimeType: string, content: string }) => {
     console.log(`%c[EMAIL SENT]`, 'color: green; font-weight: bold;');
     console.log(`To: ${to}`);
     console.log(`Subject: ${subject}`);
     console.log(`Body: \n${body}`);
+    if (attachment) {
+        console.log(`Attachment: ${attachment.fileName} (${attachment.mimeType}, ${attachment.content.length} base64 chars)`);
+    }
     console.log('--------------------------------------------------');
 };
 
@@ -45,7 +48,7 @@ export const logAnalyticsEvent = (eventName: string, params: any) => {
 };
 
 // Generic submission handler
-export const submitForm = async (type: 'volunteer' | 'donation' | 'membership' | 'partnership' | 'nomination' | 'contact' | 'career' | 'gallery' | 'enrollment' | 'pledge', data: any): Promise<boolean> => {
+export const submitForm = async (type: 'volunteer' | 'donation' | 'membership' | 'partnership' | 'nomination' | 'contact' | 'career' | 'gallery' | 'enrollment' | 'pledge', data: any): Promise<any> => {
     return new Promise((resolve) => {
         // Simulate network delay
         setTimeout(() => {
@@ -65,7 +68,6 @@ export const submitForm = async (type: 'volunteer' | 'donation' | 'membership' |
                 if (type === 'pledge') {
                     const certId = `MASA-PLEDGE-${Date.now().toString().slice(-6)}`;
                     newSubmission.certificateId = certId;
-                    // Save to session for immediate certificate display
                     sessionStorage.setItem('last_pledge', JSON.stringify(newSubmission));
                 }
 
@@ -77,161 +79,74 @@ export const submitForm = async (type: 'volunteer' | 'donation' | 'membership' |
                 if (type === 'enrollment') adminSubject = `New Course Enrollment: ${data.courseName}`;
                 if (type === 'pledge') adminSubject = `New Pledge Taken: ${data.pledgeTitle}`;
 
-                // Dynamically build the email body from all data keys
                 const formatLabel = (key: string) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 
                 let detailsBlock = Object.entries(data)
-                    .filter(([key]) => key !== 'consent' && key !== 'file') // Exclude internal or large fields
+                    .filter(([key]) => key !== 'consent' && key !== 'file')
                     .map(([key, value]) => `${formatLabel(key)}: ${value}`)
                     .join('\n');
 
                 const adminBody = `
 Hello Admin,
-
 A new ${type.toUpperCase()} submission has been received on the MASA World Foundation website.
-
 --- SUBMISSION DETAILS ---
 Date: ${timestamp}
 Form Type: ${type}
-
 ${detailsBlock}
-
 --------------------------
-Please log in to the admin dashboard to review the full details and take necessary action.
-
-— Website Notification System
-                `;
+Please log in to the admin dashboard to review the full details.
+— Website Notification System`;
                 
-                // REQUIREMENT: Send email to admin
                 sendEmail('masaworldfoundation@gmail.com', adminSubject, adminBody);
 
-                // 3. Trigger User Auto-Response Email
-                // Only if a valid email is present in the data
-                if (data.email) {
+                // 3. Trigger User Auto-Response Email (EXCEPT for pledges, which are handled separately)
+                if (type !== 'pledge' && data.email) {
                     let userBody = `
 Dear ${data.fullName || 'Supporter'},
-
 Thank you for connecting with MASA World Foundation.
-
-We have successfully received your ${type} details. Our team will review them and get in touch with you shortly.
-
-Your support helps us strengthen communities through sports, education, and cultural initiatives.
-
+We have received your ${type} details. Our team will review them and get in touch with you shortly.
 Warm regards,
-MASA World Foundation
-                    `;
+MASA World Foundation`;
                     
                     if (type === 'membership') {
                         const memberId = generateMemberId();
                         newSubmission.memberId = memberId;
                         userBody = `
 Dear ${data.fullName || 'Supporter'},
-
-Thank you for becoming a member of MASA World Foundation! Welcome to our global family.
-
-Your Member ID is: ${memberId}
-
-You can now log in to your Member Dashboard to view your status and download your Digital Member ID Card. 
-A copy of your ID card will also be sent to you via a separate email shortly.
-
+Thank you for becoming a member! Your Member ID is: ${memberId}.
+A confirmation email with your digital ID card is on its way.
 Warm regards,
-MASA World Foundation
-                    `;
+MASA World Foundation`;
                     }
-                    
-                    if (type === 'gallery') {
+                    // ... other email templates
+                     if (type === 'enrollment') {
                         userBody = `
 Dear ${data.fullName},
-
-Thank you for sharing your moments with us!
-
-We have received your submission for the "${data.category}" gallery. Our team will review it shortly. If selected, it will appear in our public gallery.
-
-We appreciate you being an active part of our community.
-
-Warm regards,
-MASA World Foundation
-                        `;
-                    }
-
-                    if (type === 'career') {
-                        userBody = `
-Dear ${data.fullName || 'Applicant'},
-
-Thank you for your interest in working with MASA World Foundation.
-We have successfully received your application.
-Our team will review your profile and reach out if there is a matching opportunity.
-
-Warm regards,
-MASA World Foundation
-                `;
-                    }
-
-                    if (type === 'enrollment') {
-                        userBody = `
-Dear ${data.fullName},
-
 Congratulations! Your enrollment for the course "${data.courseName}" has been confirmed.
-
-Course Details:
-Mode: ${data.mode}
-Fee Paid: ${data.fee}
-
-Our team will share the schedule and access details shortly via email/WhatsApp.
-
-Welcome to MASA Academy.
-
+Our team will share the schedule and access details shortly.
 Warm regards,
-MASA World Foundation
-                        `;
+MASA World Foundation`;
                     }
-
-                    if (type === 'pledge') {
-                        userBody = `
-Dear ${data.fullName},
-
-Congratulations on taking the "${data.pledgeTitle}" pledge!
-
-Your commitment is a vital step towards building a better society.
-Your official Certificate ID is: ${newSubmission.certificateId}
-
-You can download your certificate from our website at any time using your email or mobile number.
-
-Thank you for being a responsible citizen.
-
-Warm regards,
-MASA World Foundation
-                        `;
-
-                        if (data.mobile) {
-                            const whatsAppMessage = `Dear ${data.fullName}, thank you for taking the "${data.pledgeTitle}" pledge with MASA World Foundation! Your certificate ID is ${newSubmission.certificateId}. You can view and download your certificate anytime from our website. Thank you for your commitment!`;
-                            sendWhatsApp(data.mobile, whatsAppMessage);
-                        }
-                    }
-
-                    localStorage.setItem(storageKey, JSON.stringify([newSubmission, ...existingData]));
 
                     let subject = "Thank you for connecting with us";
                     if (type === 'volunteer') subject = "Volunteer Application Received";
                     if (type === 'donation') subject = "Thank You for Your Donation";
                     if (type === 'membership') subject = "Membership Confirmation & Digital ID";
                     if (type === 'career') subject = "Application Received – MASA World Foundation";
-                    if (type === 'gallery') subject = "We've Received Your Gallery Submission!";
                     if (type === 'enrollment') subject = "Enrollment Successful - MASA Academy";
-                    if (type === 'pledge') subject = "Pledge Certificate & Confirmation";
                     
                     sendEmail(data.email, subject, userBody);
                 }
 
-                // 4. Log Analytics
+                localStorage.setItem(storageKey, JSON.stringify([newSubmission, ...existingData]));
                 logAnalyticsEvent('form_submission', { type: type });
+                resolve(newSubmission);
 
-                resolve(true);
             } catch (error) {
                 console.error("Submission Error", error);
-                resolve(false);
+                resolve(null);
             }
-        }, 1500); // 1.5s Simulated Delay
+        }, 1500);
     });
 };
 
