@@ -23,7 +23,7 @@ const AccessibilityWidget: React.FC = () => {
     }, [textSize, contrast, grayscale]);
 
     return (
-        <div className="fixed bottom-24 left-6 z-50">
+        <div className="fixed bottom-8 left-8 z-50">
             {isOpen && (
                 <div className="bg-white rounded-xl shadow-2xl p-6 mb-4 w-64 border border-gray-200 animate-fade-in-up">
                     <div className="flex justify-between items-center mb-4">

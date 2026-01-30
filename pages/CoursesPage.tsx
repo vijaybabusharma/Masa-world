@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
-import { NavigationProps } from '../types';
+// FIX: The Course type is defined in `../types`, not `../utils/data`.
+import { NavigationProps, Course } from '../types';
 import { 
     ClockIcon, 
     LaptopIcon, 
@@ -15,7 +15,6 @@ import {
     ShieldCheckIcon
 } from '../components/icons/FeatureIcons';
 import { XIcon } from '../components/icons/UiIcons';
-import { Course } from '../utils/data';
 import { ContentManager } from '../utils/contentManager';
 import { submitForm } from '../utils/mockBackend';
 
@@ -94,6 +93,7 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({ course, onClose }) =>
     }, [onClose]);
 
     const isFree = course.price === 'Free';
+    const inputFieldClasses = "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-masa-orange outline-none transition-all";
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -130,20 +130,20 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({ course, onClose }) =>
                             <div className="space-y-3">
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-1">Full Name *</label>
-                                    <input required name="fullName" value={formData.fullName} onChange={handleChange} className="w-full input-field" placeholder="Enter full name" />
+                                    <input required name="fullName" value={formData.fullName} onChange={handleChange} className={inputFieldClasses} placeholder="Enter full name" />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-1">Email Address *</label>
-                                    <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full input-field" placeholder="name@example.com" />
+                                    <input required type="email" name="email" value={formData.email} onChange={handleChange} className={inputFieldClasses} placeholder="name@example.com" />
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
                                         <label className="block text-sm font-bold text-gray-700 mb-1">Mobile *</label>
-                                        <input required type="tel" name="mobile" value={formData.mobile} onChange={handleChange} className="w-full input-field" placeholder="+91..." />
+                                        <input required type="tel" name="mobile" value={formData.mobile} onChange={handleChange} className={inputFieldClasses} placeholder="+91..." />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-bold text-gray-700 mb-1">City / Country</label>
-                                        <input required name="location" value={formData.location} onChange={handleChange} className="w-full input-field" placeholder="e.g. Delhi, India" />
+                                        <input required name="location" value={formData.location} onChange={handleChange} className={inputFieldClasses} placeholder="e.g. Delhi, India" />
                                     </div>
                                 </div>
                             </div>
@@ -180,13 +180,13 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({ course, onClose }) =>
                                 <div className="space-y-3">
                                     <div className="relative">
                                         <CreditCardIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                        <input required name="cardNumber" value={paymentDetails.cardNumber} onChange={handlePaymentChange} placeholder="Card Number (Mock)" className="w-full pl-10 input-field" maxLength={19} />
+                                        <input required name="cardNumber" value={paymentDetails.cardNumber} onChange={handlePaymentChange} placeholder="Card Number (Mock)" className={`w-full pl-10 ${inputFieldClasses}`} maxLength={19} />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
-                                        <input required name="expiry" value={paymentDetails.expiry} onChange={handlePaymentChange} placeholder="MM/YY" className="w-full input-field" maxLength={5} />
+                                        <input required name="expiry" value={paymentDetails.expiry} onChange={handlePaymentChange} placeholder="MM/YY" className={inputFieldClasses} maxLength={5} />
                                         <div className="relative">
                                             <LockClosedIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                            <input required name="cvv" value={paymentDetails.cvv} onChange={handlePaymentChange} type="password" placeholder="CVV" className="w-full input-field" maxLength={3} />
+                                            <input required name="cvv" value={paymentDetails.cvv} onChange={handlePaymentChange} type="password" placeholder="CVV" className={inputFieldClasses} maxLength={3} />
                                         </div>
                                     </div>
                                 </div>
@@ -255,7 +255,6 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({ course, onClose }) =>
                 </div>
             </div>
             <style>{`
-                .input-field { @apply px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-masa-orange outline-none transition-all; }
                 @keyframes scale-up { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
                 .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }
                 .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }

@@ -26,17 +26,17 @@ const EducationPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 </div>
                 <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
                     <span className="uppercase tracking-widest text-sm font-bold text-blue-200 mb-4 block">Pillar of Knowledge</span>
-                    <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">
+                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
                         Education Beyond<br/> Classrooms
                     </h1>
-                    <p className="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
+                    <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
                         Empowering minds with leadership skills, vocational training, and values for a global future.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <button onClick={() => navigateTo('get-involved')} className="bg-white text-masa-blue px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg transform hover:-translate-y-1">
+                        <button onClick={() => navigateTo('get-involved')} className="bg-white text-masa-blue px-8 py-3 rounded-full text-base font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg transform hover:-translate-y-1">
                             Get Involved
                         </button>
-                        <button onClick={() => document.getElementById('programs')?.scrollIntoView({ behavior: 'smooth' })} className="bg-transparent border-2 border-masa-orange text-masa-orange px-8 py-4 rounded-full text-lg font-bold hover:bg-masa-orange hover:text-white transition-colors duration-300">
+                        <button onClick={() => document.getElementById('programs')?.scrollIntoView({ behavior: 'smooth' })} className="bg-transparent border-2 border-masa-orange text-masa-orange px-8 py-3 rounded-full text-base font-bold hover:bg-masa-orange hover:text-white transition-colors duration-300">
                             View Programs
                         </button>
                     </div>
@@ -48,10 +48,10 @@ const EducationPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-4xl mx-auto text-center">
                         <h2 className="text-3xl font-bold text-masa-charcoal mb-6">Holistic Learning for Real Life</h2>
-                        <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                        <p className="text-base md:text-lg text-gray-600 mb-6 leading-relaxed text-justify">
                             Education is not just about literacy; it is about employability, ethics, and empowerment. While we support academic excellence, MASA World Foundation focuses heavily on the "soft skills" often missing from traditional curriculums—leadership, public speaking, and civic responsibility.
                         </p>
-                        <p className="text-lg text-gray-600 leading-relaxed">
+                        <p className="text-base md:text-lg text-gray-600 leading-relaxed text-justify">
                             We identify gaps in the current system and fill them with practical workshops. From teaching a rural student how to use a computer to mentoring a young leader on social reform, we ensure our youth are ready for both the Indian economy and the global stage.
                         </p>
                     </div>
@@ -76,7 +76,7 @@ const EducationPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 <div className="w-16 h-16 mx-auto bg-orange-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-masa-blue transition-colors duration-300">
                                     <item.icon className="h-8 w-8 text-masa-orange group-hover:text-white transition-colors" />
                                 </div>
-                                <h3 className="font-bold text-gray-800">{item.label}</h3>
+                                <h3 className="font-bold text-gray-800 text-base">{item.label}</h3>
                             </div>
                         ))}
                     </div>
@@ -132,7 +132,7 @@ const EducationPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 ].map((program, idx) => (
                                     <li key={idx} className="flex items-start">
                                         <CheckIcon className="h-6 w-6 text-masa-blue mr-3 flex-shrink-0" />
-                                        <span className="text-gray-700 text-lg">{program}</span>
+                                        <span className="text-gray-700 text-base md:text-lg leading-relaxed">{program}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -152,7 +152,7 @@ const EducationPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                         ].map((stat, idx) => (
                             <div key={idx} className="p-4">
                                 <p className="text-4xl md:text-5xl font-extrabold mb-2 text-masa-orange">{stat.val}</p>
-                                <p className="text-lg font-medium opacity-90">{stat.label}</p>
+                                <p className="text-base font-medium opacity-90">{stat.label}</p>
                             </div>
                         ))}
                     </div>
@@ -162,18 +162,18 @@ const EducationPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             {/* 7. Get Involved CTA */}
             <section className="py-24 bg-white">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
-                    <h2 className="text-4xl font-bold text-masa-charcoal mb-6">Knowledge is Power. Share Yours.</h2>
-                    <p className="text-xl text-gray-600 mb-10">
+                    <h2 className="text-3xl font-bold text-masa-charcoal mb-6">Knowledge is Power. Share Yours.</h2>
+                    <p className="text-lg text-gray-600 mb-10 leading-relaxed">
                         Whether you are a teacher, professional, or organization, your expertise can light up a mind.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-6">
-                        <button onClick={() => navigateTo('get-involved', 'volunteer-section')} className="bg-masa-orange text-white px-8 py-4 rounded-full font-bold hover:bg-orange-600 transition-all shadow-lg">
+                        <button onClick={() => navigateTo('get-involved', 'volunteer-section')} className="bg-masa-orange text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-all shadow-lg text-base">
                             Volunteer as Mentor
                         </button>
-                        <button onClick={() => navigateTo('membership')} className="bg-white border-2 border-masa-blue text-masa-blue px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-all">
+                        <button onClick={() => navigateTo('membership')} className="bg-white border-2 border-masa-blue text-masa-blue px-8 py-3 rounded-full font-bold hover:bg-blue-50 transition-all text-base">
                             Institutional Member
                         </button>
-                        <button onClick={() => navigateTo('contact')} className="bg-gray-100 text-gray-800 px-8 py-4 rounded-full font-bold hover:bg-gray-200 transition-all">
+                        <button onClick={() => navigateTo('contact')} className="bg-gray-100 text-gray-800 px-8 py-3 rounded-full font-bold hover:bg-gray-200 transition-all text-base">
                             Partner With Us
                         </button>
                     </div>

@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import SocialShareButtons from '../components/SocialShareButtons';
-import { Post } from '../types';
+import { Post, NavigationProps } from '../types';
 import { 
     CalendarDaysIcon, 
     ArrowRightIcon, 
@@ -72,11 +72,13 @@ const Sidebar: React.FC<{
     setSelectedTag: (t: string) => void;
     recentPosts: Post[];
     onPostClick: (post: Post) => void;
+    navigateTo: NavigationProps['navigateTo'];
 }> = ({ 
     searchQuery, setSearchQuery, 
     selectedCategory, setSelectedCategory, 
     tagsList, selectedTag, setSelectedTag,
-    recentPosts, onPostClick 
+    recentPosts, onPostClick,
+    navigateTo
 }) => {
     return (
         <aside className="space-y-8">
@@ -162,7 +164,7 @@ const Sidebar: React.FC<{
                     Stay updated with our latest initiatives and impact stories.
                 </p>
                 <div className="relative z-10">
-                    <button className="w-full bg-masa-orange text-white py-2 rounded-lg text-sm font-bold hover:bg-orange-600 transition-colors">
+                    <button onClick={() => navigateTo('contact')} className="w-full bg-masa-orange text-white py-2 rounded-lg text-sm font-bold hover:bg-orange-600 transition-colors">
                         Subscribe to Newsletter
                     </button>
                 </div>
@@ -171,7 +173,7 @@ const Sidebar: React.FC<{
     );
 };
 
-const BlogPage: React.FC = () => {
+const BlogPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedTag, setSelectedTag] = useState<string>('All');
@@ -285,14 +287,16 @@ const BlogPage: React.FC = () => {
                         <div className="flex flex-col lg:flex-row gap-12">
                             {/* Main Content */}
                             <div className="lg:w-3/4">
-                                <div className="prose prose-lg prose-blue max-w-none text-gray-700">
+                                <div className="prose lg:prose-lg max-w-none text-gray-700">
                                     {/* Summary as a Lead Intro */}
-                                    <p className="lead text-2xl font-medium text-gray-900 mb-10 border-l-4 border-masa-orange pl-6 py-2 bg-gray-50 rounded-r-lg italic">
+                                    <p className="lead text-xl font-medium text-gray-900 mb-10 border-l-4 border-masa-orange pl-6 py-2 bg-gray-50 rounded-r-lg italic leading-relaxed text-justify">
                                         {selectedPost.summary}
                                     </p>
                                     
                                     {/* Main Body Content */}
-                                    {renderContent(selectedPost.content)}
+                                    <div className="text-justify">
+                                        {renderContent(selectedPost.content)}
+                                    </div>
                                 </div>
 
                                 <div className="mt-12 pt-8 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between">
@@ -321,14 +325,14 @@ const BlogPage: React.FC = () => {
                             <div className="lg:w-1/4 space-y-8">
                                 <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 sticky top-32">
                                     <h3 className="text-xl font-bold text-masa-blue mb-4">Be the Change</h3>
-                                    <p className="text-gray-600 mb-6 text-sm">
+                                    <p className="text-gray-600 mb-6 text-sm leading-relaxed text-justify">
                                         Inspired by this story? Join us in making a difference.
                                     </p>
                                     <div className="space-y-3">
-                                        <button className="w-full bg-masa-blue text-white py-3 rounded-lg font-bold hover:bg-blue-900 transition-colors text-sm">
+                                        <button onClick={() => navigateTo('volunteer')} className="w-full bg-masa-blue text-white py-3 rounded-lg font-bold hover:bg-blue-900 transition-colors text-sm">
                                             Volunteer Now
                                         </button>
-                                        <button className="w-full bg-white border border-masa-orange text-masa-orange py-3 rounded-lg font-bold hover:bg-orange-50 transition-colors text-sm">
+                                        <button onClick={() => navigateTo('donate')} className="w-full bg-white border border-masa-orange text-masa-orange py-3 rounded-lg font-bold hover:bg-orange-50 transition-colors text-sm">
                                             Make a Donation
                                         </button>
                                     </div>
@@ -348,7 +352,7 @@ const BlogPage: React.FC = () => {
             <div className="bg-masa-charcoal pt-24 pb-20 text-white text-center">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">Blog & News</h1>
-                    <p className="mt-4 text-xl text-gray-300 max-w-2xl mx-auto">Insights, stories, and updates from the ground.</p>
+                    <p className="mt-4 text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">Insights, stories, and updates from the ground.</p>
                 </div>
             </div>
 
@@ -379,6 +383,7 @@ const BlogPage: React.FC = () => {
                                 setSelectedTag={setSelectedTag}
                                 recentPosts={recentPosts}
                                 onPostClick={handlePostClick}
+                                navigateTo={navigateTo}
                             />
                         </div>
                     </div>
@@ -396,6 +401,7 @@ const BlogPage: React.FC = () => {
                                     <img 
                                         src={featuredPost.image} 
                                         alt={featuredPost.title} 
+                                        loading="lazy"
                                         className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" 
                                     />
                                     <div className="absolute top-4 left-4 bg-masa-orange text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
@@ -412,7 +418,7 @@ const BlogPage: React.FC = () => {
                                         <h2 className="text-2xl md:text-3xl font-bold leading-tight mb-3 group-hover:text-orange-200 transition-colors">
                                             {featuredPost.title}
                                         </h2>
-                                        <p className="text-gray-200 line-clamp-2 md:line-clamp-none">
+                                        <p className="text-gray-200 line-clamp-2 md:line-clamp-none leading-relaxed text-justify">
                                             {featuredPost.summary}
                                         </p>
                                     </div>
@@ -433,6 +439,7 @@ const BlogPage: React.FC = () => {
                                             <img 
                                                 src={post.image} 
                                                 alt={post.title} 
+                                                loading="lazy"
                                                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" 
                                             />
                                             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-masa-charcoal shadow-sm">
@@ -447,7 +454,7 @@ const BlogPage: React.FC = () => {
                                             <h3 className="text-lg font-bold text-masa-charcoal mb-3 group-hover:text-masa-blue transition-colors line-clamp-2">
                                                 {post.title}
                                             </h3>
-                                            <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
+                                            <p className="text-base text-gray-600 mb-4 line-clamp-3 flex-grow leading-relaxed text-justify">
                                                 {post.summary}
                                             </p>
                                             <div className="flex items-center justify-between mt-auto">

@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
-import { NavigationProps } from '../types';
+// FIX: The Event type is defined in `../types`, not `../utils/data`.
+import { NavigationProps, Event } from '../types';
 import { 
     CalendarDaysIcon, 
     UsersIcon, 
@@ -21,7 +21,6 @@ import {
 import { XIcon } from '../components/icons/UiIcons';
 import { submitForm } from '../utils/mockBackend';
 import { ContentManager } from '../utils/contentManager';
-import { Event } from '../utils/data';
 
 // --- EVENT REGISTRATION MODAL ---
 interface EventRegistrationModalProps {
@@ -84,6 +83,7 @@ const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({ event, 
     }, [onClose]);
 
     const isPaid = event.price && event.price !== 'Free';
+    const inputFieldClasses = "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-masa-orange outline-none transition-all";
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -103,12 +103,12 @@ const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({ event, 
                                     <span className="font-bold text-masa-orange bg-white px-2 py-0.5 rounded shadow-sm">{event.price || 'Free'}</span>
                                 </div>
                             </div>
-                            <div><label className="block text-sm font-bold text-gray-700 mb-1">Full Name *</label><input required name="fullName" onChange={handleChange} className="w-full input-field" placeholder="Full Name" /></div>
-                            <div><label className="block text-sm font-bold text-gray-700 mb-1">Email Address *</label><input required name="email" type="email" onChange={handleChange} className="w-full input-field" placeholder="email@example.com" /></div>
-                            <div><label className="block text-sm font-bold text-gray-700 mb-1">Mobile Number *</label><input required name="mobile" type="tel" onChange={handleChange} className="w-full input-field" placeholder="+91..." /></div>
+                            <div><label className="block text-sm font-bold text-gray-700 mb-1">Full Name *</label><input required name="fullName" onChange={handleChange} className={inputFieldClasses} placeholder="Full Name" /></div>
+                            <div><label className="block text-sm font-bold text-gray-700 mb-1">Email Address *</label><input required name="email" type="email" onChange={handleChange} className={inputFieldClasses} placeholder="email@example.com" /></div>
+                            <div><label className="block text-sm font-bold text-gray-700 mb-1">Mobile Number *</label><input required name="mobile" type="tel" onChange={handleChange} className={inputFieldClasses} placeholder="+91..." /></div>
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-1">Participation Mode</label>
-                                <select name="mode" onChange={handleChange} className="w-full input-field bg-white">
+                                <select name="mode" onChange={handleChange} className={`${inputFieldClasses} bg-white`}>
                                     <option>On-ground</option>
                                     <option>Remote (if applicable)</option>
                                 </select>
@@ -129,8 +129,8 @@ const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({ event, 
                             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                                 <div className="flex justify-between items-center mb-4"><span className="text-sm font-semibold">Total Amount</span><span className="text-2xl font-bold">{event.price}</span></div>
                                 <div className="space-y-3">
-                                    <div className="relative"><CreditCardIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" /><input required name="cardNumber" value={paymentDetails.cardNumber} onChange={handlePaymentChange} placeholder="Card Number (Mock)" className="w-full pl-10 input-field" maxLength={19} /></div>
-                                    <div className="grid grid-cols-2 gap-3"><input required name="expiry" value={paymentDetails.expiry} onChange={handlePaymentChange} placeholder="MM/YY" className="w-full input-field" maxLength={5} /><div className="relative"><LockClosedIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" /><input required name="cvv" value={paymentDetails.cvv} onChange={handlePaymentChange} type="password" placeholder="CVV" className="w-full input-field" maxLength={3} /></div></div>
+                                    <div className="relative"><CreditCardIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" /><input required name="cardNumber" value={paymentDetails.cardNumber} onChange={handlePaymentChange} placeholder="Card Number (Mock)" className={`w-full pl-10 ${inputFieldClasses}`} maxLength={19} /></div>
+                                    <div className="grid grid-cols-2 gap-3"><input required name="expiry" value={paymentDetails.expiry} onChange={handlePaymentChange} placeholder="MM/YY" className={inputFieldClasses} maxLength={5} /><div className="relative"><LockClosedIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" /><input required name="cvv" value={paymentDetails.cvv} onChange={handlePaymentChange} type="password" placeholder="CVV" className={inputFieldClasses} maxLength={3} /></div></div>
                                 </div>
                             </div>
                             <div className="flex gap-3"><button type="button" onClick={() => setStep('form')} className="flex-1 bg-gray-100 font-bold py-3 rounded-xl">Back</button><button type="submit" className="flex-1 bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700">Pay Now</button></div>
@@ -151,7 +151,7 @@ const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({ event, 
                     )}
                 </div>
             </div>
-            <style>{`.input-field { @apply px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-masa-orange outline-none transition-all; } @keyframes scale-up { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } } .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }`}</style>
+            <style>{`@keyframes scale-up { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } } .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }`}</style>
         </div>
     );
 };

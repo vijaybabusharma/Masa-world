@@ -7,7 +7,7 @@ import { TrophyIcon, AcademicCapIcon, GlobeIcon } from '../components/icons/Feat
 const ProgramsOverviewPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     return (
         <PolicyPageLayout navigateTo={navigateTo} title="Programs Overview">
-            <p className="lead text-xl text-gray-600 mb-8">
+            <p className="lead text-lg text-gray-600 mb-8 leading-relaxed">
                 Our work is structured around three core pillars designed to foster holistic development in individuals and communities. We believe these three elements are interconnected and essential for building a responsible society.
             </p>
 
@@ -19,10 +19,10 @@ const ProgramsOverviewPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
                     <div>
                         <h3 className="text-2xl font-bold text-masa-charcoal mb-4 mt-0">1. Sports & Physical Development</h3>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-gray-600 mb-4 leading-relaxed">
                             Sports is the school of life. It teaches discipline, resilience, teamwork, and the ability to handle both victory and defeat with grace.
                         </p>
-                        <ul className="space-y-2 text-sm text-gray-700">
+                        <ul className="space-y-2 text-base text-gray-700">
                             <li><strong>Grassroots Leagues:</strong> Organizing local tournaments to identify hidden talent.</li>
                             <li><strong>Coaching Camps:</strong> Providing professional guidance to underprivileged athletes.</li>
                             <li><strong>Self-Defense:</strong> Empowering women and children with safety skills.</li>
@@ -38,10 +38,10 @@ const ProgramsOverviewPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
                     <div>
                         <h3 className="text-2xl font-bold text-masa-charcoal mb-4 mt-0">2. Education & Skill Building</h3>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-gray-600 mb-4 leading-relaxed">
                             Education goes beyond literacy. We focus on 'Life Skills'—leadership, ethics, communication, and digital literacy—that are crucial for the modern world.
                         </p>
-                        <ul className="space-y-2 text-sm text-gray-700">
+                        <ul className="space-y-2 text-base text-gray-700">
                             <li><strong>Leadership Bootcamps:</strong> Developing the next generation of social leaders.</li>
                             <li><strong>Vocational Training:</strong> Practical skills for employability (Computer basics, etc.).</li>
                             <li><strong>Mentorship:</strong> Connecting youth with industry experts.</li>
@@ -57,10 +57,10 @@ const ProgramsOverviewPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
                     <div>
                         <h3 className="text-2xl font-bold text-masa-charcoal mb-4 mt-0">3. Culture & Heritage</h3>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-gray-600 mb-4 leading-relaxed">
                             A community rooted in its culture is strong. We work to preserve traditional arts and foster social harmony through cultural exchange.
                         </p>
-                        <ul className="space-y-2 text-sm text-gray-700">
+                        <ul className="space-y-2 text-base text-gray-700">
                             <li><strong>Cultural Utsavs:</strong> Celebrating diversity through festivals.</li>
                             <li><strong>Artisan Support:</strong> Providing platforms for traditional craftsmen.</li>
                             <li><strong>Heritage Awareness:</strong> Workshops on local history and arts.</li>

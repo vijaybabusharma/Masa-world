@@ -1,5 +1,5 @@
 
-import { AdminUser } from '../types';
+import { AdminUser, UserRole } from '../types';
 
 // Simulating a secure backend database using LocalStorage
 const DB_KEY = 'masa_admin_db_v1';
@@ -47,6 +47,60 @@ const initDB = () => {
 
 export const AuthService = {
     init: initDB,
+
+    getUsers: (): AdminUser[] => {
+        initDB();
+        const users = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+        return users.map((u: any) => {
+            const { passwordHash, ...safeUser } = u;
+            return safeUser;
+        });
+    },
+
+    saveUser: (user: AdminUser, password?: string): AdminUser => {
+        initDB();
+        const users = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+        const index = users.findIndex((u: any) => u.id === user.id);
+        
+        let userToSave: any;
+        if (index > -1) { // Update
+            userToSave = { ...users[index], ...user };
+            if (password) {
+                userToSave.passwordHash = hash(password);
+            }
+        } else { // Create
+             userToSave = { 
+                ...user, 
+                id: `u${Date.now()}`,
+                passwordHash: hash(password || 'password123'), // Default password for new users
+                avatar: `https://ui-avatars.com/api/?name=${user.name.replace(' ', '+')}`
+             };
+        }
+        
+        if (index > -1) users[index] = userToSave;
+        else users.push(userToSave);
+        
+        localStorage.setItem(DB_KEY, JSON.stringify(users));
+        const { passwordHash, ...safeUser } = userToSave;
+        return safeUser;
+    },
+
+    deleteUser: (userId: string): void => {
+        initDB();
+        let users = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+        users = users.filter((u: any) => u.id !== userId);
+        localStorage.setItem(DB_KEY, JSON.stringify(users));
+    },
+
+    changePassword: (userId: string, newPassword: string): void => {
+        initDB();
+        const users = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+        const index = users.findIndex((u: any) => u.id === userId);
+        if (index > -1) {
+            users[index].passwordHash = hash(newPassword);
+            localStorage.setItem(DB_KEY, JSON.stringify(users));
+        }
+    },
 
     /**
      * Authenticate user against the local "database"

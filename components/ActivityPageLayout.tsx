@@ -20,15 +20,15 @@ const FocusAreaGrid: React.FC<{ areas: { icon: any; label: string }[] }> = ({ ar
 // Sub-component for Process Flow
 const ProcessFlow: React.FC<{ steps: { title: string; description: string }[] }> = ({ steps }) => (
     <div className="relative">
-        <div className="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-200 -translate-y-1/2 z-0"></div>
+        <div className="hidden md:block absolute top-6 left-0 w-full h-1 bg-gray-200"></div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
             {steps.map((step, idx) => (
                 <div key={idx} className="bg-white p-6 rounded-xl border border-gray-200 text-center shadow-lg transform hover:-translate-y-1 transition-transform">
-                    <div className="w-10 h-10 mx-auto bg-masa-orange text-white rounded-full flex items-center justify-center font-bold text-lg mb-4 ring-4 ring-white">
+                    <div className="w-12 h-12 mx-auto bg-masa-orange text-white rounded-full flex items-center justify-center font-bold text-lg mb-4 ring-4 ring-white shadow-md">
                         {idx + 1}
                     </div>
                     <h3 className="font-bold text-masa-charcoal mb-2">{step.title}</h3>
-                    <p className="text-sm text-gray-600">{step.description}</p>
+                    <p className="text-sm text-gray-600 text-justify">{step.description}</p>
                 </div>
             ))}
         </div>
@@ -39,7 +39,7 @@ const ProcessFlow: React.FC<{ steps: { title: string; description: string }[] }>
 const ActivityCard: React.FC<{ activity: any; onAction: (type: 'support' | 'volunteer', eventName: string) => void }> = ({ activity, onAction }) => (
     <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
         <div className="relative h-48 overflow-hidden">
-            <img src={activity.image} alt={activity.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <img src={activity.image} alt={activity.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <div className="absolute top-4 left-4 bg-masa-orange text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                 {activity.status || 'Active'}
             </div>
@@ -127,10 +127,10 @@ const ActivityPageLayout: React.FC<ActivityPageLayoutProps> = ({
                     <div className="max-w-4xl mx-auto text-center">
                         <span className="text-masa-blue font-bold uppercase tracking-widest text-sm mb-3 block">About The Initiative</span>
                         <h2 className="text-3xl font-bold text-masa-charcoal mb-6">{overviewData.title}</h2>
-                        <p className="text-lg text-gray-600 mb-8 leading-relaxed">{overviewData.description}</p>
+                        <p className="text-lg text-gray-600 mb-8 leading-relaxed text-justify">{overviewData.description}</p>
                         <div className="bg-blue-50 border-l-4 border-masa-blue p-6 text-left rounded-r-lg">
                             <h4 className="font-bold text-masa-blue uppercase text-xs mb-2">Impact Scope</h4>
-                            <p className="text-gray-700">{overviewData.relevance}</p>
+                            <p className="text-gray-700 text-justify">{overviewData.relevance}</p>
                         </div>
                     </div>
                 </div>
@@ -221,7 +221,7 @@ const ActivityPageLayout: React.FC<ActivityPageLayoutProps> = ({
                 <section className="py-20 bg-white">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
                          <div className="mb-6"><HeartIcon className="h-12 w-12 text-gray-200 mx-auto" /></div>
-                        <blockquote className="text-2xl md:text-3xl font-medium text-gray-800 italic leading-relaxed mb-6">
+                        <blockquote className="text-2xl md:text-3xl font-medium text-gray-800 italic leading-relaxed mb-6 text-justify">
                             "{testimonial.quote}"
                         </blockquote>
                         <div className="text-masa-charcoal font-bold text-lg">{testimonial.author}</div>

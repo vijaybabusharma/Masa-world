@@ -36,7 +36,7 @@ const VolunteerSection: React.FC<{ navigateTo: NavigationProps['navigateTo'] }> 
                     <h2 className="text-3xl md:text-4xl font-extrabold text-masa-charcoal mb-6">
                         Lead Change on the Ground
                     </h2>
-                    <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                    <p className="text-lg text-gray-600 mb-6 leading-relaxed text-justify">
                         Volunteering with MASA is a transformative journey. It's not just about giving time; it's about building leadership skills, understanding grassroots realities, and becoming part of a family dedicated to social nation-building.
                     </p>
                     <div className="mb-6 p-4 bg-purple-50 rounded-xl border border-purple-100">
@@ -118,7 +118,7 @@ const PartnershipSection: React.FC<{ onPartnerClick: (type: PartnershipType) => 
                     <span>Collaborate With Us</span>
                 </div>
                 <h2 className="text-3xl font-bold text-masa-charcoal">Partnership Opportunities</h2>
-                <p className="mt-4 text-gray-600">
+                <p className="mt-4 text-gray-600 text-justify">
                     We collaborate with schools, universities, and corporations to scale impact. Together, we can build structured programs for sustainable development.
                 </p>
             </div>
@@ -172,7 +172,7 @@ const DonationInfoSection: React.FC<{ navigateTo: NavigationProps['navigateTo'] 
             <div className="grid lg:grid-cols-2 gap-16 items-center">
                 <div>
                     <h2 className="text-3xl md:text-4xl font-extrabold mb-6">Donation Information</h2>
-                    <p className="text-blue-100 text-lg mb-8 leading-relaxed">
+                    <p className="text-blue-100 text-lg mb-8 leading-relaxed text-justify">
                         Your contribution is more than charity; it is an investment in the future of a child, a community, and a nation. We ensure that every rupee is utilized efficiently and ethically.
                     </p>
                     <div className="grid sm:grid-cols-2 gap-6 mb-8">

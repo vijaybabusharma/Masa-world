@@ -1,10 +1,14 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { NavigationProps } from '../types';
-import { pledgeData, Pledge } from '../utils/data';
+import { NavigationProps, Pledge } from '../types';
+import { ContentManager } from '../utils/contentManager';
 import { submitForm, verifyCertificate, getStats, sendOtp, verifyOtp, getCertificatesByContact } from '../utils/mockBackend';
 import PledgeCertificate from '../components/PledgeCertificate';
-import { ArrowRightIcon, HandRaisedIcon, SparklesIcon, UsersIcon, ShieldCheckIcon, CheckIcon, DocumentTextIcon, EnvelopeIcon, PhoneIcon, DownloadIcon } from '../components/icons/FeatureIcons';
+import { 
+    ArrowRightIcon, HandRaisedIcon, SparklesIcon, UsersIcon, ShieldCheckIcon, 
+    CheckIcon, DocumentTextIcon, EnvelopeIcon, PhoneIcon, DownloadIcon, 
+    SearchIcon, GlobeIcon, HeartIcon
+} from '../components/icons/FeatureIcons';
 import { XIcon } from '../components/icons/UiIcons';
 import { FacebookIcon, TwitterIcon } from '../components/icons/SocialIcons';
 
@@ -31,6 +35,8 @@ const PledgeFormModal: React.FC<{
     const [timer, setTimer] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [agreed, setAgreed] = useState(false);
+    const oathContainerRef = useRef<HTMLDivElement>(null);
+    const [canAgree, setCanAgree] = useState(false);
 
     useEffect(() => {
         let interval: any;
@@ -41,6 +47,16 @@ const PledgeFormModal: React.FC<{
         }
         return () => clearInterval(interval);
     }, [timer]);
+
+    const handleOathScroll = () => {
+        const el = oathContainerRef.current;
+        if (el) {
+            // Check if user has scrolled to the bottom (with a 20px tolerance)
+            if (el.scrollHeight - el.scrollTop <= el.clientHeight + 20) {
+                setCanAgree(true);
+            }
+        }
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -118,28 +134,28 @@ const PledgeFormModal: React.FC<{
                                 </p>
                             </div>
                             <div className="grid md:grid-cols-2 gap-4">
-                                <input required name="fullName" onChange={handleChange} value={formData.fullName} type="text" placeholder="Full Name *" className="w-full input-field" />
-                                <select name="participantType" onChange={handleChange} value={formData.participantType} className="w-full input-field bg-white">
+                                <input required name="fullName" onChange={handleChange} value={formData.fullName} type="text" placeholder="Full Name *" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-masa-orange outline-none transition-all" />
+                                <select name="participantType" onChange={handleChange} value={formData.participantType} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-masa-orange outline-none transition-all bg-white">
                                     <option>Individual</option>
                                     <option>Organization</option>
                                 </select>
                             </div>
                             {formData.participantType === 'Organization' && (
-                                 <input name="organizationName" onChange={handleChange} value={formData.organizationName} type="text" placeholder="Organization Name *" className="w-full input-field" required/>
+                                 <input name="organizationName" onChange={handleChange} value={formData.organizationName} type="text" placeholder="Organization Name *" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-masa-orange outline-none transition-all" required/>
                             )}
                             <div className="relative">
                                 <EnvelopeIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                                <input required name="email" onChange={handleChange} value={formData.email} type="email" placeholder="Email Address *" className="w-full input-field pl-10" />
+                                <input required name="email" onChange={handleChange} value={formData.email} type="email" placeholder="Email Address *" className="w-full pl-10 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-masa-orange outline-none transition-all" />
                             </div>
                             <div className="relative">
                                 <PhoneIcon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                                <input required name="mobile" onChange={handleChange} value={formData.mobile} type="tel" placeholder="Mobile Number *" className="w-full input-field pl-10" />
+                                <input required name="mobile" onChange={handleChange} value={formData.mobile} type="tel" placeholder="Mobile Number *" className="w-full pl-10 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-masa-orange outline-none transition-all" />
                             </div>
                             <div className="grid md:grid-cols-2 gap-4">
-                                <select required name="country" onChange={handleChange} value={formData.country} className="w-full input-field bg-white">
+                                <select required name="country" onChange={handleChange} value={formData.country} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-masa-orange outline-none transition-all bg-white">
                                     <option>India</option><option>United States</option><option>United Kingdom</option><option>Other</option>
                                 </select>
-                                <input name="location" onChange={handleChange} value={formData.location} type="text" placeholder="State / City" className="w-full input-field" />
+                                <input name="location" onChange={handleChange} value={formData.location} type="text" placeholder="State / City" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-masa-orange outline-none transition-all" />
                             </div>
                             <button type="submit" className="w-full bg-masa-charcoal text-white py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors shadow-md mt-4 flex justify-center items-center gap-2">
                                 Send OTP for Verification <ArrowRightIcon className="h-4 w-4" />
@@ -203,23 +219,28 @@ const PledgeFormModal: React.FC<{
                                 <p className="text-sm text-gray-500 font-medium">Sapath Patra</p>
                             </div>
 
-                            <div className="bg-orange-50/50 p-6 rounded-xl border border-orange-100 shadow-inner relative overflow-hidden">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-masa-orange"></div>
-                                <p className="font-serif text-lg text-gray-800 text-center italic leading-relaxed">
-                                    "I, <span className="font-bold text-masa-charcoal">{formData.fullName}</span>, {pledge.statement.toLowerCase().replace('i pledge to', 'solemnly pledge to')}"
-                                </p>
+                            <div 
+                                ref={oathContainerRef}
+                                onScroll={handleOathScroll}
+                                className="bg-orange-50/50 p-6 rounded-xl border border-orange-100 shadow-inner relative overflow-hidden h-64 overflow-y-auto"
+                            >
+                                <div className="prose prose-sm text-gray-800 text-left leading-relaxed font-serif italic">
+                                    <p>I, <span className="font-bold text-masa-charcoal not-italic">{formData.fullName}</span>, do solemnly pledge to...</p>
+                                    {pledge.oathText.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
+                                </div>
                             </div>
 
-                            <div className="flex items-start space-x-3 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <div className={`flex items-start space-x-3 bg-gray-50 p-4 rounded-lg border border-gray-200 transition-opacity ${canAgree ? 'opacity-100' : 'opacity-50'}`}>
                                 <input 
                                     type="checkbox" 
                                     id="agree-pledge" 
                                     checked={agreed}
                                     onChange={() => setAgreed(!agreed)}
-                                    className="h-5 w-5 rounded text-masa-orange focus:ring-masa-orange mt-1" 
+                                    disabled={!canAgree}
+                                    className="h-5 w-5 rounded text-masa-orange focus:ring-masa-orange mt-1 disabled:cursor-not-allowed" 
                                 />
-                                <label htmlFor="agree-pledge" className="text-sm text-gray-700">
-                                    I have read the pledge and I voluntarily commit to upholding its principles.
+                                <label htmlFor="agree-pledge" className={`text-sm text-gray-700 ${!canAgree ? 'cursor-not-allowed' : ''}`}>
+                                    I have read the pledge and I voluntarily commit to upholding its principles. {!canAgree && "(Please scroll to the end)"}
                                 </label>
                             </div>
 
@@ -240,7 +261,6 @@ const PledgeFormModal: React.FC<{
                 </div>
             </div>
              <style>{`
-                .input-field { @apply px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-masa-orange outline-none transition-all; }
                 @keyframes fade-in-up {
                     from { opacity: 0; transform: translateY(20px); }
                     to { opacity: 1; transform: translateY(0); }
@@ -290,9 +310,12 @@ const CertificateViewModal: React.FC<{
 // --- MAIN PAGE COMPONENT ---
 
 const PledgePlatformPage: React.FC<NavigationProps> = ({ navigateTo }) => {
+    const [pledges, setPledges] = useState<Pledge[]>([]);
     const [selectedPledge, setSelectedPledge] = useState<Pledge | null>(null);
     const [certificateData, setCertificateData] = useState<any>(null);
     const [pledgeCount, setPledgeCount] = useState(0);
+    const [activeCategory, setActiveCategory] = useState<string>('All');
+    const [searchQuery, setSearchQuery] = useState<string>('');
 
     const [verifyCertId, setVerifyCertId] = useState('');
     const [verifyResult, setVerifyResult] = useState<any>(null);
@@ -300,9 +323,28 @@ const PledgePlatformPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [isVerifying, setIsVerifying] = useState(false);
 
     useEffect(() => {
+        setPledges(ContentManager.getPledges());
         const stats = getStats();
         setPledgeCount(1000 + (stats.pledges || 0)); // Start with a base number
     }, []);
+    
+    const filteredPledges = pledges.filter(pledge => {
+        const matchesCategory = activeCategory === 'All' || pledge.category === activeCategory;
+        const matchesSearch = pledge.title.toLowerCase().includes(searchQuery.toLowerCase()) || pledge.description.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
+
+    const pledgeCategories = Array.from(new Set(pledges.map(p => p.category)));
+
+    const getPledgeIcon = (iconName: string) => {
+        switch (iconName) {
+            case 'UsersIcon': return UsersIcon;
+            case 'GlobeIcon': return GlobeIcon;
+            case 'HeartIcon': return HeartIcon;
+            case 'ShieldCheckIcon': return ShieldCheckIcon;
+            default: return SparklesIcon;
+        }
+    };
 
     const handleTakePledge = (pledge: Pledge) => {
         setSelectedPledge(pledge);
@@ -311,6 +353,7 @@ const PledgePlatformPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const handlePledgeComplete = () => {
         setSelectedPledge(null);
         navigateTo('thank-you-pledge');
+        setPledgeCount(prev => prev + 1);
     };
     
     const handleVerify = (e: React.FormEvent) => {
@@ -323,7 +366,6 @@ const PledgePlatformPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             const result = verifyCertificate(verifyCertId);
             if(result) {
                 setVerifyResult(result);
-                setCertificateData(result);
             } else {
                 setVerifyError('Certificate ID not found. Please check the ID and try again.');
             }
@@ -370,19 +412,39 @@ const PledgePlatformPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                         <h2 className="text-3xl font-bold text-masa-charcoal">Choose Your Pledge</h2>
                         <p className="mt-2 text-gray-600 max-w-xl mx-auto">Select a cause you are passionate about and take a step towards a better tomorrow.</p>
                     </div>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                        {pledgeData.map(pledge => (
-                            <div key={pledge.id} className="bg-white p-8 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 flex flex-col text-center items-center group">
-                                <div className="w-16 h-16 bg-blue-50 text-masa-blue rounded-full flex items-center justify-center mb-4 group-hover:bg-masa-orange group-hover:text-white transition-colors duration-300">
-                                    <pledge.icon className="h-8 w-8"/>
+                    {/* Filters */}
+                    <div className="max-w-4xl mx-auto mb-8 flex flex-col md:flex-row gap-4">
+                        <div className="relative flex-grow">
+                             <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                             <input type="text" placeholder="Search pledges..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 focus:ring-2 focus:ring-masa-orange"/>
+                        </div>
+                        <select value={activeCategory} onChange={e => setActiveCategory(e.target.value)} className="py-3 px-4 rounded-full border border-gray-300 bg-white focus:ring-2 focus:ring-masa-orange">
+                            <option value="All">All Categories</option>
+                            {pledgeCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                        </select>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                        {filteredPledges.map(pledge => {
+                            const Icon = getPledgeIcon(pledge.icon);
+                            return (
+                                <div key={pledge.id} className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 flex flex-col text-center items-center group">
+                                    <div className="w-16 h-16 bg-blue-50 text-masa-blue rounded-full flex items-center justify-center mb-4 group-hover:bg-masa-orange group-hover:text-white transition-colors duration-300">
+                                        <Icon className="h-8 w-8"/>
+                                    </div>
+                                    <h3 className="text-lg font-bold text-masa-charcoal mb-2 h-14 flex items-center">{pledge.title}</h3>
+                                    <p className="text-gray-600 text-sm mb-6 flex-grow">{pledge.description}</p>
+                                    <button onClick={() => handleTakePledge(pledge)} className="mt-auto w-full bg-masa-charcoal text-white py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors">
+                                        Take this Pledge
+                                    </button>
                                 </div>
-                                <h3 className="text-xl font-bold text-masa-charcoal mb-2">{pledge.title}</h3>
-                                <p className="text-gray-600 text-sm mb-6 flex-grow">{pledge.description}</p>
-                                <button onClick={() => handleTakePledge(pledge)} className="mt-auto w-full bg-masa-charcoal text-white py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors">
-                                    Take this Pledge
-                                </button>
+                            );
+                        })}
+                         {filteredPledges.length === 0 && (
+                            <div className="md:col-span-2 lg:col-span-4 text-center text-gray-500 py-16">
+                                <p className="font-bold text-lg">No pledges found.</p>
+                                <p>Try adjusting your search or category filters.</p>
                             </div>
-                        ))}
+                         )}
                     </div>
                 </div>
             </section>
@@ -419,7 +481,7 @@ const PledgePlatformPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                             </div>
                         )}
                          <p className="text-center text-sm text-gray-500 mt-6">
-                            Lost your ID? <button onClick={() => alert('Find by contact modal to be implemented')} className="font-bold text-masa-blue hover:underline">Find by Email/Mobile</button>
+                            Lost your ID? <button onClick={() => navigateTo('certificate-downloader')} className="font-bold text-masa-blue hover:underline">Find by Email/Mobile</button>
                          </p>
                     </div>
                 </div>

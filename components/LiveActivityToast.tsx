@@ -47,7 +47,7 @@ const LiveActivityToast: React.FC = () => {
     };
 
     return (
-        <div className="fixed bottom-40 left-6 z-40 animate-fade-in-up">
+        <div className="fixed bottom-24 left-8 z-40 animate-fade-in-up">
             <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full py-2 px-4 shadow-lg flex items-center gap-3">
                 <div className="bg-gray-100 p-1.5 rounded-full">
                     {getIcon()}

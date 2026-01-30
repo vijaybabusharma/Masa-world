@@ -24,6 +24,7 @@ const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor =
                                 src={FOUNDER_IMAGE_URL}
                                 alt="Vijay Babu Sharma, Founder of Masa World Foundation" 
                                 className="rounded-2xl shadow-lg w-full h-auto object-cover aspect-[4/5] bg-gray-100"
+                                loading="lazy"
                             />
                             
                             {/* Floating Badge for Professional Context */}
@@ -44,11 +45,11 @@ const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor =
                             A Message from the Founder
                         </h2>
                         
-                        <blockquote className="text-xl text-gray-800 leading-relaxed font-serif italic border-l-4 border-masa-orange pl-6 mb-6">
+                        <blockquote className="text-xl text-gray-800 leading-relaxed font-serif italic border-l-4 border-masa-orange pl-6 mb-6 text-justify">
                             "At MASA World Foundation, we believe that sports, education, and culture together shape confident individuals and responsible communities."
                         </blockquote>
                         
-                        <p className="text-gray-600 leading-relaxed mb-8 text-lg">
+                        <p className="text-gray-600 leading-relaxed mb-8 text-lg text-justify">
                             Our mission is to empower youth, recognize real heroes, and create lasting impact through disciplined action. We invite you to join this movement of positive change.
                         </p>
                         

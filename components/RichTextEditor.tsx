@@ -93,15 +93,23 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange,
             {/* Editor Area */}
             <div
                 ref={contentRef}
-                className="flex-grow p-6 outline-none overflow-y-auto prose max-w-none text-gray-800 min-h-[400px]"
+                className="flex-grow p-6 outline-none overflow-y-auto prose max-w-none text-gray-800 min-h-[400px] editor-placeholder"
                 contentEditable
                 onInput={handleInput}
-                placeholder={placeholder}
+                data-placeholder={placeholder}
                 style={{ minHeight: '400px' }} 
                 role="textbox"
                 aria-multiline="true"
                 aria-label="Rich Text Editor"
             />
+            <style>{`
+                .editor-placeholder[contentEditable=true]:empty:before {
+                    content: attr(data-placeholder);
+                    color: #a0aec0; /* Tailwind gray-500 */
+                    pointer-events: none;
+                    display: block; /* or inline-block */
+                }
+            `}</style>
         </div>
     );
 };

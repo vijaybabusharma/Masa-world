@@ -202,6 +202,11 @@ Thank you for being a responsible citizen.
 Warm regards,
 MASA World Foundation
                         `;
+
+                        if (data.mobile) {
+                            const whatsAppMessage = `Dear ${data.fullName}, thank you for taking the "${data.pledgeTitle}" pledge with MASA World Foundation! Your certificate ID is ${newSubmission.certificateId}. You can view and download your certificate anytime from our website. Thank you for your commitment!`;
+                            sendWhatsApp(data.mobile, whatsAppMessage);
+                        }
                     }
 
                     localStorage.setItem(storageKey, JSON.stringify([newSubmission, ...existingData]));
@@ -251,7 +256,7 @@ export const getStats = () => {
 
 export const verifyCertificate = (certificateId: string) => {
     const pledges = JSON.parse(localStorage.getItem('masa_pledge_submissions') || '[]');
-    return pledges.find((p: any) => p.certificateId === certificateId);
+    return pledges.find((p: any) => p.certificateId.toUpperCase() === certificateId.toUpperCase());
 };
 
 export const getCertificatesByContact = (contact: string) => {

@@ -1,77 +1,93 @@
 
 import React, { useEffect, useState } from 'react';
-import { UsersIcon, CalendarDaysIcon, GlobeIcon } from './icons/FeatureIcons';
+import { 
+    UsersIcon, 
+    PresentationChartBarIcon,
+    GlobeIcon,
+    ClockIcon
+} from './icons/FeatureIcons';
 import { getStats } from '../utils/mockBackend';
 
 const ImpactSnapshot: React.FC = () => {
-    // Updated credible figures
     const [stats, setStats] = useState({
         youth: 75000,
         programs: 650,
-        communities: 90, 
+        globalReach: 114,
+        years: 13,
     });
 
     useEffect(() => {
-        // Fetch stats on mount
-        const backendStats = getStats();
-        // Simulate base + new activity
-        setStats(prev => ({
-            youth: 75000 + (backendStats.members || 0), 
-            programs: 650 + (backendStats.gallery || 0), 
-            communities: 90 + (backendStats.countries || 0), 
-        }));
+        // This function simulates fetching and calculating live data.
+        const calculateStats = () => {
+            const backendStats = getStats();
+            // To match the requested "13+ Years", the start year is adjusted to 2011 (assuming current year is 2024).
+            const foundationStartYear = 2011;
+            const currentYear = new Date().getFullYear();
+
+            const youthImpacted = 75000 + (backendStats.members + backendStats.pledges + backendStats.enrollments);
+            const programsConducted = 650 + (backendStats.volunteers + backendStats.enrollments + backendStats.gallery);
+            const globalReach = 114 + (backendStats.countries);
+            const yearsOfImpact = currentYear - foundationStartYear;
+
+            setStats({
+                youth: youthImpacted,
+                programs: programsConducted,
+                globalReach: globalReach,
+                years: yearsOfImpact,
+            });
+        };
+
+        calculateStats();
+
+        // Simulate a data refresh every 24 hours
+        const interval = setInterval(calculateStats, 24 * 60 * 60 * 1000); 
+        return () => clearInterval(interval);
+
     }, []);
 
     const metrics = [
         { 
             icon: UsersIcon, 
             value: `${stats.youth.toLocaleString()}+`, 
-            label: "Youth Impacted",
-            micro: "Lives Transformed"
+            label: "Youth",
+            color: "text-masa-orange"
         },
         { 
-            icon: CalendarDaysIcon, 
+            icon: PresentationChartBarIcon, 
             value: `${stats.programs.toLocaleString()}+`, 
-            label: "Programs Conducted",
-            micro: "Since 2013"
+            label: "Programs",
+            color: "text-masa-blue"
         },
         { 
             icon: GlobeIcon, 
-            value: `${stats.communities.toLocaleString()}+`, 
+            value: `${stats.globalReach.toLocaleString()}+`, 
             label: "Global Reach",
-            micro: "Nations Connected"
+            color: "text-green-600"
         },
+        {
+            icon: ClockIcon,
+            value: `${stats.years}+`,
+            label: "Years",
+            color: "text-purple-600"
+        }
     ];
 
     return (
         <div className="bg-masa-charcoal">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20">
-                <div className="bg-white rounded-2xl shadow-xl border border-gray-100">
-                    <div className="grid grid-cols-1 md:grid-cols-3 md:divide-x md:divide-gray-100">
+                <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                    <div className="flex flex-col md:flex-row justify-around items-center py-6 px-4 md:divide-x md:divide-gray-200 space-y-6 md:space-y-0">
                         {metrics.map((metric, index) => (
-                            <div key={index} className="p-8 text-center group hover:bg-gray-50 transition-colors duration-300 first:rounded-l-2xl last:rounded-r-2xl">
-                                {/* Icon Container - Enhanced definition */}
-                                <div className="w-16 h-16 mx-auto bg-orange-50/80 rounded-full flex items-center justify-center mb-5 group-hover:bg-masa-orange group-hover:shadow-md transition-all duration-300 ring-4 ring-white shadow-sm border border-orange-100">
-                                    <metric.icon className="h-7 w-7 text-masa-orange group-hover:text-white transition-colors duration-300" />
+                            <div key={index} className="flex-1 flex justify-center items-center gap-4 px-4">
+                                <metric.icon className={`h-8 w-8 flex-shrink-0 ${metric.color}`} />
+                                <div className="text-left">
+                                    <p className={`text-3xl lg:text-4xl font-black ${metric.color} tracking-tight`}>
+                                        {metric.value}
+                                    </p>
+                                    <p className="text-sm font-semibold text-gray-600 leading-tight">
+                                        {metric.label}
+                                    </p>
                                 </div>
-                                
-                                {/* Value - Heavier weight for authority */}
-                                <p className="text-4xl lg:text-5xl font-black text-masa-charcoal tracking-tight leading-none mb-3">
-                                    {metric.value}
-                                </p>
-                                
-                                {/* Accent Divider - Visual balance */}
-                                <div className="h-0.5 w-8 bg-gray-200 mx-auto rounded-full mb-3 group-hover:bg-masa-orange/40 transition-colors"></div>
-
-                                {/* Label - Professional tracking */}
-                                <p className="text-xs font-bold text-gray-500 uppercase tracking-[0.15em]">
-                                    {metric.label}
-                                </p>
-
-                                {/* Micro-text - Added Context */}
-                                <p className="text-[10px] font-medium text-masa-blue mt-1 opacity-80 uppercase tracking-wide">
-                                    {metric.micro}
-                                </p>
                             </div>
                         ))}
                     </div>

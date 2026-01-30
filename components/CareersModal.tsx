@@ -45,6 +45,8 @@ const CareersModal: React.FC<CareersModalProps> = ({ initialRole, onClose, navig
         };
     }, [onClose]);
 
+    const inputFieldClasses = "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-masa-blue focus:border-masa-blue sm:text-sm";
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg shadow-2xl w-full max-w-lg relative animate-fade-in-up max-h-[90vh] overflow-y-auto">
@@ -55,20 +57,20 @@ const CareersModal: React.FC<CareersModalProps> = ({ initialRole, onClose, navig
                     <h3 className="text-2xl font-bold text-center mb-4">Careers & Internships Application</h3>
                     <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                         <div className="grid md:grid-cols-2 gap-4">
-                            <div><label className="block text-sm font-medium text-gray-700">Full Name</label><input required name="fullName" onChange={handleChange} type="text" className="mt-1 block w-full input-field" /></div>
-                            <div><label className="block text-sm font-medium text-gray-700">Email Address</label><input required name="email" onChange={handleChange} type="email" className="mt-1 block w-full input-field" /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Full Name</label><input required name="fullName" onChange={handleChange} type="text" className={inputFieldClasses} /></div>
+                            <div><label className="block text-sm font-medium text-gray-700">Email Address</label><input required name="email" onChange={handleChange} type="email" className={inputFieldClasses} /></div>
                         </div>
-                        <div><label className="block text-sm font-medium text-gray-700">Phone Number</label><input required name="phone" onChange={handleChange} type="tel" className="mt-1 block w-full input-field" /></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Phone Number</label><input required name="phone" onChange={handleChange} type="tel" className={inputFieldClasses} /></div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Role of Interest</label>
-                            <select name="role" value={formData.role} onChange={handleChange} className="mt-1 block w-full input-field bg-white">
+                            <select name="role" value={formData.role} onChange={handleChange} className={`${inputFieldClasses} bg-white`}>
                                 <option>Social Work Internship</option>
                                 <option>Project Coordinator</option>
                                 <option>Research Fellowship</option>
                                 <option value="General Application">General Application (Future Opportunities)</option>
                             </select>
                         </div>
-                        <div><label className="block text-sm font-medium text-gray-700">Cover Letter / Message</label><textarea required name="message" onChange={handleChange} rows={4} className="mt-1 block w-full input-field"></textarea></div>
+                        <div><label className="block text-sm font-medium text-gray-700">Cover Letter / Message</label><textarea required name="message" onChange={handleChange} rows={4} className={inputFieldClasses}></textarea></div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Upload Resume (PDF)</label>
                             <input required type="file" accept=".pdf" className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-masa-blue hover:file:bg-blue-100"/>
@@ -83,10 +85,7 @@ const CareersModal: React.FC<CareersModalProps> = ({ initialRole, onClose, navig
                     </form>
                 </div>
             </div>
-            {/* FIX: Replaced non-standard 'jsx' style tag with a standard style tag. */}
             <style>{`
-                .input-field { border: 1px solid #D1D5DB; border-radius: 0.375rem; padding: 0.5rem 0.75rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
-                .input-field:focus { outline: 2px solid transparent; outline-offset: 2px; --tw-ring-color: #1E3A8A; border-color: var(--tw-ring-color); }
                 @keyframes fade-in-up {
                     from { opacity: 0; transform: translateY(20px); }
                     to { opacity: 1; transform: translateY(0); }

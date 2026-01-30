@@ -1,12 +1,31 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display-swap');
 
-html {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Fluid Type Scale using clamp() */
+    --font-size-xs: clamp(0.75rem, 0.17vw + 0.71rem, 0.875rem); /* 12px -> 14px */
+    --font-size-sm: clamp(0.875rem, 0.17vw + 0.84rem, 1rem);    /* 14px -> 16px */
+    --font-size-base: clamp(1rem, 0.17vw + 0.96rem, 1.125rem);  /* 16px -> 18px */
+    --font-size-lg: clamp(1.125rem, 0.17vw + 1.09rem, 1.25rem); /* 18px -> 20px */
+    --font-size-xl: clamp(1.25rem, 0.34vw + 1.18rem, 1.5rem);   /* 20px -> 24px */
+    --font-size-2xl: clamp(1.5rem, 0.52vw + 1.39rem, 1.875rem); /* 24px -> 30px */
+    --font-size-3xl: clamp(1.875rem, 0.7vw + 1.73rem, 2.25rem); /* 30px -> 36px */
+    --font-size-4xl: clamp(2.25rem, 1.05vw + 2.04rem, 3rem);    /* 36px -> 48px */
+    --font-size-5xl: clamp(3rem, 1.75vw + 2.65rem, 4rem);      /* 48px -> 64px */
+    --font-size-6xl: clamp(3.75rem, 2.62vw + 3.22rem, 5.25rem); /* 60px -> 84px */
+  }
+
+  html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-}
+  }
 
-body {
+  body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: #1F2937;
     background-color: #F9FAFB;
@@ -14,7 +33,77 @@ body {
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden; /* Prevent horizontal scroll on small devices */
+    overflow-x: hidden;
+    font-size: var(--font-size-base);
+    line-height: 1.65;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Headings: Tighter line-height and letter-spacing for impact */
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    font-weight: 800; /* Bolder by default */
+  }
+  
+  h1, .text-4xl, .text-5xl, .text-6xl { font-weight: 800; }
+  h2, .text-3xl { font-weight: 800; }
+  h3, .text-2xl { font-weight: 700; }
+  h4, .text-xl { font-weight: 700; }
+
+  /* Responsive Font Sizes for Headings */
+  h1 { font-size: var(--font-size-5xl); }
+  h2 { font-size: var(--font-size-4xl); }
+  h3 { font-size: var(--font-size-3xl); }
+  h4 { font-size: var(--font-size-2xl); }
+  p { line-height: 1.7; }
+  
+  /* Update Tailwind's utility classes to use our fluid scale */
+  .text-xs { font-size: var(--font-size-xs); }
+  .text-sm { font-size: var(--font-size-sm); }
+  .text-base { font-size: var(--font-size-base); }
+  .text-lg { font-size: var(--font-size-lg); }
+  .text-xl { font-size: var(--font-size-xl); }
+  .text-2xl { font-size: var(--font-size-2xl); }
+  .text-3xl { font-size: var(--font-size-3xl); }
+  .text-4xl { font-size: var(--font-size-4xl); }
+  .text-5xl { font-size: var(--font-size-5xl); }
+  .text-6xl { font-size: var(--font-size-6xl); }
+
+  /* Improved Prose styles for readability */
+  .prose {
+    font-size: var(--font-size-base);
+    line-height: 1.7;
+  }
+  .prose :where(p):not(:where([class~="not-prose"] *)) {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+  .prose :where(h2):not(:where([class~="not-prose"] *)) {
+    font-size: var(--font-size-3xl);
+    margin-top: 2em;
+    margin-bottom: 1em;
+  }
+  .prose :where(h3):not(:where([class~="not-prose"] *)) {
+    font-size: var(--font-size-2xl);
+    margin-top: 1.6em;
+    margin-bottom: 0.8em;
+  }
+  
+  .prose-lg {
+    font-size: var(--font-size-lg);
+    line-height: 1.75;
+  }
+  .prose-lg :where(p):not(:where([class~="not-prose"] *)) {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+  }
+  .prose-lg :where(h2):not(:where([class~="not-prose"] *)) {
+    font-size: var(--font-size-4xl);
+  }
+  .prose-lg :where(h3):not(:where([class~="not-prose"] *)) {
+    font-size: var(--font-size-3xl);
+  }
 }
 
 /* Custom Scrollbar */
@@ -78,41 +167,4 @@ textarea:focus-visible {
 
 .animate-scale-up {
     animation: scale-up 0.3s ease-out forwards;
-}
-
-/* Modal Helpers */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 50;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    backdrop-filter: blur(2px);
-}
-
-.modal-overlay.active {
-    display: flex;
-}
-
-.modal-content {
-    background: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    width: 100%;
-    max-width: 32rem;
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-/* Slider Helpers */
-.slide {
-    display: none;
-    transition: opacity 1s ease-in-out;
-}
-.slide.active {
-    display: block;
 }

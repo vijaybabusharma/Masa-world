@@ -7,7 +7,8 @@ import {
     GlobeIcon, UsersIcon, LaptopIcon, ArrowRightIcon, BriefcaseIcon, TrophyIcon, 
     HeartIcon, ShieldCheckIcon, PresentationChartBarIcon, CalendarDaysIcon, 
     CreditCardIcon, BellIcon, DocumentCheckIcon, HandshakeIcon, SearchIcon, 
-    AcademicCapIcon, NewspaperIcon, SignalIcon, CheckIcon, EnvelopeIcon, ClockIcon
+    AcademicCapIcon, NewspaperIcon, SignalIcon, CheckIcon, EnvelopeIcon, ClockIcon,
+    EyeIcon
 } from '../components/icons/FeatureIcons';
 import { ChevronDownIcon, ChevronUpIcon } from '../components/icons/UiIcons';
 
@@ -102,7 +103,7 @@ const PageHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subt
                 <span className="font-bold text-sm">AI Utility Hub</span>
             </div>
             <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">{title}</h1>
-            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto font-light">{subtitle}</p>
+            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">{subtitle}</p>
             <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-400">
                 <ShieldCheckIcon className="h-4 w-4" /> Built for NGOs • Data not stored • Secure
             </div>
@@ -502,7 +503,7 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                                 Analyzing...
                                             </div>
                                         ) : (
-                                            <div className="prose prose-sm max-w-none text-inherit">
+                                            <div className="prose max-w-none text-inherit">
                                                 <p className="whitespace-pre-wrap">{msg.content}</p>
                                             </div>
                                         )}

@@ -9,8 +9,8 @@ interface ThankYouPageProps extends NavigationProps {
 
 const contentConfig = {
     volunteer: {
-        title: "Thank You for Volunteering",
-        subtitle: "You've taken the first step toward creating real impact.",
+        title: "Thank You for Stepping Up",
+        subtitle: "You've taken a powerful step toward creating real impact.",
         message: "Our team has received your volunteer application and will contact you shortly. Together, we empower communities through sports, education, and culture.",
         primaryBtn: "Explore Our Work",
         primaryAction: "initiatives",
@@ -19,9 +19,9 @@ const contentConfig = {
         bg: "bg-blue-50"
     },
     donate: {
-        title: "Thank You for Supporting Our Mission",
-        subtitle: "Your contribution makes a difference.",
-        message: "Your generous contribution helps us empower youth and communities. We deeply appreciate your support and commitment to positive change. A confirmation email has been sent to you.",
+        title: "Thank You for Your Generous Support",
+        subtitle: "Your contribution is already making a difference.",
+        message: "Your generous contribution helps us empower youth and communities. We deeply appreciate your support and commitment to positive change. A confirmation receipt has been sent to your email.",
         primaryBtn: "View Our Impact",
         primaryAction: "media-reports",
         icon: CheckIcon,
@@ -29,19 +29,19 @@ const contentConfig = {
         bg: "bg-green-50"
     },
     membership: {
-        title: "Welcome to MASA World Foundation!",
-        subtitle: "You are now part of our global family.",
+        title: "Welcome to the MASA Family!",
+        subtitle: "You are now an official part of our global community.",
         message: "Thank you for becoming a member. A confirmation email with your digital ID card is on its way. We appreciate your support in our mission to empower communities.",
-        primaryBtn: "Explore Our Initiatives",
-        primaryAction: "initiatives",
+        primaryBtn: "Explore Member Benefits",
+        primaryAction: "dashboard",
         icon: UsersIcon,
         color: "text-masa-orange",
         bg: "bg-orange-50"
     },
     career: {
         title: "Thank You for Your Interest",
-        subtitle: "Your application has been received.",
-        message: "Thank you for applying to MASA World Foundation. We have received your application/resume successfully. Our team will review your details and contact you if there is a suitable opportunity aligned with your profile.",
+        subtitle: "Your application has been successfully submitted.",
+        message: "Thank you for applying to MASA World Foundation. Our team will review your profile and reach out if there is a suitable opportunity aligned with your skills and passion.",
         primaryBtn: "Explore Our Work",
         primaryAction: "initiatives",
         icon: BriefcaseIcon,
@@ -60,26 +60,24 @@ const contentConfig = {
     },
     event: {
         title: "Registration Confirmed!",
-        subtitle: "We look forward to seeing you there.",
-        message: "Thank you for registering for the event. Your spot is reserved. We have sent a confirmation email with all the event details to your registered address.",
+        subtitle: "We look forward to seeing you at the event.",
+        message: "Thank you for registering. Your spot is reserved, and we have sent a confirmation email with all the event details to your registered address.",
         primaryBtn: "View Other Events",
         primaryAction: "events",
         icon: CalendarDaysIcon,
         color: "text-masa-orange",
         bg: "bg-orange-50"
     },
-//- FIX START
     pledge: {
-        title: "Thank You for Taking the Pledge!",
-        subtitle: "Your commitment makes a world of difference.",
-        message: "You have successfully taken the pledge. Your official digital certificate is now available. You can download it anytime from our website.",
+        title: "Thank You for Your Commitment!",
+        subtitle: "Your pledge is a powerful statement for positive change.",
+        message: "You have successfully taken the pledge. Your official digital certificate is now available for download. Thank you for being a responsible and active citizen.",
         primaryBtn: "Verify/Download Certificate",
         primaryAction: "pledge",
         icon: ShieldCheckIcon,
         color: "text-purple-600",
         bg: "bg-purple-50"
     }
-//- FIX END
 };
 
 const ThankYouPage: React.FC<ThankYouPageProps> = ({ navigateTo, type }) => {
@@ -99,23 +97,23 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ navigateTo, type }) => {
                 <h1 className="text-3xl md:text-4xl font-extrabold text-masa-charcoal mb-4">
                     {config.title}
                 </h1>
-                <p className="text-xl text-gray-500 font-medium mb-6">
+                <p className="text-lg text-gray-500 font-medium mb-6">
                     {config.subtitle}
                 </p>
-                <p className="text-gray-600 mb-10 leading-relaxed text-lg">
+                <p className="text-base text-gray-600 mb-10 leading-relaxed text-justify">
                     {config.message}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button 
                         onClick={() => navigateTo(config.primaryAction as any)}
-                        className="bg-masa-charcoal text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition-colors shadow-lg"
+                        className="bg-masa-charcoal text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition-colors shadow-lg text-sm"
                     >
                         {config.primaryBtn}
                     </button>
                     <button 
                         onClick={() => navigateTo('home')}
-                        className="bg-white border-2 border-gray-200 text-gray-700 px-8 py-3 rounded-full font-bold hover:bg-gray-50 transition-colors"
+                        className="bg-white border-2 border-gray-200 text-gray-700 px-8 py-3 rounded-full font-bold hover:bg-gray-50 transition-colors text-sm"
                     >
                         Return to Home
                     </button>

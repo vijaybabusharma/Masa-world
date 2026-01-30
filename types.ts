@@ -1,5 +1,5 @@
 
-export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'ngo-help-desk' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices' | 'pledge' | 'thank-you-pledge';
+export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'ngo-help-desk' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices' | 'pledge' | 'thank-you-pledge' | 'certificate-downloader';
 
 export interface NavigationProps {
   navigateTo: (page: Page, anchor?: string) => void;
@@ -17,7 +17,6 @@ export interface Post {
     author?: string;
     tags?: string[];
     status?: 'Draft' | 'Published' | 'Scheduled';
-    // Advanced Blog Features
     slug?: string;
     seoTitle?: string;
     metaDescription?: string;
@@ -25,6 +24,44 @@ export interface Post {
     views?: number;
     featured?: boolean;
     publishDate?: string; // ISO string for scheduling
+}
+
+export interface Course {
+    id: number;
+    title: string;
+    description: string;
+    fullDescription: string;
+    category: 'Sports' | 'Education' | 'Culture';
+    level: 'Beginner' | 'Intermediate' | 'Advanced';
+    duration: string;
+    mode: 'Online' | 'Offline' | 'Hybrid';
+    image: string;
+    highlights: string[];
+    price: string;
+}
+
+export interface Event {
+    id: string;
+    title: string;
+    category: 'Conference' | 'Training' | 'Sports' | 'Community' | 'Award';
+    date: string;
+    displayDate: string;
+    location: string;
+    description: string;
+    image: string;
+    status: 'Upcoming' | 'Completed';
+    price?: string;
+}
+
+export interface Pledge {
+    id: string;
+    title: string;
+    description: string;
+    statement: string;
+    icon: string; // Storing icon name as string
+    category: 'Civic Duty' | 'Environment' | 'Social' | 'Digital';
+    oathText: string;
+    imageUrl: string;
 }
 
 export type MembershipType = 'Community' | 'Supporting' | 'Life' | 'International' | 'Student / Youth';
@@ -71,7 +108,7 @@ export interface SocialLink {
 
 // --- Navigation Menu Types ---
 export interface NavItem {
-  id: string; // Unique ID for key prop
+  id: string;
   label: string;
   page: Page;
   isExternal?: boolean;
@@ -101,27 +138,17 @@ export interface GlobalSettings {
     };
     social: SocialLink[];
     scripts: {
-        // Analytics & Tracking
         googleAnalyticsId: string;
         enableAnalytics: boolean;
-        
         facebookPixelId: string;
         enablePixel: boolean;
-
-        // Monetization & Ads
-        googleAdsenseCode: string; // Full script or Client ID
+        googleAdsenseCode: string;
         enableAdsense: boolean;
-
-        // Verification
-        googleSearchConsole: string; // Meta tag content
-        
-        // Custom Code Injection
+        googleSearchConsole: string;
         customHead: string;
         enableCustomHead: boolean;
-        
         customBodyStart: string;
         enableCustomBodyStart: boolean;
-        
         customBodyEnd: string;
         enableCustomBodyEnd: boolean;
     };

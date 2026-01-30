@@ -53,31 +53,33 @@ const PartnershipModal: React.FC<PartnershipModalProps> = ({ partnershipType, on
         };
     }, [onClose]);
 
+    const inputFieldClasses = "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-masa-orange focus:border-masa-orange sm:text-sm";
+
     const formFields = partnershipType === 'Institutional' ? (
         <>
-            <div><label htmlFor="inst-name" className="block text-sm font-medium text-gray-700">Institution Name</label><input required onChange={handleChange} type="text" id="inst-name" className="mt-1 block w-full input-field" /></div>
-            <div><label htmlFor="inst-contact-person" className="block text-sm font-medium text-gray-700">Contact Person</label><input required onChange={handleChange} type="text" id="inst-contact-person" className="mt-1 block w-full input-field" /></div>
-            <div><label htmlFor="inst-email" className="block text-sm font-medium text-gray-700">Email Address</label><input required onChange={handleChange} type="email" id="inst-email" className="mt-1 block w-full input-field" /></div>
-            <div><label htmlFor="inst-phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input required onChange={handleChange} type="tel" id="inst-phone" className="mt-1 block w-full input-field" /></div>
+            <div><label htmlFor="inst-name" className="block text-sm font-medium text-gray-700">Institution Name</label><input required onChange={handleChange} type="text" id="inst-name" className={inputFieldClasses} /></div>
+            <div><label htmlFor="inst-contact-person" className="block text-sm font-medium text-gray-700">Contact Person</label><input required onChange={handleChange} type="text" id="inst-contact-person" className={inputFieldClasses} /></div>
+            <div><label htmlFor="inst-email" className="block text-sm font-medium text-gray-700">Email Address</label><input required onChange={handleChange} type="email" id="inst-email" className={inputFieldClasses} /></div>
+            <div><label htmlFor="inst-phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input required onChange={handleChange} type="tel" id="inst-phone" className={inputFieldClasses} /></div>
             <div>
                 <label htmlFor="inst-type" className="block text-sm font-medium text-gray-700">Type of Institution</label>
-                <select required onChange={handleChange} id="inst-type" className="mt-1 block w-full input-field">
+                <select required onChange={handleChange} id="inst-type" className={inputFieldClasses}>
                     <option>School</option>
                     <option>College</option>
                     <option>University</option>
                     <option>Other</option>
                 </select>
             </div>
-            <div><label htmlFor="inst-proposal" className="block text-sm font-medium text-gray-700">Proposal / Message</label><textarea onChange={handleChange} id="inst-proposal" rows={3} className="mt-1 block w-full input-field"></textarea></div>
+            <div><label htmlFor="inst-proposal" className="block text-sm font-medium text-gray-700">Proposal / Message</label><textarea onChange={handleChange} id="inst-proposal" rows={3} className={inputFieldClasses}></textarea></div>
         </>
     ) : (
         <>
-            <div><label htmlFor="corp-name" className="block text-sm font-medium text-gray-700">Company / Foundation Name</label><input required onChange={handleChange} type="text" id="corp-name" className="mt-1 block w-full input-field" /></div>
-            <div><label htmlFor="corp-contact-person" className="block text-sm font-medium text-gray-700">Contact Person</label><input required onChange={handleChange} type="text" id="corp-contact-person" className="mt-1 block w-full input-field" /></div>
-            <div><label htmlFor="corp-email" className="block text-sm font-medium text-gray-700">Email Address</label><input required onChange={handleChange} type="email" id="corp-email" className="mt-1 block w-full input-field" /></div>
-            <div><label htmlFor="corp-phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input required onChange={handleChange} type="tel" id="corp-phone" className="mt-1 block w-full input-field" /></div>
-            <div><label htmlFor="corp-interest" className="block text-sm font-medium text-gray-700">Area of Interest (CSR)</label><input onChange={handleChange} type="text" id="corp-interest" placeholder="e.g., Youth Empowerment, Environment" className="mt-1 block w-full input-field" /></div>
-            <div><label htmlFor="corp-proposal" className="block text-sm font-medium text-gray-700">Proposal / Message</label><textarea onChange={handleChange} id="corp-proposal" rows={3} className="mt-1 block w-full input-field"></textarea></div>
+            <div><label htmlFor="corp-name" className="block text-sm font-medium text-gray-700">Company / Foundation Name</label><input required onChange={handleChange} type="text" id="corp-name" className={inputFieldClasses} /></div>
+            <div><label htmlFor="corp-contact-person" className="block text-sm font-medium text-gray-700">Contact Person</label><input required onChange={handleChange} type="text" id="corp-contact-person" className={inputFieldClasses} /></div>
+            <div><label htmlFor="corp-email" className="block text-sm font-medium text-gray-700">Email Address</label><input required onChange={handleChange} type="email" id="corp-email" className={inputFieldClasses} /></div>
+            <div><label htmlFor="corp-phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input required onChange={handleChange} type="tel" id="corp-phone" className={inputFieldClasses} /></div>
+            <div><label htmlFor="corp-interest" className="block text-sm font-medium text-gray-700">Area of Interest (CSR)</label><input onChange={handleChange} type="text" id="corp-interest" placeholder="e.g., Youth Empowerment, Environment" className={inputFieldClasses} /></div>
+            <div><label htmlFor="corp-proposal" className="block text-sm font-medium text-gray-700">Proposal / Message</label><textarea onChange={handleChange} id="corp-proposal" rows={3} className={inputFieldClasses}></textarea></div>
         </>
     );
 
@@ -123,10 +125,7 @@ const PartnershipModal: React.FC<PartnershipModalProps> = ({ partnershipType, on
                     )}
                 </div>
             </div>
-            {/* FIX: Replaced non-standard 'jsx' style tag with a standard style tag. */}
             <style>{`
-                .input-field { border: 1px solid #D1D5DB; border-radius: 0.375rem; padding: 0.5rem 0.75rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
-                .input-field:focus { outline: 2px solid transparent; outline-offset: 2px; --tw-ring-color: #F97316; border-color: var(--tw-ring-color); }
                 @keyframes fade-in-up {
                     from { opacity: 0; transform: translateY(20px); }
                     to { opacity: 1; transform: translateY(0); }

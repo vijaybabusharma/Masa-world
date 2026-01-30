@@ -17,6 +17,7 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         availability: '',
         mode: '',
         skills: '',
+        motivation: '',
         consent: false
     });
 
@@ -201,6 +202,11 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Skills / Previous Experience</label>
                                 <textarea name="skills" onChange={handleChange} value={formData.skills} rows={3} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-blue outline-none" placeholder="Briefly describe your skills or any past volunteering experience..."></textarea>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Why do you want to volunteer? *</label>
+                                <textarea required name="motivation" onChange={handleChange} value={formData.motivation} rows={4} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-blue outline-none" placeholder="Tell us what motivates you to join us..."></textarea>
                             </div>
 
                             <div className="flex items-start pt-4 border-t border-gray-100">

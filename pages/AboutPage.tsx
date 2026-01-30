@@ -15,7 +15,7 @@ const PageHeader: React.FC<{ title: string; subtitle: string, navigateTo: Naviga
         </div>
         <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">{title}</h1>
-            <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">{subtitle}</p>
+            <p className="mt-4 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">{subtitle}</p>
         </div>
     </div>
 );
@@ -25,19 +25,19 @@ const OurStorySection: React.FC = () => (
     <section className="py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-16 items-center">
-                <div className="prose prose-lg text-gray-600 max-w-full">
-                    <span className="text-masa-blue font-bold uppercase tracking-widest text-sm mb-2 block">Our Origin</span>
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-masa-charcoal mb-6 leading-tight">From a Sports Field to a Global Movement</h2>
+                <div className="prose lg:prose-lg text-gray-600 max-w-full text-justify">
+                    <span className="text-masa-blue font-bold uppercase tracking-widest text-sm mb-2 block text-left">Our Origin</span>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-masa-charcoal mb-6 leading-tight text-left">From a Sports Field to a Global Movement</h2>
                     <p>
-                        MASA World Foundation began in 2013 with a simple observation: a playground is the best classroom. What started as a small initiative to organize local sports leagues for underprivileged youth quickly revealed a deeper need. We saw that discipline learned in sports could translate to leadership in life.
+                        MASA World Foundation began in 2013 with a simple observation: a playground is the best classroom. What started as a small initiative to organize local sports leagues for underprivileged youth quickly revealed a deeper truth: the discipline learned in sports translates directly to leadership in life.
                     </p>
                     <p>
-                        Over the years, our mission expanded. We realized that true empowerment requires a holistic ecosystem. We integrated education to sharpen minds and cultural programs to strengthen roots. Today, MASA is not just an NGO; it is a movement that bridges the gap between grassroots potential and global opportunity.
+                        Over the years, our mission expanded as we realized that true empowerment requires a holistic ecosystem. We integrated education to sharpen minds and cultural programs to strengthen community roots. Today, MASA is not just an NGO; it is a global movement that bridges the gap between grassroots potential and worldwide opportunity.
                     </p>
                 </div>
                 <div className="relative">
                     <div className="absolute -inset-4 bg-masa-orange/10 rounded-2xl transform rotate-3"></div>
-                    <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=800&q=80" alt="A diverse group of volunteers working together" className="relative rounded-xl shadow-2xl w-full h-auto object-cover" />
+                    <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=800&q=80" alt="A diverse group of volunteers working together" className="relative rounded-xl shadow-2xl w-full h-auto object-cover" loading="lazy" />
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@ const MissionVisionSection: React.FC = () => (
                         </div>
                         <h2 className="text-3xl font-bold text-masa-charcoal">Our Mission</h2>
                     </div>
-                    <p className="text-lg text-gray-700 leading-relaxed font-medium mb-6 flex-grow">
+                    <p className="text-lg text-gray-700 leading-relaxed font-medium mb-6 flex-grow text-justify">
                         “To empower youth and communities by providing access to sports, education, and cultural opportunities that foster discipline, leadership, self-reliance, and social responsibility.”
                     </p>
                 </div>
@@ -70,7 +70,7 @@ const MissionVisionSection: React.FC = () => (
                         </div>
                         <h2 className="text-3xl font-bold text-masa-charcoal">Our Vision</h2>
                     </div>
-                    <p className="text-lg text-gray-700 leading-relaxed font-medium mb-6 flex-grow">
+                    <p className="text-lg text-gray-700 leading-relaxed font-medium mb-6 flex-grow text-justify">
                         “To build a world where every young individual has the opportunity, guidance, and confidence to lead positive change—locally and globally.”
                     </p>
                 </div>
@@ -104,7 +104,7 @@ const CoreValuesSection: React.FC = () => {
                                 <v.icon className="h-7 w-7" />
                             </div>
                             <h3 className="font-bold text-lg text-masa-charcoal mb-2">{v.title}</h3>
-                            <p className="text-gray-600 text-sm">{v.text}</p>
+                            <p className="text-base text-gray-600 leading-relaxed text-justify">{v.text}</p>
                         </div>
                     ))}
                 </div>
@@ -113,7 +113,7 @@ const CoreValuesSection: React.FC = () => {
     );
 };
 
-// 4. Timeline Section
+// 4. Timeline Section (FIXED FOR DESKTOP READABILITY)
 const TimelineSection: React.FC = () => {
     const events = [
         { year: "2013", title: "Inception", description: "MASA World Foundation established with a focus on sports for development." },
@@ -130,24 +130,29 @@ const TimelineSection: React.FC = () => {
                     <h2 className="text-3xl font-bold">Our Journey Through Time</h2>
                 </div>
                 <div className="relative max-w-4xl mx-auto">
-                    {/* Vertical Line */}
-                    <div className="absolute left-1/2 w-0.5 h-full bg-gray-700 -translate-x-1/2"></div>
+                    {/* Vertical line: positioned left on mobile, center on md+ */}
+                    <div className="absolute top-0 left-4 md:left-1/2 w-0.5 h-full bg-gray-700 -translate-x-1/2"></div>
                     
-                    <div className="space-y-12">
+                    <div className="space-y-16">
                         {events.map((event, index) => (
-                            <div key={index} className="relative flex flex-col md:flex-row items-center justify-between">
-                                {/* Left Content (Right aligned on desktop for alternate) */}
-                                <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'order-last pl-8 text-left'}`}>
-                                    <h3 className="text-3xl font-bold text-masa-orange">{event.year}</h3>
-                                    <h4 className="text-xl font-bold mt-1">{event.title}</h4>
-                                    <p className="mt-2 text-gray-400 text-sm">{event.description}</p>
+                            <div key={index} className="relative">
+                                {/* Dot on the line */}
+                                <div className="absolute top-1 left-4 md:left-1/2 w-4 h-4 bg-masa-orange rounded-full -translate-x-1/2 border-4 border-masa-charcoal"></div>
+                                
+                                {/* Content container */}
+                                <div className={`pl-12 md:pl-0 md:flex items-start ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
+                                    {/* Spacer for desktop */}
+                                    <div className="md:w-1/2"></div>
+                                    
+                                    {/* Content */}
+                                    <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:pl-8' : 'md:pr-8'}`}>
+                                        <div className={index % 2 !== 0 ? 'md:text-right' : 'md:text-left'}>
+                                            <h3 className="text-3xl font-bold text-masa-orange">{event.year}</h3>
+                                            <h4 className="text-xl font-bold mt-1">{event.title}</h4>
+                                            <p className="mt-2 text-base text-gray-400 leading-relaxed text-justify">{event.description}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                
-                                {/* Dot */}
-                                <div className="absolute left-1/2 w-4 h-4 bg-masa-orange rounded-full -translate-x-1/2 border-4 border-gray-800 top-1/2 -translate-y-1/2"></div>
-                                
-                                {/* Spacer for desktop balance */}
-                                <div className="hidden md:block w-5/12"></div>
                             </div>
                         ))}
                     </div>

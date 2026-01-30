@@ -2,9 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { NavigationProps } from '../types';
 import { XIcon } from '../components/icons/UiIcons';
-import { HeartIcon, UsersIcon, SparklesIcon, CalendarDaysIcon, MapPinIcon, ArrowRightIcon } from '../components/icons/FeatureIcons';
-import GalleryUploadModal from '../components/GalleryUploadModal';
-import AiImageGeneratorModal from '../components/AiImageGeneratorModal';
+import { HeartIcon, UsersIcon, SparklesIcon, CalendarDaysIcon, MapPinIcon } from '../components/icons/FeatureIcons';
 
 // --- Data ---
 const galleryCategories = [
@@ -13,14 +11,14 @@ const galleryCategories = [
 ];
 
 const galleryData = [
-    { id: 1, category: 'Sports Events', title: 'Annual Sports Day', location: 'New Delhi', date: 'Aug 15, 2024', imageUrl: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=800&q=80', description: 'Our annual celebration of sportsmanship and youth talent. Over 500 participants from across the state competed in various track and field events, showcasing determination and grit.', tags: ['Sports', 'Youth', 'Competition', 'Athletics'] },
-    { id: 2, category: 'Community Outreach', title: 'Rural Health Camp', location: 'Uttar Pradesh', date: 'Jul 20, 2024', imageUrl: 'https://images.unsplash.com/photo-1628348070889-cb656243b487?auto=format&fit=crop&w=800&q=80', description: 'Providing essential healthcare services to underserved communities. Doctors and volunteers worked tirelessly to screen over 1,000 patients in a single day.', tags: ['Health', 'Community', 'Service', 'Medical'] },
-    { id: 3, category: 'Trainings & Workshops', title: 'Leadership Bootcamp', location: 'Mumbai', date: 'Jul 10, 2024', imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80', description: 'Empowering the next generation of leaders with essential skills. This 3-day intensive workshop covered public speaking, strategic thinking, and team management.', tags: ['Education', 'Leadership', 'Youth', 'Skills'] },
-    { id: 4, category: 'Awards & Recognition', title: 'Real Hero Awards', location: 'New Delhi', date: 'Jun 05, 2024', imageUrl: 'https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=800&q=80', description: 'Honoring the unsung heroes of our society who work silently to make a difference. 20 individuals were recognized for their outstanding social service.', tags: ['Awards', 'Recognition', 'Community', 'Heroes'] },
-    { id: 5, category: 'Conferences & Seminars', title: 'National Youth Conclave', location: 'Bangalore', date: 'May 15, 2024', imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80', description: 'A platform for dialogue on national issues concerning youth. Policymakers and student leaders engaged in fruitful discussions on education reform.', tags: ['Conference', 'Youth', 'Policy', 'Debate'] },
-    { id: 6, category: 'International Programs', title: 'Global Exchange Forum', location: 'Virtual', date: 'Apr 22, 2024', imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80', description: 'Connecting youth leaders from India and around the world to discuss sustainable development goals.', tags: ['Global', 'International', 'Culture', 'SDGs'] },
-    { id: 7, category: 'Sports Events', title: 'District Football League', location: 'Kolkata', date: 'Mar 30, 2024', imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80', description: 'Fostering teamwork and discipline through competitive sports. The league saw fierce competition and high spirits among the local clubs.', tags: ['Sports', 'Football', 'Youth', 'Teamwork'] },
-    { id: 8, category: 'Community Outreach', title: 'City Cleanliness Drive', location: 'Pune', date: 'Mar 12, 2024', imageUrl: 'https://images.unsplash.com/photo-1618521630643-b19623e4d872?auto=format&fit=crop&w=800&q=80', description: 'Volunteers coming together to create a cleaner, healthier city. The drive focused on waste segregation awareness and spot cleaning.', tags: ['Community', 'Environment', 'Volunteer', 'SwachhBharat'] },
+    { id: 1, category: 'Sports Events', title: 'Annual Sports Day', location: 'New Delhi', date: 'Aug 15, 2024', imageUrl: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=800&q=80', description: 'A vibrant celebration of sportsmanship where over 500 young athletes showcased incredible determination and talent in track and field events.', tags: ['Sports', 'Youth', 'Competition', 'Athletics'] },
+    { id: 2, category: 'Community Outreach', title: 'Rural Health Camp', location: 'Uttar Pradesh', date: 'Jul 20, 2024', imageUrl: 'https://images.unsplash.com/photo-1628348070889-cb656243b487?auto=format&fit=crop&w=800&q=80', description: 'Our dedicated team of doctors and volunteers provided essential healthcare screenings to over 1,000 people in a single day, bridging critical gaps in medical access.', tags: ['Health', 'Community', 'Service', 'Medical'] },
+    { id: 3, category: 'Trainings & Workshops', title: 'Leadership Bootcamp', location: 'Mumbai', date: 'Jul 10, 2024', imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80', description: 'An intensive 3-day workshop that transformed aspiring students into confident leaders through sessions on public speaking, strategic thinking, and team management.', tags: ['Education', 'Leadership', 'Youth', 'Skills'] },
+    { id: 4, category: 'Awards & Recognition', title: 'Real Hero Awards', location: 'New Delhi', date: 'Jun 05, 2024', imageUrl: 'https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=800&q=80', description: 'A night dedicated to honoring the unsung heroes of our society. We celebrated 20 individuals whose selfless work inspires us all.', tags: ['Awards', 'Recognition', 'Community', 'Heroes'] },
+    { id: 5, category: 'Conferences & Seminars', title: 'National Youth Conclave', location: 'Bangalore', date: 'May 15, 2024', imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80', description: 'A vital platform where policymakers and student leaders engaged in fruitful discussions on education reform and the future of India\'s youth.', tags: ['Conference', 'Youth', 'Policy', 'Debate'] },
+    { id: 6, category: 'International Programs', title: 'Global Exchange Forum', location: 'Virtual', date: 'Apr 22, 2024', imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80', description: 'Connecting bright young minds from India and around the world to collaborate on sustainable development goals and foster global understanding.', tags: ['Global', 'International', 'Culture', 'SDGs'] },
+    { id: 7, category: 'Sports Events', title: 'District Football League', location: 'Kolkata', date: 'Mar 30, 2024', imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80', description: 'The finals of our district league, where fierce competition, incredible teamwork, and the pure joy of the game were on full display.', tags: ['Sports', 'Football', 'Youth', 'Teamwork'] },
+    { id: 8, category: 'Community Outreach', title: 'City Cleanliness Drive', location: 'Pune', date: 'Mar 12, 2024', imageUrl: 'https://images.unsplash.com/photo-1618521630643-b19623e4d872?auto=format&fit=crop&w=800&q=80', description: 'Hundreds of volunteers joined hands to create a cleaner city, spreading awareness about waste segregation and our collective civic duty.', tags: ['Community', 'Environment', 'Volunteer', 'SwachhBharat'] },
 ];
 
 // --- Components ---
@@ -93,7 +91,7 @@ const LightboxModal: React.FC<{ item: any; onClose: () => void }> = ({ item, onC
                             </div>
                         </div>
 
-                        <div className="prose prose-sm text-gray-600 leading-relaxed mb-8">
+                        <div className="prose prose-sm text-gray-600 leading-relaxed mb-8 text-justify">
                             <p>{item.description}</p>
                         </div>
 
@@ -125,8 +123,8 @@ const LightboxModal: React.FC<{ item: any; onClose: () => void }> = ({ item, onC
                     to { opacity: 1; }
                 }
                 @keyframes scale-up {
-                    from { transform: scale(0.95); opacity: 0; }
-                    to { transform: scale(1); opacity: 1; }
+                    from { opacity: 0; transform: scale(0.95); }
+                    to { opacity: 1; transform: scale(1); }
                 }
                 .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
                 .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }
@@ -142,31 +140,15 @@ const LightboxModal: React.FC<{ item: any; onClose: () => void }> = ({ item, onC
 const GalleryPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [activeCategory, setActiveCategory] = useState('All');
     const [selectedItem, setSelectedItem] = useState<any | null>(null);
-    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-    const [isAiModalOpen, setIsAiModalOpen] = useState(false);
-    const [aiGeneratedImage, setAiGeneratedImage] = useState<string | null>(null);
 
     const filteredItems = useMemo(() => {
         if (activeCategory === 'All') return galleryData;
         return galleryData.filter(item => item.category === activeCategory);
     }, [activeCategory]);
     
-    const handleAiImageSubmit = (base64Data: string) => {
-        setAiGeneratedImage(base64Data);
-        setIsAiModalOpen(false);
-        setIsUploadModalOpen(true);
-    };
-    
-    const handleCloseUploadModal = () => {
-        setIsUploadModalOpen(false);
-        setAiGeneratedImage(null);
-    };
-
     return (
         <div className="bg-gray-50">
             {selectedItem && <LightboxModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
-            {isUploadModalOpen && <GalleryUploadModal categories={galleryCategories.filter(c => c !== 'All')} onClose={handleCloseUploadModal} generatedImage={aiGeneratedImage} />}
-            {isAiModalOpen && <AiImageGeneratorModal onClose={() => setIsAiModalOpen(false)} onSubmitToGallery={handleAiImageSubmit} />}
 
             {/* 1. Hero Section */}
             <section className="relative bg-masa-charcoal py-24 text-white text-center">
@@ -219,29 +201,6 @@ const GalleryPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 </div>
             </main>
 
-            {/* 5. Submit Media Section */}
-            <section className="py-20 bg-white">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-2xl">
-                    <h2 className="text-3xl font-bold text-masa-charcoal">Share Your Moments with MASA</h2>
-                    <p className="mt-4 text-lg text-gray-600">If you are a volunteer, partner, or participant, you can submit photos or videos from MASA activities to be featured in our gallery.</p>
-                    <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-                        <button 
-                            onClick={() => setIsUploadModalOpen(true)}
-                            className="bg-masa-charcoal text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition-colors shadow-lg transform hover:-translate-y-1"
-                        >
-                            Submit Your Photos & Videos
-                        </button>
-                        <button 
-                            onClick={() => setIsAiModalOpen(true)}
-                            className="flex items-center justify-center gap-2 bg-masa-blue text-white px-8 py-3 rounded-full font-bold hover:bg-blue-900 transition-colors shadow-lg transform hover:-translate-y-1"
-                        >
-                            <SparklesIcon className="h-5 w-5" />
-                            Generate with AI
-                        </button>
-                    </div>
-                </div>
-            </section>
-            
             {/* 6. CTA Section */}
             <section className="bg-masa-blue text-white py-20">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">

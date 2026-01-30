@@ -69,6 +69,7 @@ const MembershipModal: React.FC<MembershipModalProps> = ({ tier, onClose }) => {
   }, [onClose]);
   
   const isPaid = tier.price !== 'Free';
+  const inputFieldClasses = "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-masa-orange outline-none transition-all";
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
@@ -95,15 +96,15 @@ const MembershipModal: React.FC<MembershipModalProps> = ({ tier, onClose }) => {
                         <p className="text-sm text-gray-600">{tier.description}</p>
                     </div>
 
-                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Full Name *</label><input required name="fullName" onChange={handleChange} type="text" className="w-full input-field" placeholder="Enter full name" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Email Address *</label><input required name="email" onChange={handleChange} type="email" className="w-full input-field" placeholder="name@example.com" /></div>
+                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Full Name *</label><input required name="fullName" onChange={handleChange} type="text" className={inputFieldClasses} placeholder="Enter full name" /></div>
+                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Email Address *</label><input required name="email" onChange={handleChange} type="email" className={inputFieldClasses} placeholder="name@example.com" /></div>
                     <div className="grid grid-cols-2 gap-4">
-                        <div><label className="block text-sm font-bold text-gray-700 mb-1">Mobile *</label><input required name="mobile" onChange={handleChange} type="tel" className="w-full input-field" placeholder="+91..." /></div>
-                        <div><label className="block text-sm font-bold text-gray-700 mb-1">City / Country *</label><input required name="location" onChange={handleChange} type="text" className="w-full input-field" /></div>
+                        <div><label className="block text-sm font-bold text-gray-700 mb-1">Mobile *</label><input required name="mobile" onChange={handleChange} type="tel" className={inputFieldClasses} placeholder="+91..." /></div>
+                        <div><label className="block text-sm font-bold text-gray-700 mb-1">City / Country *</label><input required name="location" onChange={handleChange} type="text" className={inputFieldClasses} /></div>
                     </div>
 
                     {tier.title.includes('Student') && (
-                        <div><label className="block text-sm font-bold text-gray-700 mb-1">School / College Name *</label><input required name="studentStatus" onChange={handleChange} type="text" className="w-full input-field" /></div>
+                        <div><label className="block text-sm font-bold text-gray-700 mb-1">School / College Name *</label><input required name="studentStatus" onChange={handleChange} type="text" className={inputFieldClasses} /></div>
                     )}
 
                     <div className="flex items-start mt-2">
@@ -136,13 +137,13 @@ const MembershipModal: React.FC<MembershipModalProps> = ({ tier, onClose }) => {
                         <div className="space-y-3">
                             <div className="relative">
                                 <CreditCardIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                <input required name="cardNumber" value={paymentDetails.cardNumber} onChange={handlePaymentChange} placeholder="Card Number (Mock)" className="w-full pl-10 input-field" maxLength={19} />
+                                <input required name="cardNumber" value={paymentDetails.cardNumber} onChange={handlePaymentChange} placeholder="Card Number (Mock)" className={`w-full pl-10 ${inputFieldClasses}`} maxLength={19} />
                             </div>
                             <div className="grid grid-cols-2 gap-3">
-                                <input required name="expiry" value={paymentDetails.expiry} onChange={handlePaymentChange} placeholder="MM/YY" className="w-full input-field" maxLength={5} />
+                                <input required name="expiry" value={paymentDetails.expiry} onChange={handlePaymentChange} placeholder="MM/YY" className={inputFieldClasses} maxLength={5} />
                                 <div className="relative">
                                     <LockClosedIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                    <input required name="cvv" value={paymentDetails.cvv} onChange={handlePaymentChange} type="password" placeholder="CVV" className="w-full input-field" maxLength={3} />
+                                    <input required name="cvv" value={paymentDetails.cvv} onChange={handlePaymentChange} type="password" placeholder="CVV" className={inputFieldClasses} maxLength={3} />
                                 </div>
                             </div>
                         </div>
@@ -189,7 +190,6 @@ const MembershipModal: React.FC<MembershipModalProps> = ({ tier, onClose }) => {
         </div>
       </div>
       <style>{`
-        .input-field { @apply px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-masa-orange outline-none transition-all; }
         @keyframes fade-in-up {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }

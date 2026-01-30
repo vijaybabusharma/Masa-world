@@ -29,7 +29,7 @@ const PolicyPageLayout: React.FC<PolicyPageLayoutProps> = ({ navigateTo, title, 
             </div>
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="max-w-4xl mx-auto prose prose-lg prose-p:text-gray-700 prose-headings:text-masa-charcoal prose-strong:text-masa-charcoal prose-a:text-masa-blue hover:prose-a:text-masa-orange prose-ul:list-disc prose-ul:ml-6 prose-li:my-2">
+                <div className="max-w-4xl mx-auto prose lg:prose-lg prose-p:text-gray-700 prose-headings:text-masa-charcoal prose-strong:text-masa-charcoal prose-a:text-masa-blue hover:prose-a:text-masa-orange prose-ul:list-disc prose-ul:ml-6 prose-li:my-2 text-justify">
                     {children}
                 </div>
                 

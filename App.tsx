@@ -50,6 +50,7 @@ import EthicalUsePolicyPage from './pages/EthicalUsePolicyPage';
 // Import new interactive pages
 import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
 import PledgePlatformPage from './pages/PledgePlatformPage';
+import CertificateDownloaderPage from './pages/CertificateDownloaderPage';
 
 // Import new content pages
 import ImpactStoriesPage from './pages/ImpactStoriesPage';
@@ -97,7 +98,7 @@ const App: React.FC = () => {
       case 'about': return <AboutPage navigateTo={navigateTo} />;
       case 'initiatives': return <InitiativesPage navigateTo={navigateTo} />;
       case 'gallery': return <GalleryPage navigateTo={navigateTo} />;
-      case 'blog': return <BlogPage />;
+      case 'blog': return <BlogPage navigateTo={navigateTo} />;
       case 'media-reports': return <MediaReportsPage navigateTo={navigateTo} />;
       case 'membership': return <MembershipPage navigateTo={navigateTo} />;
       case 'get-involved': return <GetInvolvedPage navigateTo={navigateTo} />;
@@ -109,7 +110,7 @@ const App: React.FC = () => {
       case 'awards': return <AwardsPage navigateTo={navigateTo} />;
       case 'records': return <RecordsPage navigateTo={navigateTo} />;
       case 'conferences': return <ConferencesPage navigateTo={navigateTo} />;
-      case 'founder-message': return <FounderMessagePage />;
+      case 'founder-message': return <FounderMessagePage navigateTo={navigateTo} />;
       case 'sports': return <SportsPage navigateTo={navigateTo} />;
       case 'education': return <EducationPage navigateTo={navigateTo} />;
       case 'culture': return <CulturePage navigateTo={navigateTo} />;
@@ -122,9 +123,8 @@ const App: React.FC = () => {
       
       // New Interactive Pages
       case 'ngo-help-desk': return <NgoHelpDeskPage navigateTo={navigateTo} />;
-//- FIX START
       case 'pledge': return <PledgePlatformPage navigateTo={navigateTo} />;
-//- FIX END
+      case 'certificate-downloader': return <CertificateDownloaderPage navigateTo={navigateTo} />;
 
       // New Content Pages
       case 'impact-stories': return <ImpactStoriesPage navigateTo={navigateTo} />;
@@ -139,9 +139,7 @@ const App: React.FC = () => {
       case 'thank-you-career': return <ThankYouPage navigateTo={navigateTo} type="career" />;
       case 'thank-you-contact': return <ThankYouPage navigateTo={navigateTo} type="contact" />;
       case 'thank-you-event': return <ThankYouPage navigateTo={navigateTo} type="event" />;
-//- FIX START
       case 'thank-you-pledge': return <ThankYouPage navigateTo={navigateTo} type="pledge" />;
-//- FIX END
       
       // Admin
       case 'admin-dashboard':

@@ -12,7 +12,7 @@ import {
     LaptopIcon
 } from '../components/icons/FeatureIcons';
 import { ChevronLeftIcon, ChevronRightIcon } from '../components/icons/UiIcons';
-import { FOUNDER_IMAGE_URL, calculateReadingTime } from '../utils/data';
+import { FOUNDER_IMAGE_URL, calculateReadingTime, pledgeData } from '../utils/data';
 import { ContentManager } from '../utils/contentManager';
 import { getStats } from '../utils/mockBackend';
 import ImpactSnapshot from '../components/ImpactSnapshot';
@@ -61,7 +61,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
     const slides = [
         {
             headline: "Empowering Youth. Strengthening Communities.",
-            subtext: "We believe in building a stronger future through holistic development, discipline, and shared values.",
+            subtext: "Fostering holistic development, instilling discipline, and promoting shared values to build a stronger future.",
             image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Get Involved", page: "get-involved", primary: true },
@@ -70,7 +70,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
         },
         {
             headline: "Sports, Education & Culture for Real Impact",
-            subtext: "A proven model for character building, social unity, and creating responsible citizens.",
+            subtext: "Our proven model builds character, fosters social unity, and nurtures responsible citizens for a better world.",
             image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Explore Programs", page: "programs-overview", primary: true },
@@ -79,7 +79,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
         },
         {
             headline: "From Grassroots to Global Change",
-            subtext: "Local actions creating ripples across the world. Connecting communities beyond borders.",
+            subtext: "Creating global impact through local action. We connect communities beyond borders to build a unified world.",
             image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Our Story", page: "about", primary: true },
@@ -88,7 +88,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
         },
         {
             headline: "Building Leaders. Creating Opportunities.",
-            subtext: "Nurturing talent, discipline, and leadership skills in every child, regardless of background.",
+            subtext: "We nurture talent, discipline, and leadership in every young person, creating a world of opportunity for all.",
             image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1800&q=80",
             ctas: [
                 { label: "Trainings", page: "trainings", primary: true },
@@ -140,10 +140,10 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="max-w-4xl text-left">
                      {/* Text Animation Key: Changes when slide changes to trigger re-animation */}
                      <div key={`text-${currentSlide}`} className="animate-fade-in-up">
-                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight drop-shadow-lg text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
                             {slides[currentSlide].headline}
                         </h1>
-                        <p className="mt-6 text-xl md:text-2xl text-gray-100 font-light max-w-3xl leading-relaxed drop-shadow-md border-l-4 border-masa-orange pl-4">
+                        <p className="mt-6 text-lg md:text-xl text-gray-100 font-light max-w-3xl leading-relaxed drop-shadow-md border-l-4 border-masa-orange pl-4 text-justify">
                             {slides[currentSlide].subtext}
                         </p>
                         <div className="mt-10 md:mt-12 flex flex-col sm:flex-row gap-4">
@@ -154,7 +154,7 @@ const HeroSlider: React.FC<NavigationProps> = ({ navigateTo }) => {
                                     className={`${cta.primary 
                                         ? 'bg-masa-orange text-white hover:bg-orange-600 shadow-lg hover:shadow-orange-500/40 border-2 border-transparent' 
                                         : 'bg-transparent border-2 border-white text-white hover:bg-white hover:text-masa-charcoal'} 
-                                        px-8 py-4 rounded-full text-lg font-bold transition-all duration-300 transform hover:scale-105 active:scale-95`}
+                                        px-8 py-4 rounded-full text-base font-bold transition-all duration-300 transform hover:scale-105 active:scale-95`}
                                 >
                                     {cta.label}
                                 </button>
@@ -199,22 +199,22 @@ const FeaturedEventSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                     <div className="w-full md:w-1/3 lg:w-1/4">
                         <span className="inline-block bg-masa-orange text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">Featured Event</span>
                         <div className="aspect-video rounded-lg overflow-hidden relative shadow-inner">
-                            <img src={featuredEvent.image} alt={featuredEvent.title} className="w-full h-full object-cover" />
+                            <img src={featuredEvent.image} alt={featuredEvent.title} className="w-full h-full object-cover" loading="lazy" />
                             <div className="absolute inset-0 bg-black/10"></div>
                         </div>
                     </div>
                     <div className="w-full md:w-1/2">
-                        <h3 className="text-xl md:text-2xl font-bold text-masa-charcoal leading-tight">{featuredEvent.title}</h3>
+                        <h3 className="text-xl font-bold text-masa-charcoal leading-tight">{featuredEvent.title}</h3>
                         <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mt-3 mb-3">
                             <span className="flex items-center gap-1.5 font-medium"><CalendarDaysIcon className="h-4 w-4 text-masa-blue"/> {featuredEvent.displayDate}</span>
                             <span className="flex items-center gap-1.5 font-medium"><MapPinIcon className="h-4 w-4 text-masa-orange"/> {featuredEvent.location}</span>
                         </div>
-                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 md:line-clamp-3">{featuredEvent.description}</p>
+                        <p className="text-gray-600 leading-relaxed line-clamp-2 md:line-clamp-3 text-base">{featuredEvent.description}</p>
                     </div>
                     <div className="w-full md:w-auto md:ml-auto text-center md:text-right">
                         <button 
                             onClick={() => navigateTo('events')} 
-                            className="w-full md:w-auto bg-white border-2 border-masa-blue text-masa-blue px-6 py-2.5 rounded-lg font-bold hover:bg-masa-blue hover:text-white transition-all shadow-sm active:scale-95"
+                            className="w-full md:w-auto bg-white border-2 border-masa-blue text-masa-blue px-6 py-2.5 rounded-lg font-bold hover:bg-masa-blue hover:text-white transition-all shadow-sm active:scale-95 text-sm"
                         >
                             View Details
                         </button>
@@ -227,7 +227,7 @@ const FeaturedEventSection: React.FC<NavigationProps> = ({ navigateTo }) => {
 
 // --- UPCOMING & RECENT EVENTS HIGHLIGHT ---
 const EventsHighlightSection: React.FC<NavigationProps> = ({ navigateTo }) => {
-    // Logic: Get top 3 events (Prioritize Upcoming, then latest Completed)
+    // Logic: Get top 3 events (Prioritize Upcoming, then latest completed)
     const highlightEvents = useMemo(() => {
         const eventsData = ContentManager.getEvents();
         const upcoming = eventsData.filter(e => e.status === 'Upcoming').sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
@@ -241,8 +241,8 @@ const EventsHighlightSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div className="text-center md:text-left">
                         <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Upcoming & Recent Events</h2>
-                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed">
-                            National and international programs, trainings, conferences, and community initiatives.
+                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base text-justify">
+                            Explore our national and international programs, trainings, conferences, and community initiatives.
                         </p>
                     </div>
                     <button 
@@ -257,7 +257,7 @@ const EventsHighlightSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                     {highlightEvents.map((event) => (
                         <div key={event.id} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full cursor-pointer" onClick={() => navigateTo('events')}>
                             <div className="h-48 overflow-hidden relative">
-                                <img src={event.image} alt={event.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                                <img src={event.image} alt={event.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                                 <div className={`absolute top-4 left-4 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${event.status === 'Upcoming' ? 'bg-green-600' : 'bg-gray-600'}`}>
                                     {event.status}
                                 </div>
@@ -269,7 +269,7 @@ const EventsHighlightSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                                     <div className="flex items-center gap-2"><CalendarDaysIcon className="h-4 w-4 text-gray-400"/> {event.displayDate}</div>
                                     <div className="flex items-center gap-2"><MapPinIcon className="h-4 w-4 text-gray-400"/> {event.location}</div>
                                 </div>
-                                <p className="text-sm text-gray-600 mb-6 line-clamp-2 flex-grow leading-relaxed">{event.description}</p>
+                                <p className="text-base text-gray-600 mb-6 line-clamp-2 flex-grow leading-relaxed">{event.description}</p>
                                 
                                 <button 
                                     className="mt-auto w-full bg-gray-50 text-masa-charcoal py-2.5 rounded-lg font-bold text-sm hover:bg-masa-charcoal hover:text-white transition-colors border border-gray-200"
@@ -306,7 +306,7 @@ const FeaturedCoursesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div className="text-center md:text-left">
                         <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Featured Courses & Programs</h2>
-                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed">
+                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base text-justify">
                             Unlock your potential with our expert-led trainings, leadership bootcamps, and skill development workshops.
                         </p>
                     </div>
@@ -322,7 +322,7 @@ const FeaturedCoursesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                     {featuredCourses.map((course) => (
                         <div key={course.id} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full cursor-pointer" onClick={() => navigateTo('courses')}>
                             <div className="h-48 overflow-hidden relative">
-                                <img src={course.image} alt={course.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                                <img src={course.image} alt={course.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-masa-charcoal uppercase tracking-wider shadow-sm border border-gray-200">
                                     {course.category}
                                 </div>
@@ -342,7 +342,7 @@ const FeaturedCoursesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                                     </div>
                                 </div>
 
-                                <p className="text-sm text-gray-600 mb-6 line-clamp-2 flex-grow leading-relaxed">{course.description}</p>
+                                <p className="text-base text-gray-600 mb-6 line-clamp-2 flex-grow leading-relaxed">{course.description}</p>
                                 
                                 <button 
                                     className="mt-auto w-full bg-blue-50 text-masa-blue py-2.5 rounded-lg font-bold text-sm hover:bg-masa-blue hover:text-white transition-colors"
@@ -377,9 +377,9 @@ const LatestBlogsSection: React.FC<NavigationProps> = ({ navigateTo }) => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div className="text-center md:text-left">
-                        <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Latest Blogs & Updates</h2>
-                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed">
-                            Stories of change, impact reports, and updates from the ground.
+                        <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Latest Stories & Updates</h2>
+                        <p className="mt-3 text-gray-600 max-w-2xl leading-relaxed text-base text-justify">
+                            Read our stories of change, impact reports, and updates from the ground.
                         </p>
                     </div>
                     <button 
@@ -401,7 +401,7 @@ const LatestBlogsSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                             <h3 className="text-lg font-bold text-masa-charcoal mb-3 group-hover:text-masa-blue transition-colors line-clamp-2 leading-snug">
                                 {post.title}
                             </h3>
-                            <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow leading-relaxed">{post.summary}</p>
+                            <p className="text-gray-600 text-base mb-4 line-clamp-3 flex-grow leading-relaxed">{post.summary}</p>
                             
                             <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
                                 <span className="text-masa-orange font-bold text-sm flex items-center transition-transform group-hover:translate-x-1">
@@ -432,23 +432,23 @@ const WhyMasaSection: React.FC = () => {
     const reasons = [
         {
             icon: UsersIcon,
-            title: "Grassroots Work",
-            desc: "We work directly with communities to identify and solve real problems from the ground up."
+            title: "Grassroots Centric",
+            desc: "We work directly with communities, identifying and solving real problems from the ground up."
         },
         {
             icon: ShieldCheckIcon,
             title: "Discipline-Based",
-            desc: "Every program is designed to instill discipline, integrity, and leadership in participants."
+            desc: "Our programs are designed to instill discipline, integrity, and leadership in every participant."
         },
         {
             icon: EyeIcon,
             title: "Full Transparency",
-            desc: "We maintain complete financial and operational openness with our donors and partners."
+            desc: "We maintain complete financial and operational openness with our donors, partners, and community."
         },
         {
             icon: SparklesIcon,
-            title: "Real Impact",
-            desc: "Our focus is on measurable outcomes that create lasting change in society."
+            title: "Measurable Impact",
+            desc: "Our focus is on creating measurable, lasting change that empowers individuals and strengthens society."
         }
     ];
 
@@ -456,9 +456,9 @@ const WhyMasaSection: React.FC = () => {
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Why Masa World Foundation?</h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                        We are driven by a commitment to genuine social transformation through actionable values.
+                    <h2 className="text-3xl font-bold text-masa-charcoal tracking-tight">Why Choose MASA?</h2>
+                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">
+                        We are driven by a commitment to genuine social transformation through actionable values and complete transparency.
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -467,8 +467,8 @@ const WhyMasaSection: React.FC = () => {
                             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-md text-masa-blue group-hover:bg-masa-orange group-hover:text-white transition-colors duration-300">
                                 <reason.icon className="h-8 w-8" />
                             </div>
-                            <h3 className="text-xl font-bold text-masa-charcoal mb-3">{reason.title}</h3>
-                            <p className="text-gray-600 text-sm leading-relaxed">{reason.desc}</p>
+                            <h3 className="text-lg font-bold text-masa-charcoal mb-3">{reason.title}</h3>
+                            <p className="text-base text-gray-600 leading-relaxed">{reason.desc}</p>
                         </div>
                     ))}
                 </div>
@@ -490,9 +490,9 @@ const ProgramIconStrip: React.FC<NavigationProps> = ({ navigateTo }) => {
         <section className="bg-masa-charcoal pt-24 pb-24 text-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center max-w-3xl mx-auto">
-                    <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">Let’s Create Incredible!</h2>
-                    <p className="mt-4 text-lg text-gray-300 leading-relaxed">
-                        We organise, manage, and host impactful activities across sports, education, and culture to engage communities and drive our mission forward—locally and globally.
+                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">A Spectrum of Impact</h2>
+                    <p className="mt-4 text-lg text-gray-300 leading-relaxed text-justify">
+                        From local fields to global forums, we host diverse activities across our core pillars to engage communities and drive our mission forward.
                     </p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-16 max-w-6xl mx-auto">
@@ -520,7 +520,7 @@ const PillarsSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     return (
         <section className="py-24 bg-gray-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16"><span className="text-masa-blue font-bold uppercase tracking-widest text-sm">Our Pillars</span><h2 className="text-3xl font-bold text-masa-charcoal mt-2">Holistic Development Ecosystem</h2><p className="mt-4 text-gray-600 max-w-3xl mx-auto leading-relaxed">We don’t focus on just one aspect. We build a connected ecosystem where sports, education, and culture reinforce each other.</p></div>
+                <div className="text-center mb-16"><span className="text-masa-blue font-bold uppercase tracking-widest text-sm">Our Pillars</span><h2 className="text-3xl font-bold text-masa-charcoal mt-2">Holistic Development Ecosystem</h2><p className="mt-4 text-base text-gray-600 max-w-3xl mx-auto leading-relaxed text-justify">We build a connected ecosystem where sports, education, and culture work in synergy to create profound and lasting change.</p></div>
                 <div className="relative grid md:grid-cols-3 gap-12 md:gap-8">
                     <div className="hidden md:block absolute top-12 left-1/3 w-1/3 h-1 bg-gray-200"></div>
                     {pillars.map(pillar => (
@@ -530,7 +530,7 @@ const PillarsSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                             </div>
                             <p className="mt-3 text-xs font-bold text-gray-500 uppercase tracking-widest">{pillar.subtitle}</p>
                             <h3 className="text-2xl font-bold mt-1 text-masa-charcoal">{pillar.title}</h3>
-                            <p className="text-gray-600 my-4 flex-grow max-w-xs leading-relaxed text-sm">{pillar.desc}</p>
+                            <p className="text-base text-gray-600 my-4 flex-grow max-w-xs leading-relaxed">{pillar.desc}</p>
                             <button onClick={() => navigateTo(pillar.page as any)} className="mt-auto font-bold text-masa-blue hover:text-masa-orange transition-colors flex items-center group text-sm uppercase tracking-wide">
                                 Explore {pillar.title} <ArrowRightIcon className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
                             </button>
@@ -570,8 +570,8 @@ const KeyInitiativesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl font-bold text-masa-charcoal">Our Key Initiatives</h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                        We focus on three core areas to create a well-rounded impact on society.
+                    <p className="mt-4 text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">
+                        Our work is focused on three core areas designed to create a comprehensive, positive impact on society.
                     </p>
                 </div>
                 <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -581,7 +581,7 @@ const KeyInitiativesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 <item.icon className="h-8 w-8" />
                             </div>
                             <h3 className="text-xl font-bold text-masa-charcoal mb-4 flex-grow">{item.title}</h3>
-                            <p className="text-gray-600 mb-6 text-sm leading-relaxed">{item.description}</p>
+                            <p className="text-base text-gray-600 mb-6 leading-relaxed">{item.description}</p>
                             <button 
                                 onClick={() => navigateTo(item.page as any)}
                                 className="mt-auto font-bold text-masa-blue hover:text-masa-orange transition-colors flex items-center text-sm"
@@ -617,6 +617,7 @@ const FounderMessageSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 src={FOUNDER_IMAGE_URL} 
                                 alt="Vijay Babu Sharma" 
                                 className="relative rounded-2xl shadow-2xl w-full max-w-sm h-auto object-cover aspect-[4/5] border-8 border-white transform transition-transform duration-500 group-hover:-translate-y-1"
+                                loading="lazy"
                             />
                             
                             {/* Floating Badge */}
@@ -640,11 +641,11 @@ const FounderMessageSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                             <QuoteIcon className="h-3 w-3" /> Founder's Vision
                         </div>
                         <h2 className="text-3xl lg:text-4xl font-extrabold text-masa-charcoal mb-6">A Message from the Founder</h2>
-                        <blockquote className="text-lg text-gray-700 leading-relaxed italic border-l-4 border-masa-orange pl-6 mb-6 relative">
+                        <blockquote className="text-lg text-gray-700 leading-relaxed italic border-l-4 border-masa-orange pl-6 mb-6 relative text-justify">
                             <span className="absolute top-0 left-2 text-6xl text-gray-100 -z-10 font-serif">"</span>
                             "MASA World Foundation was established with a clear belief—that sports, education, and culture are among the strongest tools for building disciplined individuals, empowered youth, and responsible communities."
                         </blockquote>
-                        <p className="text-gray-600 leading-relaxed mb-8">
+                        <p className="text-base text-gray-600 leading-relaxed mb-8 text-justify">
                             Sports teach discipline, teamwork, resilience, and confidence. Education builds knowledge, leadership, and critical thinking. Culture connects us to our roots while opening doors to global understanding. At MASA, we integrate all three to help individuals grow—not just as athletes or students, but as strong, ethical, and confident human beings.
                         </p>
                         
@@ -655,7 +656,7 @@ const FounderMessageSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                             </div>
                             <button 
                                 onClick={() => navigateTo('founder-message')} 
-                                className="inline-flex items-center text-white bg-masa-blue px-6 py-3 rounded-full font-semibold hover:bg-blue-900 transition-all shadow-md transform hover:-translate-y-0.5 active:scale-95"
+                                className="inline-flex items-center text-white bg-masa-blue px-6 py-3 rounded-full font-semibold hover:bg-blue-900 transition-all shadow-md transform hover:-translate-y-0.5 active:scale-95 text-sm"
                             >
                                 Read Full Message <ArrowRightIcon className="ml-2 h-4 w-4" />
                             </button>
@@ -715,15 +716,15 @@ const GetInvolvedSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     return (
         <section className="py-24 bg-gray-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16"><h2 className="text-3xl font-bold text-masa-charcoal">Join Our Community!</h2><p className="mt-4 text-gray-600 max-w-2xl mx-auto">Whether you offer your time, skills, or support, there’s a place for you at MASA World Foundation.</p></div>
+                <div className="text-center mb-16"><h2 className="text-3xl font-bold text-masa-charcoal">Join Our Community!</h2><p className="mt-4 text-base text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">Whether you offer your time, skills, or support, there’s a place for you at MASA World Foundation.</p></div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {actions.map((a, index) => (
                         <div key={a.title} className={`p-8 rounded-2xl shadow-lg flex flex-col text-center items-center group transition-all duration-300 ${index === 3 ? 'bg-masa-orange text-white' : 'bg-white border border-gray-200'}`}>
                             <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 ${index === 3 ? 'bg-white/20' : 'bg-orange-50'}`}>
                                 <a.icon className={`h-8 w-8 ${index === 3 ? 'text-white' : 'text-masa-orange'}`} />
                             </div>
-                            <h3 className={`text-xl font-bold ${index === 3 ? 'text-white' : 'text-masa-charcoal'}`}>{a.title}</h3>
-                            <p className={`my-4 flex-grow text-sm leading-relaxed ${index === 3 ? 'text-orange-100' : 'text-gray-600'}`}>{a.desc}</p>
+                            <h3 className={`text-lg font-bold ${index === 3 ? 'text-white' : 'text-masa-charcoal'}`}>{a.title}</h3>
+                            <p className={`my-4 flex-grow text-base leading-relaxed ${index === 3 ? 'text-orange-100' : 'text-gray-600'}`}>{a.desc}</p>
                             <button onClick={() => navigateTo(a.page as any)} className={`mt-auto font-bold py-3 px-6 rounded-full transition-colors w-full text-sm active:scale-95 ${index === 3 ? 'bg-white text-masa-orange hover:bg-orange-50' : (index === 1 ? 'bg-masa-orange text-white hover:bg-orange-600' : 'bg-white border-2 border-masa-blue text-masa-blue hover:bg-masa-blue hover:text-white')}`}>
                                 {a.buttonText}
                             </button>
@@ -747,7 +748,7 @@ const AccountabilityInfographic: React.FC = () => {
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16"><span className="text-masa-blue font-bold uppercase tracking-widest text-sm">Our Accountability</span><h2 className="text-3xl font-bold text-masa-charcoal mt-2">The Cycle of Trust</h2><p className="mt-4 text-lg text-gray-600">Transparency isn’t just a promise; it’s built into every step of our process.</p></div>
+                <div className="text-center mb-16"><span className="text-masa-blue font-bold uppercase tracking-widest text-sm">Our Accountability</span><h2 className="text-3xl font-bold text-masa-charcoal mt-2">The Cycle of Trust</h2><p className="mt-4 text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">Transparency is not just a promise; it is built into every step of our process.</p></div>
                 <div className="relative max-w-5xl mx-auto">
                     <div className="hidden md:block absolute top-8 left-0 w-full h-1 bg-gray-200"></div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 relative">
@@ -759,7 +760,7 @@ const AccountabilityInfographic: React.FC = () => {
                                         {Icon ? <Icon className={`h-8 w-8 ${i === 1 ? 'text-masa-orange' : i > 2 ? 'text-green-500' : 'text-masa-blue'}`} /> : <span className="font-bold text-2xl text-masa-blue">{i + 1}</span>}
                                     </div>
                                     <h3 className="text-lg font-bold text-masa-charcoal mb-3">{step.title}</h3>
-                                    <p className="text-gray-600 text-sm leading-relaxed">{step.desc}</p>
+                                    <p className="text-base text-gray-600 leading-relaxed">{step.desc}</p>
                                 </div>
                             );
                         })}
@@ -769,6 +770,54 @@ const AccountabilityInfographic: React.FC = () => {
         </section>
     );
 };
+
+// --- NEW PLEDGE SNAPSHOT SECTION ---
+const PledgeSnapshotSection: React.FC<NavigationProps> = ({ navigateTo }) => {
+    const [stats, setStats] = useState({ available: 0, taken: 0 });
+
+    useEffect(() => {
+        const backendStats = getStats();
+        // Use the length of the new pledgeData array for available count
+        setStats({
+            available: pledgeData.length,
+            taken: 1000 + (backendStats.pledges || 0) // Base count + dynamic count
+        });
+    }, []);
+
+    return (
+        <section className="bg-white py-16">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="bg-gray-50 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-8 border border-gray-200">
+                    <div className="text-center md:text-left">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-bold mb-3">
+                            <HandRaisedIcon className="h-4 w-4" />
+                            <span>Masa Sapath</span>
+                        </div>
+                        <h3 className="text-2xl font-bold text-masa-charcoal">Join the Movement</h3>
+                        <p className="text-base text-gray-600 mt-1 leading-relaxed text-justify">Take a pledge and commit to positive action for a better India.</p>
+                    </div>
+                    <div className="flex gap-8">
+                        <div className="text-center">
+                            <p className="text-4xl font-extrabold text-masa-blue">{stats.available}+</p>
+                            <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Pledges Available</p>
+                        </div>
+                        <div className="text-center">
+                            <p className="text-4xl font-extrabold text-masa-orange">{stats.taken.toLocaleString()}+</p>
+                            <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">Pledges Taken</p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => navigateTo('pledge')}
+                        className="bg-masa-charcoal text-white px-6 py-3 rounded-full font-bold hover:bg-gray-800 transition-all shadow-md flex items-center gap-2 text-sm"
+                    >
+                        Take a Pledge <ArrowRightIcon className="h-4 w-4" />
+                    </button>
+                </div>
+            </div>
+        </section>
+    );
+};
+
 
 // --- 7. TESTIMONIAL SLIDER SECTION ---
 const TestimonialSlider: React.FC = () => {
@@ -813,7 +862,7 @@ const TestimonialSlider: React.FC = () => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl font-bold text-masa-charcoal">Voices of Our Community</h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">Real stories from the people who make our mission possible.</p>
+                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed text-justify">Real stories from the people who make our mission possible.</p>
                 </div>
 
                 <div className="relative max-w-3xl mx-auto min-h-[22rem] flex items-center justify-center">
@@ -823,9 +872,9 @@ const TestimonialSlider: React.FC = () => {
                             className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${index === current ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                         >
                             <div className="flex flex-col items-center text-center p-4">
-                                <img src={testimonial.image} alt={testimonial.name} className="w-24 h-24 rounded-full shadow-lg mb-6 border-4 border-white" />
+                                <img src={testimonial.image} alt={testimonial.name} loading="lazy" className="w-24 h-24 rounded-full shadow-lg mb-6 border-4 border-white" />
                                 <QuoteIcon className="h-16 w-16 text-gray-200 absolute top-12 left-1/2 transform -translate-x-1/2 -z-10" />
-                                <blockquote className="text-xl italic text-gray-700 leading-relaxed max-w-2xl relative z-10">
+                                <blockquote className="text-xl italic text-gray-700 leading-loose max-w-2xl relative z-10 text-justify">
                                     "{testimonial.quote}"
                                 </blockquote>
                                 <div className="mt-6">
@@ -857,7 +906,7 @@ const TestimonialSlider: React.FC = () => {
 
 // --- 8. FINAL CTA SECTION ---
 const FinalCTA: React.FC<NavigationProps> = ({ navigateTo }) => (
-    <section className="bg-masa-blue"><div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center"><h2 className="text-3xl md:text-4xl font-bold text-white">Be the Change You Want to See</h2><div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4"><button onClick={() => navigateTo('volunteer')} className="w-full sm:w-auto bg-masa-orange text-white px-8 py-3.5 rounded-full text-lg font-bold hover:bg-orange-600 active:scale-95 transition-all">Volunteer</button><button onClick={() => navigateTo('membership')} className="w-full sm:w-auto bg-white text-masa-charcoal px-8 py-3.5 rounded-full text-lg font-bold hover:bg-gray-100 active:scale-95 transition-all">Become a Member</button><button onClick={() => navigateTo('donate')} className="w-full sm:w-auto bg-transparent border-2 border-white text-white px-8 py-3.5 rounded-full text-lg font-bold hover:bg-white hover:text-masa-blue active:scale-95 transition-all">Donate Now</button></div></div></section>
+    <section className="bg-masa-blue"><div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center"><h2 className="text-3xl md:text-4xl font-bold text-white">Be the Change You Want to See</h2><div className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4"><button onClick={() => navigateTo('volunteer')} className="w-full sm:w-auto bg-masa-orange text-white px-8 py-3.5 rounded-full text-base font-bold hover:bg-orange-600 active:scale-95 transition-all">Volunteer</button><button onClick={() => navigateTo('membership')} className="w-full sm:w-auto bg-white text-masa-charcoal px-8 py-3.5 rounded-full text-base font-bold hover:bg-gray-100 active:scale-95 transition-all">Become a Member</button><button onClick={() => navigateTo('donate')} className="w-full sm:w-auto bg-transparent border-2 border-white text-white px-8 py-3.5 rounded-full text-base font-bold hover:bg-white hover:text-masa-blue active:scale-95 transition-all">Donate Now</button></div></div></section>
 );
 
 // --- MAIN HOMEPAGE COMPONENT ---
@@ -870,6 +919,7 @@ const HomePage: React.FC<NavigationProps> = ({ navigateTo }) => {
             <FeaturedEventSection navigateTo={navigateTo} />
             <WhyMasaSection />
             <ProgramIconStrip navigateTo={navigateTo} />
+            <PledgeSnapshotSection navigateTo={navigateTo} />
             <EventsHighlightSection navigateTo={navigateTo} />
             <FeaturedCoursesSection navigateTo={navigateTo} />
             <LatestBlogsSection navigateTo={navigateTo} />

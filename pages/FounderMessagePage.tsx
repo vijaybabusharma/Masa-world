@@ -1,17 +1,18 @@
 
 import React from 'react';
 import { FOUNDER_IMAGE_URL } from '../utils/data';
+import { NavigationProps } from '../types';
 
 const PageHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
     <div className="bg-masa-charcoal py-20 text-white text-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">{title}</h1>
-            <p className="mt-4 text-xl text-gray-300 max-w-2xl mx-auto font-light">{subtitle}</p>
+            <p className="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">{subtitle}</p>
         </div>
     </div>
 );
 
-const FounderMessagePage: React.FC = () => {
+const FounderMessagePage: React.FC<NavigationProps> = ({ navigateTo }) => {
     return (
         <div className="bg-white">
             <PageHeader title="Message from the Founder" subtitle="Our Vision for a Stronger, More Inclusive Future" />
@@ -32,6 +33,7 @@ const FounderMessagePage: React.FC = () => {
                                     src={FOUNDER_IMAGE_URL}
                                     alt="Vijay Babu Sharma, Founder of Masa World Foundation" 
                                     className="rounded-2xl shadow-2xl w-full h-auto object-cover aspect-[4/5] bg-gray-100 border-4 border-white"
+                                    loading="lazy"
                                 />
                                 
                                 {/* Quote Overlay */}
@@ -41,7 +43,7 @@ const FounderMessagePage: React.FC = () => {
                                 </div>
                             </div>
                             <div className="mt-12 text-center lg:text-left w-full pl-4">
-                                <h3 className="text-3xl font-extrabold text-masa-charcoal">Vijay Babu Sharma</h3>
+                                <h3 className="text-3xl md:text-4xl font-extrabold text-masa-charcoal">Vijay Babu Sharma</h3>
                                 <p className="text-masa-blue font-bold text-lg mt-1">Founder & Chairman</p>
                                 <div className="h-1.5 w-20 bg-masa-orange mt-4 mx-auto lg:mx-0 rounded-full"></div>
                             </div>
@@ -49,7 +51,7 @@ const FounderMessagePage: React.FC = () => {
 
                         {/* Right Column: Message Content */}
                         <div className="w-full lg:w-7/12 order-2 lg:order-2">
-                            <div className="text-lg text-gray-700 leading-relaxed space-y-6 text-left">
+                            <div className="prose lg:prose-lg max-w-none text-gray-700 space-y-6 text-justify">
                                 <p className="text-xl font-bold text-masa-charcoal mb-8">
                                     Dear Friends and Supporters,
                                 </p>

@@ -50,6 +50,8 @@ const NominationModal: React.FC<NominationModalProps> = ({ onClose }) => {
             document.body.style.overflow = 'auto';
         };
     }, [onClose]);
+    
+    const inputFieldClasses = "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-masa-orange focus:border-masa-orange sm:text-sm";
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
@@ -77,12 +79,12 @@ const NominationModal: React.FC<NominationModalProps> = ({ onClose }) => {
                         <>
                             <h3 className="text-2xl font-bold text-center">Honorary / Advisory Member Nomination</h3>
                             <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                                <div><label htmlFor="hon-nominee-name" className="block text-sm font-medium text-gray-700">Nominee's Full Name</label><input required onChange={handleChange} type="text" id="hon-nominee-name" className="mt-1 block w-full input-field" /></div>
-                                <div><label htmlFor="hon-nominee-profile" className="block text-sm font-medium text-gray-700">Nominee's Profile / Background</label><input required onChange={handleChange} type="text" id="hon-nominee-profile" placeholder="e.g., Social Leader, Educator, Expert" className="mt-1 block w-full input-field" /></div>
-                                <div><label htmlFor="hon-reason" className="block text-sm font-medium text-gray-700">Reason for Nomination</label><textarea required onChange={handleChange} id="hon-reason" rows={3} className="mt-1 block w-full input-field"></textarea></div>
+                                <div><label htmlFor="hon-nominee-name" className="block text-sm font-medium text-gray-700">Nominee's Full Name</label><input required onChange={handleChange} type="text" id="hon-nominee-name" className={inputFieldClasses} /></div>
+                                <div><label htmlFor="hon-nominee-profile" className="block text-sm font-medium text-gray-700">Nominee's Profile / Background</label><input required onChange={handleChange} type="text" id="hon-nominee-profile" placeholder="e.g., Social Leader, Educator, Expert" className={inputFieldClasses} /></div>
+                                <div><label htmlFor="hon-reason" className="block text-sm font-medium text-gray-700">Reason for Nomination</label><textarea required onChange={handleChange} id="hon-reason" rows={3} className={inputFieldClasses}></textarea></div>
                                 <hr className="my-2 border-gray-200" />
-                                <div><label htmlFor="hon-nominator-name" className="block text-sm font-medium text-gray-700">Your Name (Nominator)</label><input required onChange={handleChange} type="text" id="hon-nominator-name" className="mt-1 block w-full input-field" /></div>
-                                <div><label htmlFor="hon-nominator-email" className="block text-sm font-medium text-gray-700">Your Email Address</label><input required onChange={handleChange} type="email" id="hon-nominator-email" className="mt-1 block w-full input-field" /></div>
+                                <div><label htmlFor="hon-nominator-name" className="block text-sm font-medium text-gray-700">Your Name (Nominator)</label><input required onChange={handleChange} type="text" id="hon-nominator-name" className={inputFieldClasses} /></div>
+                                <div><label htmlFor="hon-nominator-email" className="block text-sm font-medium text-gray-700">Your Email Address</label><input required onChange={handleChange} type="email" id="hon-nominator-email" className={inputFieldClasses} /></div>
                                 <button type="submit" className="w-full bg-masa-charcoal text-white py-3 px-4 rounded-md font-semibold transition-colors hover:bg-gray-800">
                                     Submit Nomination
                                 </button>
@@ -91,10 +93,7 @@ const NominationModal: React.FC<NominationModalProps> = ({ onClose }) => {
                     )}
                 </div>
             </div>
-            {/* FIX: Replaced non-standard 'jsx' style tag with a standard style tag. */}
             <style>{`
-                .input-field { border: 1px solid #D1D5DB; border-radius: 0.375rem; padding: 0.5rem 0.75rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
-                .input-field:focus { outline: 2px solid transparent; outline-offset: 2px; --tw-ring-color: #F97316; border-color: var(--tw-ring-color); }
                 @keyframes fade-in-up {
                     from { opacity: 0; transform: translateY(20px); }
                     to { opacity: 1; transform: translateY(0); }
