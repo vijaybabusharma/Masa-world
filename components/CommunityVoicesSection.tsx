@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Testimonial, NavigationProps } from '../types';
 import { QuoteIcon, ArrowRightIcon } from './icons/FeatureIcons';
@@ -7,8 +8,8 @@ import { ContentManager } from '../utils/contentManager';
 const CommunityVoicesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    // FIX: Replaced NodeJS.Timeout with ReturnType<typeof setTimeout> for browser compatibility.
-    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    // FIX: Replaced fragile `ReturnType<typeof setTimeout>` with the explicit `number` type for robust browser compatibility, fixing the build error.
+    const timeoutRef = useRef<number | null>(null);
 
     useEffect(() => {
         const settings = ContentManager.getSettings();
@@ -30,7 +31,7 @@ const CommunityVoicesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     useEffect(() => {
         resetTimeout();
         if (testimonials.length > 0) {
-            timeoutRef.current = setTimeout(nextSlide, 7000);
+            timeoutRef.current = window.setTimeout(nextSlide, 7000);
         }
         return () => {
             resetTimeout();
@@ -58,7 +59,7 @@ const CommunityVoicesSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                 onMouseEnter={() => resetTimeout()}
                 onMouseLeave={() => {
                     resetTimeout();
-                    timeoutRef.current = setTimeout(nextSlide, 7000);
+                    timeoutRef.current = window.setTimeout(nextSlide, 7000);
                 }}
             >
                 <div className="text-center mb-16 max-w-3xl mx-auto">
