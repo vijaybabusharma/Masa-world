@@ -1,7 +1,5 @@
 
-import React from 'react';
 import { Post } from '../types';
-import { UsersIcon, GlobeIcon, HeartIcon, ShieldCheckIcon } from '../components/icons/FeatureIcons';
 
 // Replaced with a professional placeholder representing leadership
 export const FOUNDER_IMAGE_URL = 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=782,fit=crop/AMq4Dg7v0wH5yKM1/founder-B9OrhqqUN6Kq3Qir.jpeg';
