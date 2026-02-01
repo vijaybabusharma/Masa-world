@@ -18,7 +18,6 @@ import AwardsPage from './pages/AwardsPage';
 import RecordsPage from './pages/RecordsPage';
 import ConferencesPage from './pages/ConferencesPage';
 import FounderMessagePage from './pages/FounderMessagePage';
-import TrustSection from './components/TrustSection';
 import MediaReportsPage from './pages/MediaReportsPage';
 import MembershipPage from './pages/MembershipPage';
 import SportsPage from './pages/SportsPage';
@@ -47,21 +46,18 @@ import FactCheckPolicyPage from './pages/FactCheckPolicyPage';
 import CommentPolicyPage from './pages/CommentPolicyPage';
 import EthicalUsePolicyPage from './pages/EthicalUsePolicyPage';
 
-// Import new interactive pages
-import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
-import PledgePlatformPage from './pages/PledgePlatformPage';
-import CertificateDownloaderPage from './pages/CertificateDownloaderPage';
-
 // Import new content pages
 import ImpactStoriesPage from './pages/ImpactStoriesPage';
 import MediaHighlightsPage from './pages/MediaHighlightsPage';
 import ProgramsOverviewPage from './pages/ProgramsOverviewPage';
 import CommunityVoicesPage from './pages/CommunityVoicesPage';
+import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
 
 // Import enhancements
 import AccessibilityWidget from './components/AccessibilityWidget';
 import LiveActivityToast from './components/LiveActivityToast';
 import GlobalScriptManager from './components/GlobalScriptManager';
+import CredibilityBanner from './components/CredibilityBanner';
 
 
 const App: React.FC = () => {
@@ -121,16 +117,12 @@ const App: React.FC = () => {
       case 'governance': return <GovernancePage navigateTo={navigateTo} />;
       case 'global-impact': return <GlobalImpactPage navigateTo={navigateTo} />;
       
-      // New Interactive Pages
-      case 'ngo-help-desk': return <NgoHelpDeskPage navigateTo={navigateTo} />;
-      case 'pledge': return <PledgePlatformPage navigateTo={navigateTo} />;
-      case 'certificate-downloader': return <CertificateDownloaderPage navigateTo={navigateTo} />;
-
       // New Content Pages
       case 'impact-stories': return <ImpactStoriesPage navigateTo={navigateTo} />;
       case 'media-highlights': return <MediaHighlightsPage navigateTo={navigateTo} />;
       case 'programs-overview': return <ProgramsOverviewPage navigateTo={navigateTo} />;
       case 'community-voices': return <CommunityVoicesPage navigateTo={navigateTo} />;
+      case 'ngo-help-desk': return <NgoHelpDeskPage navigateTo={navigateTo} />;
 
       // Thank You Pages
       case 'thank-you-volunteer': return <ThankYouPage navigateTo={navigateTo} type="volunteer" />;
@@ -139,7 +131,6 @@ const App: React.FC = () => {
       case 'thank-you-career': return <ThankYouPage navigateTo={navigateTo} type="career" />;
       case 'thank-you-contact': return <ThankYouPage navigateTo={navigateTo} type="contact" />;
       case 'thank-you-event': return <ThankYouPage navigateTo={navigateTo} type="event" />;
-      case 'thank-you-pledge': return <ThankYouPage navigateTo={navigateTo} type="pledge" />;
       
       // Admin
       case 'admin-dashboard':
@@ -173,7 +164,7 @@ const App: React.FC = () => {
       <main className="flex-grow">
         {renderPage()}
       </main>
-      {!isDashboard && <TrustSection navigateTo={navigateTo} />}
+      {!isDashboard && <CredibilityBanner />}
       {!isDashboard && <Footer navigateTo={navigateTo} />}
       
       {!isDashboard && <ScrollToTopButton />}

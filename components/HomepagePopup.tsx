@@ -54,7 +54,7 @@ const HomepagePopup: React.FC<HomepagePopupProps> = ({ navigateTo, onClose }) =>
         </button>
 
         <div className="w-16 h-16 mx-auto bg-masa-blue text-white rounded-full flex items-center justify-center mb-4 overflow-hidden">
-            <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png" alt="MASA Logo" className="h-10 w-auto" onError={(e) => { e.currentTarget.src = '/favicon.svg'; }} />
+            <img src="logo.svg" alt="MASA Logo" className="h-8 w-auto" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
         </div>
 
         <h2 id="popup-title" className="text-2xl font-bold text-masa-charcoal">
@@ -87,7 +87,7 @@ const HomepagePopup: React.FC<HomepagePopupProps> = ({ navigateTo, onClose }) =>
 
         <div className="mt-8">
           <button
-            onClick={() => handleNavigation('initiatives')}
+            onClick={() => handleNavigation('programs-overview')}
             className="text-masa-blue font-semibold hover:underline flex items-center justify-center mx-auto group"
           >
             Explore Our Programs
@@ -95,12 +95,6 @@ const HomepagePopup: React.FC<HomepagePopupProps> = ({ navigateTo, onClose }) =>
           </button>
         </div>
       </div>
-      <style>{`
-        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes scale-up { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
-        .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }
-      `}</style>
     </div>
   );
 };

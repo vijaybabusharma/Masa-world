@@ -39,12 +39,6 @@ const VolunteerSection: React.FC<{ navigateTo: NavigationProps['navigateTo'] }> 
                     <p className="text-lg text-gray-600 mb-6 leading-relaxed text-justify">
                         Volunteering with MASA is a transformative journey. It's not just about giving time; it's about building leadership skills, understanding grassroots realities, and becoming part of a family dedicated to social nation-building.
                     </p>
-                    <div className="mb-6 p-4 bg-purple-50 rounded-xl border border-purple-100">
-                        <p className="text-sm text-purple-800 font-semibold flex items-center">
-                            <SparklesIcon className="h-4 w-4 mr-2" />
-                            Coming Soon: AI-enabled skill matching to connect you with the perfect opportunity tailored to your profile.
-                        </p>
-                    </div>
                     <ul className="space-y-4 mb-8">
                         <li className="flex items-start">
                             <CheckIcon className="h-6 w-6 text-green-500 mr-3 mt-1" />
@@ -227,7 +221,6 @@ const DonationInfoSection: React.FC<{ navigateTo: NavigationProps['navigateTo'] 
                     </div>
                     <div className="mt-8 pt-6 border-t border-gray-100 text-center">
                         <p className="text-sm text-gray-500 italic mb-2">"Transparency is the currency of trust."</p>
-                        <p className="text-xs text-masa-blue font-bold">Future Roadmap: AI-driven transparent impact tracking.</p>
                     </div>
                 </div>
             </div>
@@ -267,13 +260,22 @@ const AdditionalOpportunities: React.FC<{ navigateTo: NavigationProps['navigateT
 
 // --- MAIN PAGE COMPONENT ---
 
-const GetInvolvedSection: React.FC<{ navigateTo: NavigationProps['navigateTo'] }> = ({ navigateTo }) => {
+const GetInvolvedSection: React.FC<{ navigateTo: NavigationProps['navigateTo']; onPartnerClick: (type: PartnershipType) => void; }> = ({ navigateTo, onPartnerClick }) => {
     const actions = [
-        { icon: HeartIcon, title: "Volunteer With Us", desc: "Contribute your time, skills, and passion to create real impact on the ground.", page: 'volunteer', anchor: 'volunteer-form', buttonText: "Volunteer Registration" },
-        { icon: UsersIcon, title: "Become a Member", desc: "Join our growing community and support our mission long-term.", page: 'membership', buttonText: "Explore Memberships" },
-        { icon: HandshakeIcon, title: "Partner / Collaborate", desc: "Institutions, NGOs, corporates, and schools can collaborate with us on initiatives.", page: 'get-involved', anchor: 'partnership-section', buttonText: "Partner With Us" },
-        { icon: SparklesIcon, title: "Donate & Support", desc: "Support our work financially and help scale impact across communities.", page: 'donate', buttonText: "Donate Now" }
+        { type: 'nav', icon: HeartIcon, title: "Volunteer With Us", desc: "Contribute your time, skills, and passion to create real impact on the ground.", page: 'volunteer', anchor: 'volunteer-form', buttonText: "Volunteer Registration" },
+        { type: 'nav', icon: UsersIcon, title: "Become a Member", desc: "Join our growing community and support our mission long-term.", page: 'membership', buttonText: "Explore Memberships" },
+        { type: 'modal', icon: HandshakeIcon, title: "Partner / Collaborate", desc: "Institutions, NGOs, corporates, and schools can collaborate with us on initiatives.", modal: 'Corporate', buttonText: "Partner With Us" },
+        { type: 'nav', icon: SparklesIcon, title: "Donate & Support", desc: "Support our work financially and help scale impact across communities.", page: 'donate', buttonText: "Donate Now" }
     ];
+
+    const handleClick = (action: any) => {
+        if (action.type === 'nav') {
+            navigateTo(action.page, action.anchor);
+        } else if (action.type === 'modal') {
+            onPartnerClick(action.modal as PartnershipType);
+        }
+    };
+
     return (
         <section className="py-24 bg-gray-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -287,7 +289,7 @@ const GetInvolvedSection: React.FC<{ navigateTo: NavigationProps['navigateTo'] }
                             <h3 className={`text-xl font-bold ${index === 3 ? 'text-white' : 'text-masa-charcoal'}`}>{a.title}</h3>
                             <p className={`my-4 flex-grow ${index === 3 ? 'text-orange-100' : 'text-gray-600'}`}>{a.desc}</p>
                             <button 
-                                onClick={() => navigateTo(a.page as any, (a as any).anchor)} 
+                                onClick={() => handleClick(a)} 
                                 className={`mt-auto font-bold py-3 px-8 rounded-full transition-colors w-full ${index === 3 ? 'bg-white text-masa-orange hover:bg-orange-50' : (index === 1 ? 'bg-masa-orange text-white hover:bg-orange-600' : 'bg-white border-2 border-masa-blue text-masa-blue hover:bg-masa-blue hover:text-white')}`}
                             >
                                 {a.buttonText}
@@ -320,7 +322,7 @@ const GetInvolvedPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             </div>
 
             {/* Main Sections */}
-            <GetInvolvedSection navigateTo={navigateTo} />
+            <GetInvolvedSection navigateTo={navigateTo} onPartnerClick={setPartnershipModal} />
 
             <VolunteerSection navigateTo={navigateTo} />
             

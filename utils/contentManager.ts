@@ -1,13 +1,12 @@
 
-import { eventsData, postsData, coursesData, pledgeData } from './data';
-import { Post, GlobalSettings, PageMetadata, Event, Course, Pledge, MenuItem, NavItem, SliderItem } from '../types';
+import { eventsData, postsData, coursesData } from './data';
+import { Post, GlobalSettings, PageMetadata, Event, Course, MenuItem, NavItem, SliderItem, PillarItem, Testimonial } from '../types';
 
 // Keys for LocalStorage
 const KEYS = {
     EVENTS: 'masa_content_events',
     BLOGS: 'masa_content_blogs',
     COURSES: 'masa_content_courses',
-    PLEDGES: 'masa_content_pledges',
     SETTINGS: 'masa_global_settings',
     PAGES: 'masa_content_pages'
 };
@@ -53,11 +52,9 @@ const defaultHeaderMenu: MenuItem[] = [
             { id: 'nav-volunteer', label: 'Volunteer', page: 'volunteer' },
             { id: 'nav-membership', label: 'Become a Member', page: 'membership' },
             { id: 'nav-careers', label: 'Careers & Internships', page: 'careers' },
-            { id: 'nav-pledge', label: 'Take a Pledge', page: 'pledge' },
         ]
     },
     { id: 'nav-blog', label: 'Blog', page: 'blog' },
-    { id: 'nav-contact', label: 'Contact', page: 'contact' },
 ];
 
 const defaultFooterLinks: { about: NavItem[], involved: NavItem[], resources: NavItem[], policies: NavItem[] } = {
@@ -71,7 +68,6 @@ const defaultFooterLinks: { about: NavItem[], involved: NavItem[], resources: Na
         { id: 'footer-volunteer', label: 'Volunteer', page: 'volunteer' },
         { id: 'footer-member', label: 'Membership', page: 'membership' },
         { id: 'footer-donate', label: 'Donate', page: 'donate' },
-        { id: 'footer-pledge', label: 'Take a Pledge', page: 'pledge' },
         { id: 'footer-contact', label: 'Contact Us', page: 'contact' },
     ],
     resources: [
@@ -79,6 +75,7 @@ const defaultFooterLinks: { about: NavItem[], involved: NavItem[], resources: Na
         { id: 'footer-events', label: 'Events', page: 'events' },
         { id: 'footer-reports', label: 'Reports', page: 'media-reports' },
         { id: 'footer-gallery', label: 'Gallery', page: 'gallery' },
+        { id: 'footer-ai-desk', label: 'AI Help Desk', page: 'ngo-help-desk' },
     ],
     policies: [
         { id: 'footer-privacy', label: 'Privacy Policy', page: 'privacy-policy' },
@@ -92,17 +89,75 @@ const defaultSliderItems: SliderItem[] = [
     { id: 'slide2', headline: "Action Today. Impact for Generations.", subtext: "Our model builds character, fosters social unity, and nurtures responsible citizens.", image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=80", ctas: [{ label: "Explore Programs", page: "programs-overview", primary: true }, { label: "Volunteer", page: "volunteer", primary: false }] },
 ];
 
+const defaultPillars: PillarItem[] = [
+    {
+        id: 'pillar-sports',
+        label: "ACTION",
+        title: "Sports",
+        description: "Promoting physical fitness, discipline, and team spirit through structured sports programs and competitive tournaments.",
+        page: "sports",
+        icon: "UsersIcon",
+        color: "red"
+    },
+    {
+        id: 'pillar-education',
+        label: "KNOWLEDGE",
+        title: "Education",
+        description: "Empowering minds through leadership workshops, skill development trainings, and value-based learning initiatives.",
+        page: "education",
+        icon: "AcademicCapIcon",
+        color: "blue"
+    },
+    {
+        id: 'pillar-heritage',
+        label: "HERITAGE",
+        title: "Culture",
+        description: "Preserving heritage and fostering social harmony through vibrant cultural events, arts, and community celebrations.",
+        page: "culture",
+        icon: "TargetIcon",
+        color: "green"
+    }
+];
+
+const defaultTestimonials: Testimonial[] = [
+    {
+        quote: "I joined MASA as a student looking for a certificate. I stayed because I found a purpose. The leadership training didn't just teach me how to manage a team; it taught me how to manage myself.",
+        author: "Vikram Singh",
+        role: "Student Volunteer, 3 Years",
+        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+        quote: "As a donor, transparency is everything. MASA's regular impact reports and the ability to see exactly where my funds go give me immense confidence. It's rare to see such professionalism.",
+        author: "Mrs. Anjali Kapoor",
+        role: "Life Member & Donor",
+        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+        quote: "The sports kit provided to our village team changed everything. We went from playing barefoot to winning the district championship. MASA believed in us when no one else did.",
+        author: "Rahul D.",
+        role: "Beneficiary, Sports Program",
+        image: "https://images.unsplash.com/photo-1534030347209-467a5b0aa3e6?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+        quote: "What I love about MASA is the diversity. At the Cultural Utsav, I met people from 10 different states. It reminded me of the strength in our unity.",
+        author: "Priya Menon",
+        role: "Cultural Event Participant",
+        image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+    }
+];
+
 // Default Settings
 const defaultSettings: GlobalSettings = {
     general: { siteName: 'MASA World Foundation', contactEmail: 'masaworldfoundation@gmail.com', enableRegistrations: true, maintenanceMode: false },
     homepage: {
         slider: { slides: defaultSliderItems, autoplaySpeed: 7000 },
+        pillars: defaultPillars,
+        testimonials: defaultTestimonials,
         sections: {
             impactSnapshot: { visible: true },
             featuredEvent: { visible: true },
             whyMasa: { visible: true, title: "Our Guiding Principles", subtitle: "Driven by a commitment to genuine social transformation." },
             programIcons: { visible: true },
-            pledgeSnapshot: { visible: true },
             eventsHighlight: { visible: true, title: "Upcoming & Recent Events", subtitle: "Explore our national and international programs." },
             featuredCourses: { visible: true, title: "Featured Courses & Programs", subtitle: "Unlock your potential with our expert-led trainings." },
             latestBlogs: { visible: true },
@@ -123,12 +178,16 @@ const defaultSettings: GlobalSettings = {
         footerResourceLinks: defaultFooterLinks.resources,
         footerPolicyLinks: defaultFooterLinks.policies,
     },
-    social: [{ id: 'fb', platform: 'facebook', url: 'https://facebook.com', enabled: true }, { id: 'ig', platform: 'instagram', url: 'https://instagram.com', enabled: true }, { id: 'tw', platform: 'twitter', url: 'https://twitter.com', enabled: true }],
+    social: [
+        { id: 'fb', platform: 'facebook', url: 'https://www.facebook.com/masaworld.org', enabled: true }, 
+        { id: 'ig', platform: 'instagram', url: 'https://www.instagram.com/masaworldfoundation', enabled: true },
+        { id: 'li', platform: 'linkedin', url: 'https://www.linkedin.com/company/masaworld-foundation', enabled: true },
+        { id: 'yt', platform: 'youtube', url: 'https://www.youtube.com/masaworldfoundation', enabled: true }
+    ],
     scripts: { googleAnalyticsId: '', enableAnalytics: false, facebookPixelId: '', enablePixel: false, googleAdsenseCode: '', enableAdsense: false, googleSearchConsole: '', customHead: '', enableCustomHead: false, customBodyStart: '', enableCustomBodyStart: false, customBodyEnd: '', enableCustomBodyEnd: false },
     appearance: { customCss: '', enableCustomCss: false },
     payments: { currency: 'INR', razorpayEnabled: true, razorpayKey: '', stripeEnabled: false, stripeKey: '', paypalEnabled: false, paypalClientId: '', manualPaymentEnabled: true, manualPaymentInstructions: 'Contact for details.', donationSuccessMessage: 'Thank you!', donationFailureMessage: 'Payment failed.' },
-    features: { blogEnabled: true, eventsEnabled: true, coursesEnabled: true, ngoHelpDeskEnabled: true, pledgePlatformEnabled: true, whatsAppIntegrationEnabled: false, whatsAppNumber: '', aiFeaturesEnabled: true },
-    certificates: { generationEnabled: true, logoUrl: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png', signatureUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/Signature_sample.svg' },
+    features: { blogEnabled: true, eventsEnabled: true, coursesEnabled: true, whatsAppIntegrationEnabled: false, whatsAppNumber: '' },
 };
 
 const defaultPages: PageMetadata[] = [
@@ -146,7 +205,6 @@ const initializeData = () => {
     initKey(KEYS.EVENTS, eventsData);
     initKey(KEYS.BLOGS, postsData);
     initKey(KEYS.COURSES, coursesData);
-    initKey(KEYS.PLEDGES, pledgeData);
     initKey(KEYS.PAGES, defaultPages);
     
     // Smartly merge settings to add new fields without overwriting user changes
@@ -159,12 +217,13 @@ const initializeData = () => {
             ...defaultSettings.homepage,
             ...(existingSettings.homepage || {}),
             slider: { ...defaultSettings.homepage.slider, ...(existingSettings.homepage?.slider || {}) },
+            pillars: existingSettings.homepage?.pillars && existingSettings.homepage.pillars.length > 0 ? existingSettings.homepage.pillars : defaultSettings.homepage.pillars,
+            testimonials: existingSettings.homepage?.testimonials && existingSettings.homepage.testimonials.length > 0 ? existingSettings.homepage.testimonials : defaultSettings.homepage.testimonials,
             sections: { ...defaultSettings.homepage.sections, ...(existingSettings.homepage?.sections || {}) },
         },
         navigation: { ...defaultSettings.navigation, ...existingSettings.navigation },
         scripts: { ...defaultSettings.scripts, ...existingSettings.scripts },
         features: { ...defaultSettings.features, ...existingSettings.features },
-        certificates: { ...defaultSettings.certificates, ...existingSettings.certificates },
     };
     localStorage.setItem(KEYS.SETTINGS, JSON.stringify(mergedSettings));
 };
@@ -250,21 +309,4 @@ export const ContentManager = {
         const courses = ContentManager.getCourses().filter(c => c.id !== id);
         localStorage.setItem(KEYS.COURSES, JSON.stringify(courses));
     },
-
-    // --- PLEDGES ---
-    getPledges: (): Pledge[] => {
-        const data = localStorage.getItem(KEYS.PLEDGES);
-        return data ? JSON.parse(data) : [];
-    },
-    savePledge: (pledge: Pledge) => {
-        const pledges = ContentManager.getPledges();
-        const index = pledges.findIndex(p => p.id === pledge.id);
-        if (index >= 0) pledges[index] = pledge;
-        else pledges.unshift(pledge);
-        localStorage.setItem(KEYS.PLEDGES, JSON.stringify(pledges));
-    },
-    deletePledge: (id: string) => {
-        const pledges = ContentManager.getPledges().filter(p => p.id !== id);
-        localStorage.setItem(KEYS.PLEDGES, JSON.stringify(pledges));
-    }
 };

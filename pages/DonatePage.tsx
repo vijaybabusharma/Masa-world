@@ -33,12 +33,6 @@ const FundingGoalsSection: React.FC = () => {
         },
     ];
 
-    const impactExamples = [
-        { amount: "₹500", effect: "Provides educational materials for a child." },
-        { amount: "₹2,500", effect: "Organizes a community health awareness event." },
-        { amount: "₹5,000", effect: "Sponsors a full-day youth leadership workshop." },
-    ];
-
     return (
         <section className="py-24 bg-white border-b border-gray-100">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,14 +41,10 @@ const FundingGoalsSection: React.FC = () => {
                     <p className="mt-4 text-lg text-gray-600">
                         See how your contribution directly fuels our key initiatives and helps us reach our current funding goals.
                     </p>
-                    <div className="mt-4 inline-flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full border border-blue-100 text-left md:text-center">
-                        <SparklesIcon className="h-4 w-4 text-masa-blue flex-shrink-0" />
-                        <span className="text-sm text-gray-700 font-medium">Future Roadmap: Real-time AI Impact Tracking to show exactly where your funds go.</span>
-                    </div>
                 </div>
 
                 {/* Funding Goal Cards */}
-                <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto mb-20">
+                <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {goals.map((goal, index) => (
                         <div key={index} className="bg-gray-50 p-8 rounded-2xl border border-gray-200 shadow-sm">
                             <div className="flex items-center gap-4 mb-4">
@@ -78,18 +68,35 @@ const FundingGoalsSection: React.FC = () => {
                         </div>
                     ))}
                 </div>
+            </div>
+        </section>
+    );
+};
 
-                {/* Impact Examples */}
-                <div className="text-center">
-                    <h3 className="text-2xl font-bold text-masa-charcoal mb-8">Every Contribution Counts</h3>
-                    <div className="flex flex-wrap justify-center gap-6">
-                        {impactExamples.map((example, index) => (
-                            <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 text-center shadow-sm w-full sm:w-64">
-                                <p className="text-2xl font-bold text-masa-orange mb-2">{example.amount}</p>
-                                <p className="text-gray-700">{example.effect}</p>
-                            </div>
-                        ))}
-                    </div>
+const ImpactExamplesSection: React.FC = () => {
+    const examples = [
+        { amount: "₹500", effect: "Supports a youth training session." },
+        { amount: "₹1,000", effect: "Provides a sports kit for a rural team." },
+        { amount: "₹2,500", effect: "Funds a community health awareness event." },
+        { amount: "₹5,000", effect: "Sponsors a full-day leadership workshop." },
+    ];
+
+    return (
+        <section className="py-24 bg-gray-50 border-t border-gray-200">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 className="text-3xl font-bold text-masa-charcoal">How Your Contribution Helps</h2>
+                    <p className="mt-4 text-lg text-gray-600">
+                        Every donation, big or small, directly fuels our mission and creates tangible change on the ground.
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {examples.map((example, index) => (
+                        <div key={index} className="bg-white p-8 rounded-2xl border border-gray-100 text-center shadow-md hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+                            <p className="text-4xl font-extrabold text-masa-orange mb-3">{example.amount}</p>
+                            <p className="text-gray-700 font-medium leading-relaxed">{example.effect}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
@@ -169,7 +176,7 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
 
             <FundingGoalsSection />
 
-            <section id="donate-form" className="pb-24">
+            <section id="donate-form" className="py-24">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-12 gap-12 items-start max-w-7xl mx-auto">
                         
@@ -248,7 +255,6 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                         </div>
                                     </div>
                                     
-                                    {/* Conditional Fields based on Currency/Country */}
                                     {currency === 'INR' && (
                                         <div className="mb-4">
                                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">PAN Number (Required for Tax Exemption)</label>
@@ -326,6 +332,9 @@ const DonatePage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
                 </div>
             </section>
+
+            <ImpactExamplesSection />
+
         </div>
     );
 };

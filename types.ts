@@ -1,5 +1,5 @@
 
-export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'ngo-help-desk' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices' | 'pledge' | 'thank-you-pledge' | 'certificate-downloader';
+export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices' | 'ngo-help-desk';
 
 export interface NavigationProps {
   navigateTo: (page: Page, anchor?: string) => void;
@@ -53,15 +53,11 @@ export interface Event {
     price?: string;
 }
 
-export interface Pledge {
-    id: string;
-    title: string;
-    description: string;
-    statement: string;
-    icon: string; // Storing icon name as string
-    category: string;
-    oathText: string;
-    imageUrl: string;
+export interface Testimonial {
+    quote: string;
+    author: string;
+    role: string;
+    image: string;
 }
 
 export type MembershipType = 'Community' | 'Supporting' | 'Life' | 'International' | 'Student / Youth';
@@ -122,6 +118,16 @@ export interface DropdownNavItem extends NavItem {
 export type MenuItem = NavItem | DropdownNavItem;
 
 // --- Homepage Settings Types ---
+export interface PillarItem {
+    id: string;
+    label: string;
+    title: string;
+    description: string;
+    page: Page;
+    icon: 'UsersIcon' | 'AcademicCapIcon' | 'TargetIcon';
+    color: 'red' | 'blue' | 'green';
+}
+
 export interface SliderItem {
     id: string;
     headline: string;
@@ -142,12 +148,13 @@ export interface HomepageSettings {
         slides: SliderItem[];
         autoplaySpeed: number;
     };
+    pillars: PillarItem[];
+    testimonials: Testimonial[];
     sections: {
         impactSnapshot: HomepageSection;
         featuredEvent: HomepageSection;
         whyMasa: HomepageSection;
         programIcons: HomepageSection;
-        pledgeSnapshot: HomepageSection;
         eventsHighlight: HomepageSection;
         featuredCourses: HomepageSection;
         latestBlogs: HomepageSection;
@@ -215,15 +222,7 @@ export interface GlobalSettings {
         blogEnabled: boolean;
         eventsEnabled: boolean;
         coursesEnabled: boolean;
-        ngoHelpDeskEnabled: boolean;
-        pledgePlatformEnabled: boolean;
         whatsAppIntegrationEnabled: boolean;
         whatsAppNumber: string;
-        aiFeaturesEnabled: boolean;
-    };
-    certificates: {
-        generationEnabled: boolean;
-        logoUrl: string;
-        signatureUrl: string;
     };
 }

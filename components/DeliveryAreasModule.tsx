@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { NavigationProps } from '../types';
-import { CalendarDaysIcon, AcademicCapIcon, TrophyIcon, SparklesIcon, UsersIcon, ArrowRightIcon } from './icons/FeatureIcons';
+import { CalendarDaysIcon, AcademicCapIcon, TrophyIcon, SparklesIcon, UsersIcon } from './icons/FeatureIcons';
 
 export interface DeliveryAreaItem {
     type: 'Events' | 'Trainings' | 'Awards' | 'Records' | 'Conferences';
@@ -9,9 +8,8 @@ export interface DeliveryAreaItem {
     description: string;
 }
 
-interface DeliveryAreasModuleProps extends NavigationProps {
+interface DeliveryAreasModuleProps {
     title: string;
-    description: string;
     items: DeliveryAreaItem[];
 }
 
@@ -23,42 +21,28 @@ const icons = {
     Conferences: UsersIcon,
 };
 
-const routes = {
-    Events: 'events',
-    Trainings: 'trainings',
-    Awards: 'awards',
-    Records: 'records',
-    Conferences: 'conferences',
-} as const;
-
-const DeliveryAreasModule: React.FC<DeliveryAreasModuleProps> = ({ navigateTo, title, description, items }) => {
+const DeliveryAreasModule: React.FC<DeliveryAreasModuleProps> = ({ title, items }) => {
     return (
-        <section className="py-24 bg-white">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="relative bg-masa-charcoal text-white pt-24 pb-20 overflow-hidden">
+            <div 
+                className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-32 bg-white rounded-[50%]"
+            ></div>
+            <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 z-10">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-masa-charcoal">{title}</h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-                        {description}
-                    </p>
+                    <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">{title}</h2>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-10">
                     {items.map((item) => {
                         const Icon = icons[item.type];
-                        const route = routes[item.type];
+                        const isAwards = item.type === 'Awards';
                         return (
-                            <div key={item.title} className="bg-gray-50 p-8 rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group">
-                                <div className="mb-4 inline-flex items-center justify-center w-14 h-14 rounded-full bg-orange-100 text-masa-orange group-hover:bg-masa-orange group-hover:text-white transition-colors">
-                                    <Icon className="h-7 w-7" />
+                            <div key={item.title} className="flex flex-col items-center text-center">
+                                <div className={`flex items-center justify-center w-20 h-20 rounded-full border-2 mb-6 transition-colors duration-300 ${isAwards ? 'bg-masa-orange border-masa-orange' : 'border-white/30'}`}>
+                                    <Icon className="h-8 w-8 text-white" />
                                 </div>
-                                <h3 className="text-xl font-bold text-masa-charcoal mb-3">{item.title}</h3>
-                                <p className="text-gray-600 mb-6 flex-grow leading-relaxed">{item.description}</p>
-                                <button 
-                                    onClick={() => navigateTo(route)} 
-                                    className="text-masa-blue font-bold hover:text-masa-orange flex items-center mt-auto transition-colors"
-                                >
-                                    Explore {item.type} <ArrowRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"/>
-                                </button>
+                                <h3 className={`text-xl font-bold mb-3 ${isAwards ? 'text-masa-orange' : 'text-white'}`}>{item.title}</h3>
+                                <p className="text-gray-300 text-sm leading-relaxed">{item.description}</p>
                             </div>
                         );
                     })}

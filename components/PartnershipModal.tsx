@@ -57,10 +57,10 @@ const PartnershipModal: React.FC<PartnershipModalProps> = ({ partnershipType, on
 
     const formFields = partnershipType === 'Institutional' ? (
         <>
-            <div><label htmlFor="inst-name" className="block text-sm font-medium text-gray-700">Institution Name</label><input required onChange={handleChange} type="text" id="inst-name" className={inputFieldClasses} /></div>
-            <div><label htmlFor="inst-contact-person" className="block text-sm font-medium text-gray-700">Contact Person</label><input required onChange={handleChange} type="text" id="inst-contact-person" className={inputFieldClasses} /></div>
-            <div><label htmlFor="inst-email" className="block text-sm font-medium text-gray-700">Email Address</label><input required onChange={handleChange} type="email" id="inst-email" className={inputFieldClasses} /></div>
-            <div><label htmlFor="inst-phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input required onChange={handleChange} type="tel" id="inst-phone" className={inputFieldClasses} /></div>
+            <div><label htmlFor="inst-name" className="block text-sm font-medium text-gray-700">Institution Name</label><input required onChange={handleChange} type="text" id="inst-name" className={inputFieldClasses} placeholder="e.g., Delhi Public School" /></div>
+            <div><label htmlFor="inst-contact-person" className="block text-sm font-medium text-gray-700">Contact Person</label><input required onChange={handleChange} type="text" id="inst-contact-person" className={inputFieldClasses} placeholder="e.g., Dr. Anjali Sharma" /></div>
+            <div><label htmlFor="inst-email" className="block text-sm font-medium text-gray-700">Email Address</label><input required onChange={handleChange} type="email" id="inst-email" className={inputFieldClasses} placeholder="principal@example.edu" /></div>
+            <div><label htmlFor="inst-phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input required onChange={handleChange} type="tel" id="inst-phone" className={inputFieldClasses} placeholder="+91..." /></div>
             <div>
                 <label htmlFor="inst-type" className="block text-sm font-medium text-gray-700">Type of Institution</label>
                 <select required onChange={handleChange} id="inst-type" className={inputFieldClasses}>
@@ -70,16 +70,16 @@ const PartnershipModal: React.FC<PartnershipModalProps> = ({ partnershipType, on
                     <option>Other</option>
                 </select>
             </div>
-            <div><label htmlFor="inst-proposal" className="block text-sm font-medium text-gray-700">Proposal / Message</label><textarea onChange={handleChange} id="inst-proposal" rows={3} className={inputFieldClasses}></textarea></div>
+            <div><label htmlFor="inst-proposal" className="block text-sm font-medium text-gray-700">Proposal / Message</label><textarea onChange={handleChange} id="inst-proposal" rows={3} className={inputFieldClasses} placeholder="Briefly describe your proposal or how you'd like to collaborate."></textarea></div>
         </>
     ) : (
         <>
-            <div><label htmlFor="corp-name" className="block text-sm font-medium text-gray-700">Company / Foundation Name</label><input required onChange={handleChange} type="text" id="corp-name" className={inputFieldClasses} /></div>
-            <div><label htmlFor="corp-contact-person" className="block text-sm font-medium text-gray-700">Contact Person</label><input required onChange={handleChange} type="text" id="corp-contact-person" className={inputFieldClasses} /></div>
-            <div><label htmlFor="corp-email" className="block text-sm font-medium text-gray-700">Email Address</label><input required onChange={handleChange} type="email" id="corp-email" className={inputFieldClasses} /></div>
-            <div><label htmlFor="corp-phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input required onChange={handleChange} type="tel" id="corp-phone" className={inputFieldClasses} /></div>
-            <div><label htmlFor="corp-interest" className="block text-sm font-medium text-gray-700">Area of Interest (CSR)</label><input onChange={handleChange} type="text" id="corp-interest" placeholder="e.g., Youth Empowerment, Environment" className={inputFieldClasses} /></div>
-            <div><label htmlFor="corp-proposal" className="block text-sm font-medium text-gray-700">Proposal / Message</label><textarea onChange={handleChange} id="corp-proposal" rows={3} className={inputFieldClasses}></textarea></div>
+            <div><label htmlFor="corp-name" className="block text-sm font-medium text-gray-700">Company / Foundation Name</label><input required onChange={handleChange} type="text" id="corp-name" className={inputFieldClasses} placeholder="e.g., Acme Corporation" /></div>
+            <div><label htmlFor="corp-contact-person" className="block text-sm font-medium text-gray-700">Contact Person</label><input required onChange={handleChange} type="text" id="corp-contact-person" className={inputFieldClasses} placeholder="e.g., Mr. Rohan Verma" /></div>
+            <div><label htmlFor="corp-email" className="block text-sm font-medium text-gray-700">Email Address</label><input required onChange={handleChange} type="email" id="corp-email" className={inputFieldClasses} placeholder="csr.head@example.com" /></div>
+            <div><label htmlFor="corp-phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input required onChange={handleChange} type="tel" id="corp-phone" className={inputFieldClasses} placeholder="+91..." /></div>
+            <div><label htmlFor="corp-interest" className="block text-sm font-medium text-gray-700">Area of Interest (CSR)</label><input onChange={handleChange} type="text" id="corp-interest" placeholder="e.g., Youth Empowerment, Education, Sports" className={inputFieldClasses} /></div>
+            <div><label htmlFor="corp-proposal" className="block text-sm font-medium text-gray-700">Proposal / Message</label><textarea onChange={handleChange} id="corp-proposal" rows={3} className={inputFieldClasses} placeholder="Briefly describe your proposal or how you'd like to collaborate."></textarea></div>
         </>
     );
 

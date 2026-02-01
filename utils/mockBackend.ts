@@ -1,4 +1,3 @@
-
 // This file simulates a backend server, database, and email service.
 
 const generateMemberId = () => {
@@ -48,7 +47,7 @@ export const logAnalyticsEvent = (eventName: string, params: any) => {
 };
 
 // Generic submission handler
-export const submitForm = async (type: 'volunteer' | 'donation' | 'membership' | 'partnership' | 'nomination' | 'contact' | 'career' | 'gallery' | 'enrollment' | 'pledge', data: any): Promise<any> => {
+export const submitForm = async (type: 'volunteer' | 'donation' | 'membership' | 'partnership' | 'nomination' | 'contact' | 'career' | 'gallery' | 'enrollment', data: any): Promise<any> => {
     return new Promise((resolve) => {
         // Simulate network delay
         setTimeout(() => {
@@ -65,19 +64,12 @@ export const submitForm = async (type: 'volunteer' | 'donation' | 'membership' |
                     newSubmission.volunteerId = `MASA-VOL-${year}-${randomNumber}`;
                 }
 
-                if (type === 'pledge') {
-                    const certId = `MASA-PLEDGE-${Date.now().toString().slice(-6)}`;
-                    newSubmission.certificateId = certId;
-                    sessionStorage.setItem('last_pledge', JSON.stringify(newSubmission));
-                }
-
                 // 2. Trigger Admin Notification Email (masaworldfoundation@gmail.com)
                 let adminSubject = `New ${type.charAt(0).toUpperCase() + type.slice(1)} Submission Received`;
                 if (type === 'career') adminSubject = 'New Careers / Internship Application Received';
                 if (type === 'contact' && data.subject === 'Careers & Internships') adminSubject = 'New CAREERS & INTERNSHIPS INQUIRY Received';
                 if (type === 'gallery') adminSubject = `New Gallery Submission for '${data.category}'`;
                 if (type === 'enrollment') adminSubject = `New Course Enrollment: ${data.courseName}`;
-                if (type === 'pledge') adminSubject = `New Pledge Taken: ${data.pledgeTitle}`;
 
                 const formatLabel = (key: string) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                 
@@ -99,8 +91,8 @@ Please log in to the admin dashboard to review the full details.
                 
                 sendEmail('masaworldfoundation@gmail.com', adminSubject, adminBody);
 
-                // 3. Trigger User Auto-Response Email (EXCEPT for pledges, which are handled separately)
-                if (type !== 'pledge' && data.email) {
+                // 3. Trigger User Auto-Response Email
+                if (data.email) {
                     let userBody = `
 Dear ${data.fullName || 'Supporter'},
 Thank you for connecting with MASA World Foundation.
@@ -167,20 +159,4 @@ export const getStats = () => {
         pledges: JSON.parse(localStorage.getItem('masa_pledge_submissions') || '[]').length,
         countries: 12, // Mock fallback
     };
-};
-
-export const verifyCertificate = (certificateId: string) => {
-    const pledges = JSON.parse(localStorage.getItem('masa_pledge_submissions') || '[]');
-    return pledges.find((p: any) => p.certificateId.toUpperCase() === certificateId.toUpperCase());
-};
-
-export const getCertificatesByContact = (contact: string) => {
-    const pledges = JSON.parse(localStorage.getItem('masa_pledge_submissions') || '[]');
-    return pledges.filter((p: any) => p.email === contact || p.mobile === contact)
-        .map((p: any) => ({
-            id: p.certificateId,
-            title: p.pledgeTitle,
-            type: 'Pledge',
-            date: p.timestamp.split(',')[0]
-        }));
 };

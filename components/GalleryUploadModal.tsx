@@ -6,10 +6,9 @@ import { submitForm } from '../utils/mockBackend';
 interface GalleryUploadModalProps {
   categories: string[];
   onClose: () => void;
-  generatedImage?: string | null;
 }
 
-const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({ categories, onClose, generatedImage }) => {
+const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({ categories, onClose }) => {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -36,7 +35,7 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({ categories, onC
         setIsSubmitting(true);
         // Simulate upload
         setTimeout(() => {
-            const submissionData = { ...formData, fileName: generatedImage ? 'ai-generated-image.png' : formData.file?.name };
+            const submissionData = { ...formData, fileName: formData.file?.name };
             submitForm('gallery', submissionData);
             setIsSubmitting(false);
             setSubmitted(true);
@@ -85,19 +84,10 @@ const GalleryUploadModal: React.FC<GalleryUploadModalProps> = ({ categories, onC
                                     </select>
                                 </div>
                                 <div><label className="block text-sm font-medium text-gray-700">Description</label><textarea required name="description" onChange={handleChange} rows={2} className="mt-1 block w-full input-field" placeholder="Briefly describe the photo/video..."></textarea></div>
-                                {generatedImage ? (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Generated Image</label>
-                                        <div className="mt-1 p-2 border border-gray-300 rounded-md">
-                                            <img src={`data:image/png;base64,${generatedImage}`} alt="AI Generated" className="rounded-md max-h-48 mx-auto" />
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Upload Photo / Video</label>
-                                        <input required={!generatedImage} type="file" onChange={handleFileChange} accept="image/*,video/*" className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-masa-blue hover:file:bg-blue-100"/>
-                                    </div>
-                                )}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Upload Photo / Video</label>
+                                    <input required type="file" onChange={handleFileChange} accept="image/*,video/*" className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-masa-blue hover:file:bg-blue-100"/>
+                                </div>
                                 <div className="flex items-start pt-2">
                                     <input id="media-consent" type="checkbox" required className="h-4 w-4 text-masa-orange border-gray-300 rounded focus:ring-masa-orange mt-1" />
                                     <label htmlFor="media-consent" className="ml-2 text-sm text-gray-600">I confirm I have the rights to this media and give MASA World Foundation permission to use it.</label>

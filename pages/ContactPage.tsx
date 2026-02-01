@@ -40,6 +40,7 @@ const ContactPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
+        organizationName: '',
         email: '',
         mobile: '',
         subject: 'General Inquiry',
@@ -110,6 +111,10 @@ const ContactPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 <div>
                                     <label htmlFor="fullName" className="block text-sm font-bold text-gray-700 mb-2">Full Name *</label>
                                     <input required name="fullName" onChange={handleChange} type="text" id="fullName" className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-masa-orange outline-none transition-all" />
+                                </div>
+                                <div>
+                                    <label htmlFor="organizationName" className="block text-sm font-bold text-gray-700 mb-2">Organization Name (Optional)</label>
+                                    <input name="organizationName" onChange={handleChange} type="text" id="organizationName" className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-masa-orange outline-none transition-all" placeholder="Your Company or Institution" />
                                 </div>
                                 <div className="grid md:grid-cols-2 gap-6">
                                      <div>

@@ -14,24 +14,15 @@ const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor =
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
                     
-                    {/* Image Column - Increased Size & Centered */}
+                    {/* Image Column - Simplified */}
                     <div className="flex justify-center md:justify-end">
-                         <div className="relative w-full max-w-md group">
-                            {/* Decorative Backdrop - Tightened */}
-                            <div className="absolute top-3 -right-3 w-full h-full bg-masa-orange/10 rounded-2xl -z-10 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"></div>
-                            
+                         <div className="relative w-full max-w-md">
                             <img 
                                 src={FOUNDER_IMAGE_URL}
                                 alt="Vijay Babu Sharma, Founder of Masa World Foundation" 
-                                className="rounded-2xl shadow-lg w-full h-auto object-cover aspect-[4/5] bg-gray-100"
+                                className="rounded-2xl shadow-xl w-full h-auto object-cover aspect-[4/5] bg-gray-100"
                                 loading="lazy"
                             />
-                            
-                            {/* Floating Badge for Professional Context */}
-                            <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-lg border-l-4 border-masa-blue shadow-sm hidden sm:block">
-                                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Visionary</p>
-                                <p className="text-sm font-bold text-masa-charcoal">Vijay Babu Sharma</p>
-                            </div>
                          </div>
                     </div>
 

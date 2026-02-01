@@ -17,7 +17,7 @@ interface MembershipModalProps {
 const MembershipModal: React.FC<MembershipModalProps> = ({ tier, onClose }) => {
   const [step, setStep] = useState<'form' | 'payment' | 'processing' | 'success' | 'failure'>('form');
   const [formData, setFormData] = useState({
-      fullName: '', email: '', mobile: '', location: '', studentStatus: '', amount: tier.price === 'Free' ? '' : tier.price
+      fullName: '', organizationName: '', email: '', mobile: '', location: '', studentStatus: '', amount: tier.price === 'Free' ? '' : tier.price
   });
   
   const [paymentDetails, setPaymentDetails] = useState({
@@ -97,6 +97,7 @@ const MembershipModal: React.FC<MembershipModalProps> = ({ tier, onClose }) => {
                     </div>
 
                     <div><label className="block text-sm font-bold text-gray-700 mb-1">Full Name *</label><input required name="fullName" onChange={handleChange} type="text" className={inputFieldClasses} placeholder="Enter full name" /></div>
+                    <div><label className="block text-sm font-bold text-gray-700 mb-1">Organization Name (Optional)</label><input name="organizationName" onChange={handleChange} type="text" className={inputFieldClasses} placeholder="Your Company or Institution" /></div>
                     <div><label className="block text-sm font-bold text-gray-700 mb-1">Email Address *</label><input required name="email" onChange={handleChange} type="email" className={inputFieldClasses} placeholder="name@example.com" /></div>
                     <div className="grid grid-cols-2 gap-4">
                         <div><label className="block text-sm font-bold text-gray-700 mb-1">Mobile *</label><input required name="mobile" onChange={handleChange} type="tel" className={inputFieldClasses} placeholder="+91..." /></div>

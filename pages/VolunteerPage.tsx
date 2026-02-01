@@ -9,6 +9,7 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
+        organizationName: '',
         email: '',
         phone: '',
         city: '',
@@ -148,6 +149,11 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 </div>
                             </div>
 
+                            <div>
+                                <label className="block text-sm font-bold text-gray-700 mb-2">Organization Name (Optional)</label>
+                                <input name="organizationName" onChange={handleChange} value={formData.organizationName} type="text" className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-blue outline-none" placeholder="Your Company or Institution" />
+                            </div>
+
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
@@ -201,12 +207,12 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
 
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Skills / Previous Experience</label>
-                                <textarea name="skills" onChange={handleChange} value={formData.skills} rows={3} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-blue outline-none" placeholder="Briefly describe your skills or any past volunteering experience..."></textarea>
+                                <textarea name="skills" onChange={handleChange} value={formData.skills} rows={3} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-blue outline-none" placeholder="e.g., Event management, teaching, digital marketing, content writing..."></textarea>
                             </div>
 
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Why do you want to volunteer? *</label>
-                                <textarea required name="motivation" onChange={handleChange} value={formData.motivation} rows={4} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-blue outline-none" placeholder="Tell us what motivates you to join us..."></textarea>
+                                <textarea required name="motivation" onChange={handleChange} value={formData.motivation} rows={4} className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-blue outline-none" placeholder="What inspires you to volunteer with MASA World Foundation?"></textarea>
                             </div>
 
                             <div className="flex items-start pt-4 border-t border-gray-100">

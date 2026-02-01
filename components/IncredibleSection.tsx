@@ -1,101 +1,65 @@
 
 import React from 'react';
 import { NavigationProps } from '../types';
-import { CalendarDaysIcon, AcademicCapIcon, TrophyIcon, SparklesIcon, UsersIcon, ArrowRightIcon } from './icons/FeatureIcons';
+import { CalendarDaysIcon, AcademicCapIcon, TrophyIcon, DocumentCheckIcon, MicrophoneIcon } from './icons/FeatureIcons';
 
-const IncredibleSection: React.FC<NavigationProps> = ({ navigateTo }) => {
-    const items = [
-        {
-            type: 'Events',
-            title: 'Events',
-            description: 'Bringing communities together for action, celebration, and change through impactful events.'
-        },
-        {
-            type: 'Trainings',
-            title: 'Trainings',
-            description: 'Building the leaders of tomorrow with discipline, life skills, and vocational knowledge.'
-        },
-        {
-            type: 'Awards',
-            title: 'Awards',
-            description: 'Celebrating the unsung heroes who build our communities with selfless dedication.'
-        },
-        {
-            type: 'Records',
-            title: 'Records',
-            description: 'Showcasing extraordinary feats of discipline, dedication, and human spirit to inspire.'
-        },
-        {
-            type: 'Conferences',
-            title: 'Conferences',
-            description: 'Engaging in dialogue to enlighten minds and find solutions to national issues.'
-        }
-    ];
+export interface DeliveryAreaItem {
+    type: 'Events' | 'Trainings' | 'Awards' | 'Records' | 'Conferences';
+    title: string;
+    description: string;
+}
 
-    const icons = {
-        Events: CalendarDaysIcon,
-        Trainings: AcademicCapIcon,
-        Awards: TrophyIcon,
-        Records: SparklesIcon,
-        Conferences: UsersIcon,
-    };
+interface DeliveryAreasModuleProps extends NavigationProps {
+    title: string;
+    description: string;
+    items: DeliveryAreaItem[];
+}
 
-    const routes = {
-        Events: 'events',
-        Trainings: 'trainings',
-        Awards: 'awards',
-        Records: 'records',
-        Conferences: 'conferences',
-    } as const;
+const icons = {
+    Events: CalendarDaysIcon,
+    Trainings: AcademicCapIcon,
+    Awards: TrophyIcon,
+    Records: DocumentCheckIcon,
+    Conferences: MicrophoneIcon,
+};
 
+const routes = {
+    Events: 'events',
+    Trainings: 'trainings',
+    Awards: 'awards',
+    Records: 'records',
+    Conferences: 'conferences',
+} as const;
+
+const IncredibleSection: React.FC<DeliveryAreasModuleProps> = ({ navigateTo, title, description, items }) => {
     return (
-        <section className="py-24 bg-gray-50">
+        <section className="py-24 bg-masa-charcoal text-white">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-masa-charcoal">Key Delivery & Impact</h2>
-                    <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-                        We turn our vision into action through five key delivery mechanisms, creating measurable impact on the ground.
+                <div className="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h2>
+                    <p className="mt-4 text-lg text-gray-300">
+                        {description}
                     </p>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {items.slice(0, 3).map((item) => {
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-10">
+                    {items.map((item, index) => {
                         const Icon = icons[item.type];
                         const route = routes[item.type];
+                        const colors = ['#1E3A8A', '#F97316', '#10B981', '#6366F1', '#EC4899'];
+                        
                         return (
-                             <div key={item.title} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group">
-                                <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 text-masa-orange group-hover:bg-masa-orange group-hover:text-white transition-colors">
-                                    <Icon className="h-8 w-8" />
+                            <div 
+                                key={item.title} 
+                                onClick={() => navigateTo(route)}
+                                className="flex flex-col items-center text-center group cursor-pointer"
+                            >
+                                <div className="relative flex items-center justify-center w-28 h-28 rounded-full border-2 border-white/20 mb-6 transition-all duration-300 group-hover:border-white/50 group-hover:scale-105">
+                                    <div className="absolute inset-0 rounded-full opacity-20 group-hover:opacity-30 transition-opacity" style={{backgroundColor: colors[index % colors.length], filter: 'blur(15px)'}}></div>
+                                    <Icon className="h-10 w-10 text-white" />
                                 </div>
-                                <h3 className="text-xl font-bold text-masa-charcoal mb-4">{item.title}</h3>
-                                <p className="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">{item.description}</p>
-                                <button 
-                                    onClick={() => navigateTo(route)} 
-                                    className="text-masa-blue font-bold hover:text-masa-orange flex items-center mt-auto transition-colors text-sm"
-                                >
-                                    Explore {item.type} <ArrowRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"/>
-                                </button>
-                            </div>
-                        );
-                    })}
-                </div>
-                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8 lg:max-w-4xl lg:mx-auto">
-                     {items.slice(3).map((item) => {
-                        const Icon = icons[item.type];
-                        const route = routes[item.type];
-                        return (
-                             <div key={item.title} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group">
-                                <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 text-masa-orange group-hover:bg-masa-orange group-hover:text-white transition-colors">
-                                    <Icon className="h-8 w-8" />
-                                </div>
-                                <h3 className="text-xl font-bold text-masa-charcoal mb-4">{item.title}</h3>
-                                <p className="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">{item.description}</p>
-                                <button 
-                                    onClick={() => navigateTo(route)} 
-                                    className="text-masa-blue font-bold hover:text-masa-orange flex items-center mt-auto transition-colors text-sm"
-                                >
-                                    Explore {item.type} <ArrowRightIcon className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1"/>
-                                </button>
+                                <h3 className="text-xl font-bold mb-3 text-white">{item.title}</h3>
+                                <p className="text-gray-400 text-sm leading-relaxed">{item.description}</p>
                             </div>
                         );
                     })}

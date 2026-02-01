@@ -4,7 +4,7 @@ import { NavigationProps } from '../types';
 import { CheckIcon, ArrowRightIcon, HeartIcon, UsersIcon, GlobeIcon, BriefcaseIcon, CalendarDaysIcon, ShieldCheckIcon } from '../components/icons/FeatureIcons';
 
 interface ThankYouPageProps extends NavigationProps {
-    type: 'volunteer' | 'donate' | 'membership' | 'career' | 'contact' | 'event' | 'pledge';
+    type: 'volunteer' | 'donate' | 'membership' | 'career' | 'contact' | 'event';
 }
 
 const contentConfig = {
@@ -67,16 +67,6 @@ const contentConfig = {
         icon: CalendarDaysIcon,
         color: "text-masa-orange",
         bg: "bg-orange-50"
-    },
-    pledge: {
-        title: "Thank You for Your Commitment!",
-        subtitle: "Your pledge is complete and your certificate is on its way.",
-        message: "You have successfully taken the pledge. Your official A4 PDF certificate has been sent to your registered email and a download link to your WhatsApp. You can also verify and download it anytime from our pledge platform.",
-        primaryBtn: "Verify/Download Certificate",
-        primaryAction: "pledge",
-        icon: ShieldCheckIcon,
-        color: "text-purple-600",
-        bg: "bg-purple-50"
     }
 };
 

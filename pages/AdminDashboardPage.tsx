@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { AdminUser, AuthState, GlobalSettings, PageMetadata, Post, UserRole, MenuItem, SliderItem } from '../types';
+import { AdminUser, AuthState, GlobalSettings, PageMetadata, Post, UserRole, MenuItem, SliderItem, Page, NavItem } from '../types';
 import { ContentManager } from '../utils/contentManager';
 import { AuthService } from '../utils/authService';
 import { getSubmissions, getStats } from '../utils/mockBackend';
@@ -17,7 +17,9 @@ import {
     ShieldCheckIcon,
     ClockIcon,
     EyeIcon,
-    SparklesIcon
+    SparklesIcon,
+    PlusIcon,
+    TrashIcon
 } from '../components/icons/FeatureIcons';
 import { MenuIcon, ChevronDownIcon, ChevronUpIcon, XIcon } from '../components/icons/UiIcons';
 
@@ -31,8 +33,26 @@ const SidebarItem: React.FC<{ id: string; label: string; icon: any; isActive: bo
     </div>
 );
 
+const ToggleSwitch: React.FC<{ checked: boolean; onChange: (checked: boolean) => void }> = ({ checked, onChange }) => (
+    <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        className={`${
+            checked ? 'bg-masa-blue' : 'bg-gray-200'
+        } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-masa-orange focus:ring-offset-2`}
+    >
+        <span
+            className={`${
+                checked ? 'translate-x-6' : 'translate-x-1'
+            } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+        />
+    </button>
+);
+
+
 // --- Dashboard Modules ---
-// Note: In a larger app, these would be separate files. For this structure, they are co-located.
 
 const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => void }> = ({ user, setActiveView }) => {
     const stats = getStats();
@@ -41,10 +61,10 @@ const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => v
             <h1 className="text-2xl font-bold text-gray-800 mb-6">Welcome, {user.name}</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                 {[
-                    { l: 'Total Pledges', v: stats.pledges, c: 'bg-blue-500' },
                     { l: 'Volunteers', v: stats.volunteers, c: 'bg-green-500' },
                     { l: 'New Submissions', v: stats.queries, c: 'bg-orange-500' },
-                    { l: 'Published Posts', v: ContentManager.getPosts().filter(p => p.status === 'Published').length, c: 'bg-purple-500' }
+                    { l: 'Published Posts', v: ContentManager.getPosts().filter(p => p.status === 'Published').length, c: 'bg-purple-500' },
+                    { l: 'Total Members', v: stats.members, c: 'bg-blue-500' }
                 ].map((s, i) => (
                     <div key={i} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center">
                         <div className={`w-3 h-12 rounded-full mr-4 ${s.c}`}></div>
@@ -59,7 +79,7 @@ const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => v
                         <button onClick={() => setActiveView('blogs')} className="p-4 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition text-center font-semibold text-sm">Write Blog Post</button>
                         <button onClick={() => setActiveView('events')} className="p-4 bg-gray-50 rounded-lg hover:bg-green-50 hover:text-green-600 transition text-center font-semibold text-sm">Add Event</button>
                         <button onClick={() => setActiveView('settings')} className="p-4 bg-gray-50 rounded-lg hover:bg-orange-50 hover:text-orange-600 transition text-center font-semibold text-sm">Homepage Settings</button>
-                        <button onClick={() => setActiveView('scripts')} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition text-center font-semibold text-sm">Code Injection</button>
+                        <button onClick={() => setActiveView('settings')} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition text-center font-semibold text-sm">Code Injection</button>
                     </div>
                 </div>
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
@@ -74,8 +94,107 @@ const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => v
     );
 };
 
-// ... BlogManager, Pages, etc. modules would go here, fully fleshed out ...
-// For this response, the Blog Manager is implemented as the primary example of a full CRUD module.
+const SettingsModule: React.FC = () => {
+    // This is a large, comprehensive settings management component
+    const [settings, setSettings] = useState<GlobalSettings>(ContentManager.getSettings());
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+
+    const handleSave = () => {
+        setSaveStatus('saving');
+        ContentManager.saveSettings(settings);
+        setTimeout(() => {
+            setSaveStatus('saved');
+            setTimeout(() => setSaveStatus('idle'), 2000);
+        }, 1000);
+    };
+
+    const handleSliderChange = (index: number, field: keyof SliderItem, value: any) => {
+        const newSlides = [...settings.homepage.slider.slides];
+        (newSlides[index] as any)[field] = value;
+        setSettings(prev => ({...prev, homepage: {...prev.homepage, slider: {...prev.homepage.slider, slides: newSlides}}}));
+    };
+    
+    const handleAddSlide = () => {
+        const newSlide: SliderItem = { id: `slide${Date.now()}`, headline: 'New Slide Headline', subtext: 'Subtext for new slide.', image: 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0', ctas: [{label: 'Learn More', page: 'about', primary: true }] };
+        setSettings(prev => ({...prev, homepage: {...prev.homepage, slider: {...prev.homepage.slider, slides: [...prev.homepage.slider.slides, newSlide]}}}));
+    };
+    
+    const handleRemoveSlide = (id: string) => {
+        if (confirm('Are you sure you want to delete this slide?')) {
+            const newSlides = settings.homepage.slider.slides.filter(s => s.id !== id);
+            setSettings(prev => ({...prev, homepage: {...prev.homepage, slider: {...prev.homepage.slider, slides: newSlides}}}));
+        }
+    };
+    
+    const handleSectionChange = (key: string, field: string, value: any) => {
+        setSettings(prev => ({
+            ...prev,
+            homepage: {
+                ...prev.homepage,
+                sections: {
+                    ...prev.homepage.sections,
+                    [key]: { ...prev.homepage.sections[key as keyof typeof prev.homepage.sections], [field]: value }
+                }
+            }
+        }));
+    };
+
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold text-gray-800">Site Settings</h1>
+                <button onClick={handleSave} disabled={saveStatus !== 'idle'} className="bg-masa-blue text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-900 transition-colors shadow-sm disabled:bg-gray-400">
+                    {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'saved' ? 'Saved!' : 'Save Changes'}
+                </button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h2 className="text-xl font-bold mb-4">Homepage Content</h2>
+                <div className="space-y-6">
+                    <div>
+                        <h3 className="font-bold text-lg mb-2">Hero Slider</h3>
+                        <div className="space-y-4">
+                            {settings.homepage.slider.slides.map((slide, index) => (
+                                <div key={slide.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                    <input value={slide.headline} onChange={e => handleSliderChange(index, 'headline', e.target.value)} className="w-full p-2 border rounded font-bold mb-2" placeholder="Headline" />
+                                    <textarea value={slide.subtext} onChange={e => handleSliderChange(index, 'subtext', e.target.value)} className="w-full p-2 border rounded mb-2" placeholder="Subtext" rows={2}></textarea>
+                                    <input value={slide.image} onChange={e => handleSliderChange(index, 'image', e.target.value)} className="w-full p-2 border rounded mb-2 text-sm" placeholder="Image URL" />
+                                    <button onClick={() => handleRemoveSlide(slide.id)} className="text-red-500 text-xs font-bold hover:underline">Delete Slide</button>
+                                </div>
+                            ))}
+                        </div>
+                        <button onClick={handleAddSlide} className="mt-4 bg-green-100 text-green-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-200">Add New Slide</button>
+                    </div>
+
+                    <div>
+                        <h3 className="font-bold text-lg mb-2">Section Visibility & Titles</h3>
+                        <div className="space-y-3">
+                        {/* FIX: Use Object.keys with type assertion to correctly type the 'section' variable, resolving multiple 'property does not exist on type unknown' errors. */}
+                        {Object.keys(settings.homepage.sections).map((key) => {
+                            const sectionKey = key as keyof typeof settings.homepage.sections;
+                            const section = settings.homepage.sections[sectionKey];
+                            return (
+                                <div key={key} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                    <div className="flex justify-between items-center">
+                                        <span className="font-semibold text-gray-700 capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
+                                        <ToggleSwitch checked={section.visible} onChange={(v) => handleSectionChange(key, 'visible', v)} />
+                                    </div>
+                                    {section.title !== undefined && section.visible && (
+                                         <input value={section.title} onChange={e => handleSectionChange(key, 'title', e.target.value)} className="w-full p-1 border rounded mt-2 text-sm" placeholder="Section Title" />
+                                    )}
+                                     {section.subtitle !== undefined && section.visible && (
+                                         <input value={section.subtitle} onChange={e => handleSectionChange(key, 'subtitle', e.target.value)} className="w-full p-1 border rounded mt-1 text-xs" placeholder="Section Subtitle" />
+                                    )}
+                                </div>
+                            );
+                        })}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 // --- MAIN PAGE COMPONENT ---
 const AdminDashboardPage: React.FC = () => {
@@ -107,11 +226,8 @@ const AdminDashboardPage: React.FC = () => {
             case 'courses': return hasPermission(['Super Admin', 'Editor', 'Course Manager']) ? <ContentEditorModule type="courses" /> : null;
             case 'media': return <MediaLibraryModule />;
             case 'forms': return hasPermission(['Super Admin', 'Editor']) ? <FormsDataModule /> : null;
-            case 'social': return hasPermission(['Super Admin']) ? <SocialMonetizationModule /> : null;
             case 'settings': return hasPermission(['Super Admin']) ? <SettingsModule /> : null;
             case 'users': return hasPermission(['Super Admin']) ? <UsersModule /> : null;
-            case 'scripts': return hasPermission(['Super Admin']) ? <ScriptsModule /> : null;
-            case 'pledges': return hasPermission(['Super Admin', 'Editor']) ? <PledgesModule /> : null;
             default: return <div>Select a module</div>;
         }
     };
@@ -132,7 +248,6 @@ const AdminDashboardPage: React.FC = () => {
                     <SidebarItem id="pages" label="Pages" icon={DocumentTextIcon} isActive={activeView === 'pages'} onClick={() => handleSidebarClick('pages')} />
                     <SidebarItem id="events" label="Events" icon={CalendarDaysIcon} isActive={activeView === 'events'} onClick={() => handleSidebarClick('events')} />
                     <SidebarItem id="courses" label="Courses" icon={AcademicCapIcon} isActive={activeView === 'courses'} onClick={() => handleSidebarClick('courses')} />
-                    <SidebarItem id="pledges" label="Pledges" icon={ShieldCheckIcon} isActive={activeView === 'pledges'} onClick={() => handleSidebarClick('pledges')} />
                     <SidebarItem id="media" label="Media Library" icon={CameraIcon} isActive={activeView === 'media'} onClick={() => handleSidebarClick('media')} />
 
                     <div className="px-4 py-2 text-xs font-bold text-gray-500 uppercase mt-2">Data & CRM</div>
@@ -142,8 +257,6 @@ const AdminDashboardPage: React.FC = () => {
                     {hasPermission(['Super Admin']) && <>
                         <div className="px-4 py-2 text-xs font-bold text-gray-500 uppercase mt-2">Configuration</div>
                         <SidebarItem id="settings" label="Site Settings" icon={LockClosedIcon} isActive={activeView === 'settings'} onClick={() => handleSidebarClick('settings')} />
-                        <SidebarItem id="scripts" label="Code Injection" icon={SparklesIcon} isActive={activeView === 'scripts'} onClick={() => handleSidebarClick('scripts')} />
-                        <SidebarItem id="social" label="Monetization" icon={CreditCardIcon} isActive={activeView === 'social'} onClick={() => handleSidebarClick('social')} />
                     </>}
                 </div>
                 <div className="p-4 border-t border-gray-800"><button onClick={handleLogout} className="w-full text-center text-xs text-gray-400 hover:text-white bg-gray-800 py-1.5 rounded transition-colors">Log Out</button></div>
@@ -162,7 +275,6 @@ const AdminDashboardPage: React.FC = () => {
 
 // --- Login Component ---
 const AdminLogin: React.FC<{ onLogin: (user: AdminUser) => void }> = ({ onLogin }) => {
-    // ... implementation remains the same
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
@@ -209,11 +321,7 @@ const PagesModule: React.FC = () => <div>Pages Module</div>;
 const ContentEditorModule: React.FC<{ type: string }> = ({ type }) => <div>{type.charAt(0).toUpperCase() + type.slice(1)} Editor Module</div>;
 const MediaLibraryModule: React.FC = () => <div>Media Library Module</div>;
 const FormsDataModule: React.FC = () => <div>Forms Data Module</div>;
-const SocialMonetizationModule: React.FC = () => <div>Social & Monetization Module</div>;
-const SettingsModule: React.FC = () => <div>Global Settings Module</div>;
 const UsersModule: React.FC = () => <div>User Management Module</div>;
-const ScriptsModule: React.FC = () => <div>Scripts & Code Injection Module</div>;
-const PledgesModule: React.FC = () => <div>Pledges Module</div>;
 
 
 export default AdminDashboardPage;
