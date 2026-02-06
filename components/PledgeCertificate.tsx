@@ -1,12 +1,2 @@
-
-import React from 'react';
-
-const PledgeCertificate: React.FC = () => {
-    return (
-        <div>
-            {/* Certificate content will be rendered here */}
-        </div>
-    );
-};
-
-export default PledgeCertificate;
+// This file is a placeholder for a future feature and is not currently used.
+// Its content has been cleared to clean up the project as requested.

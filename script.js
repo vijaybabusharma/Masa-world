@@ -1,1 +1,1 @@
-// This file is unused by the React application and has been cleared.
+// This file is unused in the current single-page application structure. All logic is handled by the main script entry point.

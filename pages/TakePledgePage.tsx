@@ -1,12 +1,2 @@
-
-import React from 'react';
-
-const TakePledgePage: React.FC = () => {
-    return (
-        <div>
-            <h1>Take a Pledge - Coming Soon</h1>
-        </div>
-    );
-};
-
-export default TakePledgePage;
+// This file is a placeholder for a future feature and is not currently used.
+// Its content has been cleared to clean up the project as requested.
