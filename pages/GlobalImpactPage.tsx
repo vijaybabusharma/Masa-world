@@ -2,6 +2,7 @@
 import React from 'react';
 import { NavigationProps } from '../types';
 import { AcademicCapIcon, PresentationChartBarIcon, HeartIcon, ShieldCheckIcon, TrophyIcon, GlobeIcon, UsersIcon, EyeIcon } from '../components/icons/FeatureIcons';
+import WorldMap from '../components/WorldMap';
 
 const PageHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
     <div className="bg-masa-charcoal py-20 text-white text-center">
@@ -53,6 +54,66 @@ const TrustSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     );
 };
 
+const GlobalPresenceSection: React.FC = () => {
+    const countryMissions = [
+        { country: "India (Headquarters)", mission: "Implementing large-scale programs in sports, education, and social reform across 20+ states." },
+        { country: "Nepal & Bangladesh", mission: "Adapting our youth leadership and community health models in collaboration with local NGOs." },
+        { country: "UAE & Singapore", mission: "Building corporate partnerships and engaging the diaspora community in our mission." },
+        { country: "USA & UK", mission: "Fostering university collaborations and running digital advocacy campaigns for global awareness." },
+    ];
+
+    const internationalAchievements = [
+        "Recognized by the 'Global Youth Development Forum' for innovation in sports-based education.",
+        "Launched international digital volunteering program with participants from 15+ countries.",
+        "Established partnerships with 5 international universities for cross-cultural exchange programs.",
+    ];
+    
+    return (
+        <section className="py-24 bg-white">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 className="text-3xl font-bold text-masa-charcoal">Our Global Footprint</h2>
+                    <p className="mt-4 text-lg text-gray-600">
+                        From grassroots action in India to strategic partnerships across the globe, our impact is both local and international.
+                    </p>
+                </div>
+
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                    {/* Map Visualization */}
+                    <div className="bg-gray-50 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                        <WorldMap />
+                    </div>
+
+                    {/* Content */}
+                    <div>
+                        <div className="prose prose-lg max-w-none text-justify">
+                            <h3 className="text-2xl font-bold text-masa-charcoal !mb-4">Global Reach</h3>
+                            <p className="text-base">
+                                MASA World Foundation's impact extends beyond India's borders. Through strategic partnerships, digital volunteering programs, and international chapters, we are building a global community dedicated to our core mission. Our model focuses on adapting our successful grassroots initiatives to local contexts worldwide, fostering a network of change-makers.
+                            </p>
+                            
+                            <h4 className="font-bold text-masa-charcoal !mt-8 !mb-4">Country Missions</h4>
+                            <ul className="text-base !my-0">
+                                {countryMissions.map(item => (
+                                    <li key={item.country}><strong>{item.country}:</strong> {item.mission}</li>
+                                ))}
+                            </ul>
+
+                             <h4 className="font-bold text-masa-charcoal !mt-8 !mb-4">International Achievements</h4>
+                            <ul className="text-base !my-0">
+                                {internationalAchievements.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+
 const GlobalImpactPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const impactMetrics = [
         { icon: AcademicCapIcon, val: "10,000+", label: "Youth Impacted" },
@@ -87,6 +148,8 @@ const GlobalImpactPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
                 </div>
             </section>
+            
+            <GlobalPresenceSection />
 
             <section className="py-24 bg-white">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">

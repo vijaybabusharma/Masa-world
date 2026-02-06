@@ -159,27 +159,6 @@ const ContactPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
                 </div>
             </section>
-            
-            {/* Trust & Assurance Section */}
-            <section className="py-16 bg-white border-t border-gray-100">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-4xl mx-auto">
-                        {[
-                            { icon: ShieldCheckIcon, title: "Registered NGO" },
-                            { icon: HeartIcon, title: "Ethical Practices" },
-                            { icon: PresentationChartBarIcon, title: "Transparent Communication" },
-                            { icon: GlobeIcon, title: "Global Collaboration" }
-                        ].map(item => (
-                            <div key={item.title} className="flex flex-col items-center">
-                                <div className="bg-gray-100 p-3 rounded-full text-masa-blue mb-3">
-                                    <item.icon className="h-6 w-6"/>
-                                </div>
-                                <h4 className="font-semibold text-sm text-gray-700">{item.title}</h4>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
         </div>
     );
 };

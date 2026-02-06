@@ -1,3 +1,4 @@
+
 // This file simulates a backend server, database, and email service.
 
 const generateMemberId = () => {

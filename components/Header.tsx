@@ -18,16 +18,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
   const [navItems, setNavItems] = useState<MenuItem[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  
   useEffect(() => {
     const loadNav = () => {
         const settings = ContentManager.getSettings();
@@ -53,9 +44,9 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md' : 'bg-white shadow-none'}`}>
+    <header className={`sticky top-0 z-50 transition-all duration-300 bg-white shadow-md`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className={`flex items-center justify-between transition-all duration-300 h-16`}>
           
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -63,12 +54,13 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
               <img 
                 src="logo.svg" 
                 alt="MASA World Foundation" 
-                className="h-10 w-auto" 
+                className={`h-10 w-auto transition-all duration-300`}
                 onError={(e) => { 
                     const target = e.target as HTMLImageElement;
                     const fallbackSrc = 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png';
                     if (!target.src.endsWith(fallbackSrc)) {
                         target.src = fallbackSrc; 
+                        target.classList.remove('filter', 'invert', 'grayscale', 'brightness-200', 'drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]');
                     }
                 }} 
               />
@@ -78,16 +70,20 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
           {/* Desktop Navigation & Donate Button */}
           <div className="hidden lg:flex items-center gap-6">
             <nav className="flex items-center space-x-2">
-              {navItems.map((item) => (
-                isDropdown(item) ? (
+              {navItems.map((item) => {
+                const isActive = isDropdown(item) 
+                    ? currentPage === item.page || isPageInDropdown(item, currentPage)
+                    : currentPage === item.page;
+
+                const linkClasses = isActive
+                    ? 'text-masa-orange font-semibold'
+                    : 'text-gray-700 hover:text-masa-orange';
+                
+                return isDropdown(item) ? (
                   <div key={item.id} className="relative group">
                     <button
                       onClick={() => handleNavClick(item.page)}
-                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${
-                        currentPage === item.page || isPageInDropdown(item, currentPage)
-                          ? 'text-masa-orange font-semibold'
-                          : 'text-gray-700 hover:text-masa-orange'
-                      }`}
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${linkClasses}`}
                     >
                       {item.label}
                       <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
@@ -108,21 +104,17 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                   <button
                     key={item.id}
                     onClick={() => handleNavClick(item.page)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${
-                      currentPage === item.page
-                        ? 'text-masa-orange font-semibold'
-                        : 'text-gray-700 hover:text-masa-orange'
-                    }`}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${linkClasses}`}
                   >
                     {item.label}
                   </button>
                 )
-              ))}
+              })}
             </nav>
 
             <button 
                 onClick={() => navigateTo('donate')} 
-                className="bg-masa-orange text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-orange-600 shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-1.5 active:scale-95"
+                className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all duration-300 flex items-center gap-1.5 active:scale-95 bg-masa-orange text-white hover:bg-orange-600 shadow-sm hover:shadow-md`}
             >
                 <HeartIcon className="h-4 w-4" />
                 <span>Donate</span>
@@ -133,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
           <div className="lg:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-masa-orange focus:outline-none p-2"
+              className={`p-2 focus:outline-none transition-colors duration-300 text-gray-700 hover:text-masa-orange`}
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <XIcon className="h-7 w-7" /> : <MenuIcon className="h-7 w-7" />}
@@ -144,7 +136,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 absolute top-20 left-0 w-full h-[calc(100vh-80px)] overflow-y-auto shadow-xl z-40">
+        <div className="lg:hidden bg-white border-t border-gray-100 absolute top-full left-0 w-full h-[calc(100vh-4rem)] overflow-y-auto shadow-xl z-40">
           <div className="px-4 pt-4 pb-20 space-y-2">
             {navItems.map((item) => (
               isDropdown(item) ? (

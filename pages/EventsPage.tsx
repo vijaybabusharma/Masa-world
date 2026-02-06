@@ -1,5 +1,5 @@
+
 import React, { useState, useEffect } from 'react';
-// FIX: The Event type is defined in `../types`, not `../utils/data`.
 import { NavigationProps, Event } from '../types';
 import { 
     CalendarDaysIcon, 
@@ -51,7 +51,7 @@ const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({ event, 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const price = event.price || 'Free';
-        if (price !== 'Free') {
+        if (price !== 'Free' && price !== 'Invitation Only') {
             setStep('payment');
         } else {
             submitRegistration();
@@ -82,7 +82,7 @@ const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({ event, 
         return () => { window.removeEventListener('keydown', handleEsc); document.body.style.overflow = 'auto'; };
     }, [onClose]);
 
-    const isPaid = event.price && event.price !== 'Free';
+    const isPaid = event.price && event.price !== 'Free' && event.price !== 'Invitation Only';
     const inputFieldClasses = "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-masa-orange outline-none transition-all";
 
     return (
@@ -176,13 +176,21 @@ const PageHeader: React.FC<{ title: string; subtitle: string; bgImage?: string }
 const EventsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [events, setEvents] = useState<Event[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+    const [features, setFeatures] = useState({ eventsEnabled: true });
     
     // Filters
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedStatus, setSelectedStatus] = useState<string>('All');
+    const [selectedPrice, setSelectedPrice] = useState<string>('All');
 
     useEffect(() => {
-        setEvents(ContentManager.getEvents());
+        const loadContent = () => {
+            setEvents(ContentManager.getEvents());
+            setFeatures(ContentManager.getSettings().features);
+        };
+        loadContent();
+        window.addEventListener('masa-settings-updated', loadContent);
+        return () => window.removeEventListener('masa-settings-updated', loadContent);
     }, []);
 
     const handleParticipate = (event: Event) => {
@@ -190,18 +198,34 @@ const EventsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     };
 
     const handleViewReport = (event: Event) => {
-        alert(`Viewing highlights for ${event.title}`);
         navigateTo('gallery');
+        // The alert guides the user on how to find the event photos on the gallery page.
+        setTimeout(() => {
+            alert(`Navigating to the gallery. Try filtering by the "${event.category}" category or searching for "${event.title}" to see related moments.`);
+        }, 100);
     };
 
     // Filter Logic
     const filteredEvents = events.filter(event => {
         const categoryMatch = selectedCategory === 'All' || event.category === selectedCategory;
         const statusMatch = selectedStatus === 'All' || event.status === selectedStatus;
-        return categoryMatch && statusMatch;
+        const priceMatch = selectedPrice === 'All'
+            ? true
+            : selectedPrice === 'Free'
+                ? (event.price === 'Free' || !event.price)
+                : (event.price && event.price !== 'Free' && event.price !== 'Invitation Only');
+        return categoryMatch && statusMatch && priceMatch;
     });
 
     const categories = ['All', 'Conference', 'Training', 'Sports', 'Community', 'Award'];
+    
+    if (!features.eventsEnabled) {
+        return (
+            <div className="text-center py-20">
+                <h2 className="text-2xl font-bold">Events module is currently disabled.</h2>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-gray-50 min-h-screen">
@@ -239,6 +263,16 @@ const EventsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 <option value="Upcoming">Upcoming</option>
                                 <option value="Completed">Completed</option>
                             </select>
+                            
+                            <select 
+                                value={selectedPrice} 
+                                onChange={(e) => setSelectedPrice(e.target.value)}
+                                className="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-masa-orange outline-none bg-white text-gray-700 font-medium flex-grow md:flex-grow-0"
+                            >
+                                <option value="All">All Prices</option>
+                                <option value="Free">Free</option>
+                                <option value="Paid">Paid</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -252,40 +286,49 @@ const EventsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                             {filteredEvents.map(event => (
                                 <div key={event.id} className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col overflow-hidden group">
                                     <div className="relative h-48 overflow-hidden">
-                                        <img src={event.image} alt={event.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+                                        <img 
+                                            src={event.image} 
+                                            alt={event.title} 
+                                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" 
+                                            onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80'; }}
+                                        />
                                         <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border text-white ${event.status === 'Upcoming' ? 'bg-green-600 border-green-600' : 'bg-gray-600 border-gray-600'}`}>
                                             {event.status}
                                         </div>
-                                        {event.price && (
-                                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-masa-charcoal px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-sm">
-                                                {event.price}
-                                            </div>
-                                        )}
+                                        
+                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-masa-charcoal px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-sm">
+                                            {event.price || 'Free'}
+                                        </div>
                                     </div>
                                     
                                     <div className="p-6 flex flex-col flex-grow">
                                         <span className="text-xs font-bold text-masa-orange uppercase tracking-wide mb-2 block">{event.category}</span>
-                                        <h3 className="text-xl font-bold text-masa-charcoal mb-3 group-hover:text-masa-blue transition-colors leading-tight">
-                                            {event.title}
-                                        </h3>
+                                        <button 
+                                            onClick={() => event.status === 'Upcoming' ? handleParticipate(event) : handleViewReport(event)}
+                                            className="text-left w-full"
+                                        >
+                                            <h3 className="text-xl font-bold text-masa-charcoal mb-3 group-hover:text-masa-blue transition-colors leading-tight">
+                                                {event.title}
+                                            </h3>
+                                        </button>
                                         <div className="text-sm text-gray-500 mb-4 space-y-1.5">
                                             <div className="flex items-center gap-2"><CalendarDaysIcon className="h-4 w-4 text-gray-400"/> {event.displayDate}</div>
                                             <div className="flex items-center gap-2"><MapPinIcon className="h-4 w-4 text-gray-400"/> {event.location}</div>
                                         </div>
-                                        <p className="text-sm text-gray-600 mb-6 line-clamp-2 flex-grow">{event.description}</p>
+                                        <p className="text-sm text-gray-600 mb-5 line-clamp-2 flex-grow">{event.description}</p>
                                         
                                         <div className="mt-auto">
                                             {event.status === 'Upcoming' ? (
                                                 <button 
                                                     onClick={() => handleParticipate(event)}
-                                                    className="w-full bg-masa-blue text-white py-3 rounded-xl font-bold hover:bg-blue-900 transition-colors shadow-sm"
+                                                    className="w-full bg-masa-blue text-white py-3 rounded-xl font-bold hover:bg-blue-900 transition-all duration-300 shadow-sm group-hover:shadow-lg group-hover:-translate-y-1"
                                                 >
                                                     Participate Now
                                                 </button>
                                             ) : (
                                                 <button 
                                                     onClick={() => handleViewReport(event)}
-                                                    className="w-full bg-gray-50 text-gray-700 border border-gray-200 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors"
+                                                    className="w-full bg-gray-50 text-gray-700 border border-gray-200 py-3 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 group-hover:shadow-md group-hover:-translate-y-1"
                                                 >
                                                     View Highlights
                                                 </button>
@@ -300,7 +343,7 @@ const EventsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                             <h3 className="text-2xl font-bold text-gray-400">No events found</h3>
                             <p className="text-gray-500 mt-2">Try adjusting your filters to find what you're looking for.</p>
                             <button 
-                                onClick={() => { setSelectedCategory('All'); setSelectedStatus('All'); }}
+                                onClick={() => { setSelectedCategory('All'); setSelectedStatus('All'); setSelectedPrice('All'); }}
                                 className="mt-6 text-masa-orange font-bold hover:underline"
                             >
                                 Clear all filters

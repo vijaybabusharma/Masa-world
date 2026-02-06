@@ -51,13 +51,14 @@ import ImpactStoriesPage from './pages/ImpactStoriesPage';
 import MediaHighlightsPage from './pages/MediaHighlightsPage';
 import ProgramsOverviewPage from './pages/ProgramsOverviewPage';
 import CommunityVoicesPage from './pages/CommunityVoicesPage';
-import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
 
 // Import enhancements
 import AccessibilityWidget from './components/AccessibilityWidget';
 import LiveActivityToast from './components/LiveActivityToast';
 import GlobalScriptManager from './components/GlobalScriptManager';
 import CredibilityBanner from './components/CredibilityBanner';
+import PreviewBanner from './components/PreviewBanner';
+import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
 
 
 const App: React.FC = () => {
@@ -160,6 +161,7 @@ const App: React.FC = () => {
   return (
     <div className={`bg-gray-50 min-h-screen flex flex-col font-sans ${isDashboard ? 'text-gray-800' : 'text-masa-charcoal'}`}>
       <GlobalScriptManager />
+      {!isDashboard && <PreviewBanner />}
       {!isDashboard && <Header navigateTo={navigateTo} currentPage={currentPage} />}
       <main className="flex-grow">
         {renderPage()}

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { NavigationProps, PartnershipType } from '../types';
 import { 
@@ -25,31 +26,6 @@ const PageHeader: React.FC = () => (
         </div>
     </div>
 );
-
-const TrustAndTransparencySection: React.FC = () => {
-    const trustPoints = [
-        { icon: ShieldCheckIcon, text: "Registered NGO" },
-        { icon: HeartIcon, text: "Full Transparency" },
-        { icon: SparklesIcon, text: "Impact Reports" },
-        { icon: GlobeIcon, text: "National & Global Reach" },
-    ];
-    return (
-        <section className="py-20 bg-blue-50">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center max-w-4xl mx-auto">
-                    {trustPoints.map((point) => (
-                        <div key={point.text} className="flex flex-col items-center">
-                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-3 border border-gray-200">
-                                <point.icon className="h-7 w-7 text-masa-blue" />
-                            </div>
-                            <p className="font-semibold text-gray-700">{point.text}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
 
 interface MembershipTier {
     title: string;
@@ -222,8 +198,6 @@ const MembershipPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
                 </div>
             </section>
-
-            <TrustAndTransparencySection />
         </div>
     );
 };

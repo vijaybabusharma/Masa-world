@@ -51,7 +51,7 @@ const FounderMessagePage: React.FC<NavigationProps> = ({ navigateTo }) => {
 
                         {/* Right Column: Message Content */}
                         <div className="w-full lg:w-7/12 order-2 lg:order-2">
-                            <div className="prose lg:prose-lg max-w-none text-gray-700 space-y-6 text-justify">
+                            <div className="prose lg:prose-lg max-w-none text-gray-700 space-y-6 text-left">
                                 <p className="text-xl font-bold text-masa-charcoal mb-8">
                                     Dear Friends and Supporters,
                                 </p>

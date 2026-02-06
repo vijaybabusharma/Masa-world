@@ -1,5 +1,5 @@
 
-export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices' | 'ngo-help-desk';
+export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices' | 'ngo-help-desk' | 'pledge-platform' | 'take-pledge' | 'verify-certificate' | 'thank-you-pledge';
 
 export interface NavigationProps {
   navigateTo: (page: Page, anchor?: string) => void;
@@ -133,7 +133,7 @@ export interface SliderItem {
     headline: string;
     subtext: string;
     image: string;
-    ctas: { label: string; page: Page; primary: boolean }[];
+    cta: { label: string; page: Page };
 }
 
 export interface HomepageSection {
@@ -152,19 +152,14 @@ export interface HomepageSettings {
     testimonials: Testimonial[];
     sections: {
         impactSnapshot: HomepageSection;
-        featuredEvent: HomepageSection;
-        whyMasa: HomepageSection;
-        programIcons: HomepageSection;
-        eventsHighlight: HomepageSection;
-        featuredCourses: HomepageSection;
-        latestBlogs: HomepageSection;
-        pillars: HomepageSection;
-        keyInitiatives: HomepageSection;
+        whatWeDo: HomepageSection & { title: string; subtitle: string; };
+        incredibleSection: HomepageSection & { title: string; subtitle: string; };
         founderMessage: HomepageSection;
-        credibilityStrip: HomepageSection;
-        getInvolved: HomepageSection;
-        accountability: HomepageSection;
-        testimonials: HomepageSection;
+        communityVoices: HomepageSection & { title: string; subtitle: string; };
+        trust: HomepageSection & { title: string; subtitle: string; };
+        upcomingEvents: HomepageSection & { title: string; subtitle: string; };
+        careers: HomepageSection & { title: string; subtitle: string; };
+        getInvolved: HomepageSection & { title: string; subtitle: string; };
         finalCta: HomepageSection;
     };
 }
@@ -181,6 +176,7 @@ export interface GlobalSettings {
     navigation: {
         headerMenu: MenuItem[];
         footerAboutLinks: NavItem[];
+        footerWorkLinks: NavItem[];
         footerInvolvedLinks: NavItem[];
         footerResourceLinks: NavItem[];
         footerPolicyLinks: NavItem[];
@@ -194,6 +190,7 @@ export interface GlobalSettings {
         googleAdsenseCode: string;
         enableAdsense: boolean;
         googleSearchConsole: string;
+        enableGoogleSearchConsole: boolean;
         customHead: string;
         enableCustomHead: boolean;
         customBodyStart: string;

@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { NavigationProps, PartnershipType } from '../types';
+import React, { useState, useEffect } from 'react';
+import { NavigationProps, PartnershipType, GlobalSettings } from '../types';
 import FounderMessageSection from '../components/FounderMessageSection';
 import ImpactSnapshot from '../components/ImpactSnapshot';
 import WhatWeDoSection from '../components/WhatWeDoSection';
@@ -8,15 +8,27 @@ import CommunityVoicesSection from '../components/CommunityVoicesSection';
 import TrustSection from '../components/TrustSection';
 import LatestNewsAndEvents from '../components/LatestNewsAndEvents';
 import IncredibleSection, { DeliveryAreaItem } from '../components/IncredibleSection';
+import HowWeWorkSection from '../components/HowWeWorkSection';
 import CareersSection from '../components/CareersSection';
 import HeroSection from '../components/HeroSection';
 import GetInvolvedSection from '../components/GetInvolvedSection';
 import FinalCta from '../components/FinalCta';
 import PartnershipModal from '../components/PartnershipModal';
+import { ContentManager } from '../utils/contentManager';
 
-// --- MAIN HOME PAGE COMPONENT (RE-ARRANGED) ---
 const HomePage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [partnershipModal, setPartnershipModal] = useState<PartnershipType | null>(null);
+    const [settings, setSettings] = useState<GlobalSettings['homepage']>(ContentManager.getSettings().homepage);
+
+    useEffect(() => {
+        const loadSettings = () => {
+            const currentSettings = ContentManager.getSettings();
+            setSettings(currentSettings.homepage);
+        };
+        loadSettings();
+        window.addEventListener('masa-settings-updated', loadSettings);
+        return () => window.removeEventListener('masa-settings-updated', loadSettings);
+    }, []);
 
     const deliveryItems: DeliveryAreaItem[] = [
         { type: 'Events', title: 'Events', description: 'National & international programs, competitions, and social initiatives.' },
@@ -26,47 +38,34 @@ const HomePage: React.FC<NavigationProps> = ({ navigateTo }) => {
         { type: 'Conferences', title: 'Conferences', description: 'Knowledge sharing, collaboration, and global dialogue.' }
     ];
 
+    const sections = settings.sections;
+
     return (
         <>
             {partnershipModal && <PartnershipModal partnershipType={partnershipModal} onClose={() => setPartnershipModal(null)} />}
             
-            {/* 1. Hook: Attract and state mission */}
             <HeroSection navigateTo={navigateTo} />
             
-            {/* 2. Credibility: Show scale and impact immediately */}
-            <ImpactSnapshot />
-            
-            {/* 3. The "What": Explain core pillars */}
-            <WhatWeDoSection navigateTo={navigateTo} />
-            
-            {/* 4. The "How": Detail the activities */}
-            <IncredibleSection 
-                navigateTo={navigateTo}
-                title="Let's Create Incredible!"
-                description="We organize, manage, and host impactful activities across sports, education, and culture to engage communities and drive our mission forward—locally and globally."
-                items={deliveryItems} 
-            />
-            
-            {/* 5. The "Who": Add a human connection with the founder */}
-            <FounderMessageSection navigateTo={navigateTo} bgColor="bg-white" />
-            
-            {/* 6. Social Proof: Show impact on real people */}
-            <CommunityVoicesSection navigateTo={navigateTo} />
-            
-            {/* 7. Trust: Build confidence with accountability */}
-            <TrustSection navigateTo={navigateTo} />
-            
-            {/* 8. Timeliness: Show the organization is currently active */}
-            <LatestNewsAndEvents navigateTo={navigateTo} />
+            {sections.impactSnapshot.visible && <ImpactSnapshot />}
+            {sections.whatWeDo.visible && <WhatWeDoSection navigateTo={navigateTo} />}
+            {sections.incredibleSection.visible && 
+                <IncredibleSection 
+                    navigateTo={navigateTo}
+                    title={sections.incredibleSection.title || "Let's Create Incredible!"}
+                    description={sections.incredibleSection.subtitle || "We organize, manage, and host impactful activities across sports, education, and culture to engage communities and drive our mission forward—locally and globally."}
+                    items={deliveryItems} 
+                />
+            }
 
-            {/* 9. CTA 1 (Specific): Offer career opportunities */}
-            <CareersSection navigateTo={navigateTo} />
-            
-            {/* 10. CTA 2 (Broad): The main call for involvement */}
-            <GetInvolvedSection navigateTo={navigateTo} onPartnerClick={setPartnershipModal} />
-            
-            {/* 11. Final CTA: A final, powerful ask */}
-            <FinalCta navigateTo={navigateTo} />
+            <HowWeWorkSection />
+
+            {sections.founderMessage.visible && <FounderMessageSection navigateTo={navigateTo} bgColor="bg-white" />}
+            {sections.trust.visible && <TrustSection navigateTo={navigateTo} />}
+            {sections.upcomingEvents.visible && <LatestNewsAndEvents navigateTo={navigateTo} />}
+            {sections.getInvolved.visible && <GetInvolvedSection navigateTo={navigateTo} onPartnerClick={setPartnershipModal} />}
+            {sections.careers.visible && <CareersSection navigateTo={navigateTo} />}
+            {sections.communityVoices.visible && <CommunityVoicesSection navigateTo={navigateTo} />}
+            {sections.finalCta.visible && <FinalCta navigateTo={navigateTo} />}
             
              <style>{`
                 @keyframes fade-in-up { 

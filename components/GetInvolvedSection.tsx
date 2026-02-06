@@ -68,7 +68,7 @@ const GetInvolvedSection: React.FC<GetInvolvedSectionProps> = ({ navigateTo, onP
                     <h2 className="text-3xl font-bold text-masa-charcoal">Get Involved</h2>
                     <p className="mt-4 text-lg text-gray-600">Join our mission to create a lasting impact. Whether you volunteer, donate, or partner with us, your contribution matters.</p>
                 </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {actions.map((a) => (
                         <div key={a.title} className={`p-8 rounded-2xl shadow-lg flex flex-col text-center items-center group transition-all duration-300 transform hover:-translate-y-1 ${a.color === 'highlight' ? 'bg-masa-orange text-white' : 'bg-white border border-gray-200'}`}>
                             <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 transition-colors duration-300 ${a.color === 'highlight' ? 'bg-white/20' : 'bg-orange-50 group-hover:bg-masa-orange'}`}>
@@ -79,7 +79,7 @@ const GetInvolvedSection: React.FC<GetInvolvedSectionProps> = ({ navigateTo, onP
                             
                             <button 
                                 onClick={() => handleClick(a)} 
-                                className={`mt-auto font-bold py-3 px-8 rounded-full transition-all duration-300 w-full ${
+                                className={`mt-auto font-bold py-3 px-6 rounded-full transition-all duration-300 w-full text-sm ${
                                     a.color === 'highlight' ? 'bg-white text-masa-orange hover:bg-orange-50' : 
                                     (a.color === 'orange' ? 'bg-masa-orange text-white hover:bg-orange-600' : 'bg-white border-2 border-masa-blue text-masa-blue hover:bg-masa-blue hover:text-white')
                                 }`}

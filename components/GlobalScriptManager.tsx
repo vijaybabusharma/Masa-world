@@ -5,12 +5,70 @@ import { ContentManager } from '../utils/contentManager';
 const GlobalScriptManager: React.FC = () => {
     useEffect(() => {
         const applySettings = () => {
-            const settings = ContentManager.getSettings();
+            const urlParams = new URLSearchParams(window.location.search);
+            const isPreview = urlParams.get('masa_preview') === 'true';
+            let settings;
+
+            if (isPreview) {
+                const previewSettingsJSON = sessionStorage.getItem('masa_preview_settings');
+                if (previewSettingsJSON) {
+                    try {
+                        settings = JSON.parse(previewSettingsJSON);
+                        console.log('%c[PREVIEW MODE] Applying temporary settings.', 'color: orange; font-weight: bold;');
+                    } catch (e) {
+                        console.error("Failed to parse preview settings, falling back to live.", e);
+                        settings = ContentManager.getSettings();
+                    }
+                } else {
+                    console.warn("[PREVIEW MODE] No preview settings found in sessionStorage. Displaying live version.");
+                    settings = ContentManager.getSettings();
+                }
+            } else {
+                settings = ContentManager.getSettings();
+            }
+
             const { scripts, appearance } = settings;
 
             // --- 1. CLEANUP PREVIOUS INJECTIONS ---
             document.querySelectorAll('[data-masa-injected]').forEach(el => el.remove());
 
+            // --- Robust HTML Injection Helper ---
+            const injectRawHtml = (content: string, target: HTMLElement, baseId: string, prepend: boolean = false) => {
+                if (!content) return;
+                try {
+                    const fragment = document.createRange().createContextualFragment(content);
+                    const nodes = Array.from(fragment.childNodes);
+
+                    nodes.forEach((node, index) => {
+                        const injectedId = `${baseId}-${index}`;
+                        let newNode = node.cloneNode(true); // Clone to modify
+
+                        // Special handling for scripts to ensure they execute
+                        if (newNode.nodeName.toLowerCase() === 'script') {
+                            const script = document.createElement('script');
+                            // Copy attributes (src, async, defer, etc.)
+                            for (const { name, value } of (newNode as HTMLScriptElement).attributes) {
+                                script.setAttribute(name, value);
+                            }
+                            script.setAttribute('data-masa-injected', injectedId);
+                            // Copy inline script content
+                            script.innerHTML = (newNode as HTMLScriptElement).innerHTML;
+                            newNode = script;
+                        } else if (newNode.nodeType === Node.ELEMENT_NODE) {
+                            (newNode as Element).setAttribute('data-masa-injected', injectedId);
+                        }
+
+                        if (prepend && target.firstChild) {
+                            target.insertBefore(newNode, target.firstChild);
+                        } else {
+                            target.appendChild(newNode);
+                        }
+                    });
+                } catch (e) {
+                    console.error(`Error injecting custom HTML for ${baseId}:`, e);
+                }
+            };
+            
             // --- 2. CUSTOM CSS ---
             if (appearance.enableCustomCss && appearance.customCss) {
                 const style = document.createElement('style');
@@ -20,15 +78,12 @@ const GlobalScriptManager: React.FC = () => {
             }
 
             // --- 3. GOOGLE SEARCH CONSOLE ---
-            if (scripts.googleSearchConsole) {
-                let meta = document.querySelector('meta[name="google-site-verification"]');
-                if (!meta) {
-                    meta = document.createElement('meta');
-                    meta.setAttribute('name', 'google-site-verification');
-                    document.head.appendChild(meta);
-                }
+            if (scripts.enableGoogleSearchConsole && scripts.googleSearchConsole) {
+                const meta = document.createElement('meta');
+                meta.setAttribute('name', 'google-site-verification');
                 meta.setAttribute('content', scripts.googleSearchConsole);
                 meta.setAttribute('data-masa-injected', 'gsc');
+                document.head.appendChild(meta);
             }
 
             // --- 4. GOOGLE ANALYTICS (GA4) ---
@@ -90,26 +145,12 @@ const GlobalScriptManager: React.FC = () => {
 
             // --- 8. CUSTOM BODY SCRIPTS (Start of Body) ---
             if (scripts.enableCustomBodyStart && scripts.customBodyStart) {
-                injectRawHtml(scripts.customBodyStart, document.body, 'custom-body-start', false);
+                injectRawHtml(scripts.customBodyStart, document.body, 'custom-body-start', true);
             }
 
             // --- 9. CUSTOM FOOTER SCRIPTS (End of Body) ---
             if (scripts.enableCustomBodyEnd && scripts.customBodyEnd) {
-                injectRawHtml(scripts.customBodyEnd, document.body, 'custom-body-end', true);
-            }
-        };
-
-        const injectRawHtml = (content: string, target: HTMLElement, id: string, appendToEnd: boolean = false) => {
-            const container = document.createRange().createContextualFragment(content);
-            container.childNodes.forEach((node, index) => {
-                if (node instanceof Element) {
-                    node.setAttribute('data-masa-injected', `${id}-${index}`);
-                }
-            });
-            if (appendToEnd) {
-                target.appendChild(container);
-            } else {
-                target.insertBefore(container, target.firstChild);
+                injectRawHtml(scripts.customBodyEnd, document.body, 'custom-body-end', false);
             }
         };
 

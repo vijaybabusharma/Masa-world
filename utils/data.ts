@@ -1,5 +1,5 @@
 
-import { Post } from '../types';
+import { Post, Course, Event } from '../types';
 
 // Replaced with a professional placeholder representing leadership
 export const FOUNDER_IMAGE_URL = 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=782,fit=crop/AMq4Dg7v0wH5yKM1/founder-B9OrhqqUN6Kq3Qir.jpeg';
@@ -12,7 +12,8 @@ export const calculateReadingTime = (text: string): string => {
 };
 
 // --- COURSES DATA ---
-export const coursesData = [
+// FIX: Explicitly typed the array as Course[] to match the expected type definition.
+export const coursesData: Course[] = [
     {
         id: 1,
         title: "Youth Leadership Bootcamp",
@@ -94,7 +95,176 @@ export const coursesData = [
 ];
 
 // --- EVENTS DATA ---
-export const eventsData = [
+// FIX: Explicitly typed the array as Event[] to match the expected type definition.
+export const eventsData: Event[] = [
+    {
+        id: 'evt-017',
+        title: "National Kabaddi Championship",
+        category: "Sports",
+        date: "2026-01-25",
+        displayDate: "Jan 25, 2026",
+        location: "New Delhi, India",
+        description: "Witness the nation's best kabaddi talent compete for the prestigious MASA trophy in a high-energy tournament.",
+        image: "https://images.unsplash.com/photo-1619224303323-fd3b78c6b3e8?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: '₹200'
+    },
+    {
+        id: 'evt-018',
+        title: "Clean River Initiative",
+        category: "Community",
+        date: "2026-06-05",
+        displayDate: "Jun 05, 2026",
+        location: "Varanasi, UP",
+        description: "Join hundreds of volunteers in a massive cleanup drive for the Ganges riverfront, promoting environmental responsibility.",
+        image: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Free'
+    },
+    {
+        id: 'evt-019',
+        title: "Public Speaking & Leadership Masterclass",
+        category: "Training",
+        date: "2025-12-01",
+        displayDate: "Dec 01-03, 2025",
+        location: "Online Workshop",
+        description: "A 3-day intensive online workshop designed to build confidence, communication skills, and leadership qualities in young professionals.",
+        image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: '₹750'
+    },
+    {
+        id: 'evt-020',
+        title: "Youth Icon Awards 2026",
+        category: "Award",
+        date: "2026-03-15",
+        displayDate: "Mar 15, 2026",
+        location: "Mumbai, Maharashtra",
+        description: "Celebrating young achievers under 30 who have made significant contributions in social work, arts, and innovation.",
+        image: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Invitation Only'
+    },
+    {
+        id: 'evt-021',
+        title: "International Conference on Sustainable Development",
+        category: "Conference",
+        date: "2026-07-22",
+        displayDate: "Jul 22-24, 2026",
+        location: "Bangalore, Karnataka",
+        description: "A global gathering of experts, policymakers, and youth leaders to discuss and formulate strategies for achieving the UN SDGs.",
+        image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: '₹1500'
+    },
+    {
+        id: 'evt-022',
+        title: "Heritage Walk & Storytelling Session",
+        category: "Community",
+        date: "2025-11-28",
+        displayDate: "Nov 28, 2025",
+        location: "Kolkata, West Bengal",
+        description: "Explore the historic lanes of Kolkata with our guided heritage walk, followed by a session on local folklore and history.",
+        image: "https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Free'
+    },
+    {
+        id: 'evt-013',
+        title: "Art for Social Change Exhibition",
+        category: "Community",
+        date: "2025-08-10",
+        displayDate: "Aug 10, 2025",
+        location: "Jaipur, Rajasthan",
+        description: "An exhibition showcasing art from local artisans focused on social themes. Proceeds will support artisan communities.",
+        image: "https://images.unsplash.com/photo-1501426026826-31c667bdf23d?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Free'
+    },
+    {
+        id: 'evt-014',
+        title: "Mental Health Awareness Seminar",
+        category: "Conference",
+        date: "2025-09-05",
+        displayDate: "Sep 05, 2025",
+        location: "Pune, Maharashtra",
+        description: "A seminar featuring mental health experts discussing well-being, stress management, and breaking the stigma around mental health in youth.",
+        image: "https://images.unsplash.com/photo-1560439514-4e9645039924?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Free'
+    },
+    {
+        id: 'evt-015',
+        title: "Financial Literacy for Young Adults",
+        category: "Training",
+        date: "2025-10-20",
+        displayDate: "Oct 20-22, 2025",
+        location: "Online Workshop",
+        description: "A practical workshop series covering budgeting, saving, investing, and understanding financial independence for people aged 18-25.",
+        image: "https://images.unsplash.com/photo-1554224155-1696413565d3?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: '₹250'
+    },
+    {
+        id: 'evt-016',
+        title: "Code for Good: Hackathon",
+        category: "Community",
+        date: "2025-11-15",
+        displayDate: "Nov 15-16, 2025",
+        location: "Hyderabad, Telangana",
+        description: "A 24-hour hackathon where developers and designers build tech solutions for real-world NGO challenges.",
+        image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Free'
+    },
+    {
+        id: 'evt-009',
+        title: "Green Earth Marathon 2025",
+        category: "Sports",
+        date: "2025-04-05",
+        displayDate: "Apr 05, 2025",
+        location: "Chennai, Tamil Nadu",
+        description: "Run for a cause! Join thousands in our annual marathon to promote environmental awareness and raise funds for afforestation projects.",
+        image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: '₹750'
+    },
+    {
+        id: 'evt-010',
+        title: "Volunteer Appreciation Gala",
+        category: "Award",
+        date: "2025-05-18",
+        displayDate: "May 18, 2025",
+        location: "Bangalore, Karnataka",
+        description: "An evening to celebrate and honor the incredible dedication of our volunteers who are the backbone of our foundation.",
+        image: "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Invitation Only'
+    },
+    {
+        id: 'evt-011',
+        title: "Project Management for Social Change",
+        category: "Training",
+        date: "2025-06-10",
+        displayDate: "Jun 10-12, 2025",
+        location: "Online Workshop",
+        description: "A 3-day intensive workshop for NGO professionals on effective project management, monitoring, and evaluation.",
+        image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: '₹2,500'
+    },
+    {
+        id: 'evt-012',
+        title: "Nationwide Plantation Drive",
+        category: "Community",
+        date: "2025-07-01",
+        displayDate: "Jul 01, 2025",
+        location: "Across 20+ Cities",
+        description: "Join us in our ambitious goal to plant 1 million saplings across the country. A collective step towards a greener future.",
+        image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Free'
+    },
     {
         id: 'evt-001',
         title: "National Youth Conclave 2025",
@@ -115,7 +285,55 @@ export const eventsData = [
         displayDate: "Nov 10, 2024",
         location: "Mumbai, Maharashtra",
         description: "Empowering women with essential self-defense techniques and situational awareness skills.",
-        image: "https://images.unsplash.com/photo-1515526188328-35a027959d9a?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Free'
+    },
+    {
+        id: 'evt-005',
+        title: "Global Leadership Summit",
+        category: "Conference",
+        date: "2025-03-20",
+        displayDate: "Mar 20, 2025",
+        location: "Virtual",
+        description: "Connecting young leaders from 20+ countries to discuss sustainable development goals and global citizenship.",
+        image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: '₹1500'
+    },
+    {
+        id: 'evt-006',
+        title: "Digital Skills for Social Impact",
+        category: "Training",
+        date: "2024-12-05",
+        displayDate: "Dec 05, 2024",
+        location: "Online Workshop",
+        description: "A free workshop on using digital tools for social media advocacy, fundraising, and community management.",
+        image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Free'
+    },
+    {
+        id: 'evt-007',
+        title: "Real Hero Awards 2024",
+        category: "Award",
+        date: "2024-12-28",
+        displayDate: "Dec 28, 2024",
+        location: "Mumbai, India",
+        description: "Honoring the unsung heroes of our communities whose selfless work inspires the nation.",
+        image: "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=800&q=80",
+        status: 'Upcoming',
+        price: 'Invitation Only'
+    },
+    {
+        id: 'evt-008',
+        title: "Community Sports Festival",
+        category: "Sports",
+        date: "2025-02-22",
+        displayDate: "Feb 22, 2025",
+        location: "Kolkata, West Bengal",
+        description: "A day of fun, games, and competition for families and youth to promote health and community bonding.",
+        image: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80",
         status: 'Upcoming',
         price: 'Free'
     },

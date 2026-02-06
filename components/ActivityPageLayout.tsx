@@ -28,7 +28,7 @@ const ProcessFlow: React.FC<{ steps: { title: string; description: string }[] }>
                         {idx + 1}
                     </div>
                     <h3 className="font-bold text-masa-charcoal mb-2">{step.title}</h3>
-                    <p className="text-sm text-gray-600 text-justify">{step.description}</p>
+                    <p className="text-sm text-gray-600 text-left">{step.description}</p>
                 </div>
             ))}
         </div>
@@ -39,7 +39,9 @@ const ProcessFlow: React.FC<{ steps: { title: string; description: string }[] }>
 const ActivityCard: React.FC<{ activity: any; onAction: (type: 'support' | 'volunteer', eventName: string) => void }> = ({ activity, onAction }) => (
     <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
         <div className="relative h-48 overflow-hidden">
-            <img src={activity.image} alt={activity.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <img src={activity.image} alt={activity.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80'; }}
+            />
             <div className="absolute top-4 left-4 bg-masa-orange text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                 {activity.status || 'Active'}
             </div>
@@ -127,10 +129,10 @@ const ActivityPageLayout: React.FC<ActivityPageLayoutProps> = ({
                     <div className="max-w-4xl mx-auto text-center">
                         <span className="text-masa-blue font-bold uppercase tracking-widest text-sm mb-3 block">About The Initiative</span>
                         <h2 className="text-3xl font-bold text-masa-charcoal mb-6">{overviewData.title}</h2>
-                        <p className="text-lg text-gray-600 mb-8 leading-relaxed text-justify">{overviewData.description}</p>
+                        <p className="text-lg text-gray-600 mb-8 leading-relaxed text-left">{overviewData.description}</p>
                         <div className="bg-blue-50 border-l-4 border-masa-blue p-6 text-left rounded-r-lg">
                             <h4 className="font-bold text-masa-blue uppercase text-xs mb-2">Impact Scope</h4>
-                            <p className="text-gray-700 text-justify">{overviewData.relevance}</p>
+                            <p className="text-gray-700 text-left">{overviewData.relevance}</p>
                         </div>
                     </div>
                 </div>
@@ -221,7 +223,7 @@ const ActivityPageLayout: React.FC<ActivityPageLayoutProps> = ({
                 <section className="py-20 bg-white">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
                          <div className="mb-6"><HeartIcon className="h-12 w-12 text-gray-200 mx-auto" /></div>
-                        <blockquote className="text-2xl md:text-3xl font-medium text-gray-800 italic leading-relaxed mb-6 text-justify">
+                        <blockquote className="text-2xl md:text-3xl font-medium text-gray-800 italic leading-relaxed mb-6 text-left">
                             "{testimonial.quote}"
                         </blockquote>
                         <div className="text-masa-charcoal font-bold text-lg">{testimonial.author}</div>

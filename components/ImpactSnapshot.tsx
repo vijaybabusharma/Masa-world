@@ -43,15 +43,15 @@ const ImpactSnapshot: React.FC = () => {
         <div className="bg-gray-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20">
                 <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                    <div className="grid grid-cols-2 md:grid-cols-4 py-6 px-4 md:divide-x md:divide-gray-200">
+                    <div className="grid grid-cols-2 md:grid-cols-4 py-4 md:py-6 px-2 md:px-4 divide-y md:divide-y-0 md:divide-x divide-gray-200">
                         {metrics.map((metric, index) => (
-                            <div key={index} className="flex justify-center items-center gap-4 p-4">
-                                <metric.icon className={`h-8 w-8 flex-shrink-0 ${metric.color}`} />
+                            <div key={index} className="flex justify-center items-center gap-3 md:gap-4 p-4">
+                                <metric.icon className={`h-7 w-7 md:h-8 md:w-8 flex-shrink-0 ${metric.color}`} />
                                 <div className="text-left">
-                                    <p className={`text-3xl lg:text-4xl font-black ${metric.color} tracking-tight`}>
+                                    <p className={`text-2xl sm:text-3xl lg:text-4xl font-black ${metric.color} tracking-tight`}>
                                         {metric.value}
                                     </p>
-                                    <p className="text-sm font-semibold text-gray-600 leading-tight">
+                                    <p className="text-xs sm:text-sm font-semibold text-gray-600 leading-tight">
                                         {metric.label}
                                     </p>
                                 </div>

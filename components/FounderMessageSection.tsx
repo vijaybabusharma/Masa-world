@@ -22,6 +22,7 @@ const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor =
                                 alt="Vijay Babu Sharma, Founder of Masa World Foundation" 
                                 className="rounded-2xl shadow-xl w-full h-auto object-cover aspect-[4/5] bg-gray-100"
                                 loading="lazy"
+                                onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80'; }}
                             />
                          </div>
                     </div>

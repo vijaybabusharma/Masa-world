@@ -25,7 +25,13 @@ const DigitalIdCard: React.FC<DigitalIdCardProps> = ({ name, memberId, category,
             <div className="p-6 flex flex-col items-center flex-grow">
                 {/* Photo */}
                 <div className="w-32 h-32 rounded-full overflow-hidden ring-4 ring-masa-blue ring-offset-2 ring-offset-white mb-4 shadow-md">
-                    <img src={photoUrl} alt={name} className="w-full h-full object-cover" />
+                    <img src={photoUrl} alt={name} className="w-full h-full object-cover"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.onerror = null; // prevent infinite loop if fallback fails
+                            target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1E3A8A&color=FFFFFF&size=128`;
+                        }}
+                    />
                 </div>
                 
                 {/* Details */}

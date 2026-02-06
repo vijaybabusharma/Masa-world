@@ -2,6 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import SocialShareButtons from '../components/SocialShareButtons';
 import { Post, NavigationProps } from '../types';
+import TableOfContents from '../components/TableOfContents';
 import { 
     CalendarDaysIcon, 
     ArrowRightIcon, 
@@ -143,6 +144,11 @@ const BlogPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [selectedPost, setSelectedPost] = useState<Post | null>(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     
+    // State for Table of Contents
+    const [headings, setHeadings] = useState<{id: string, text: string, level: number, index: number}[]>([]);
+    const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
+    const [isTocCollapsed, setIsTocCollapsed] = useState(false);
+
     useEffect(() => { setPosts(ContentManager.getPosts()); }, []);
     const tagsList = useMemo(() => ['All', ...Array.from(new Set(posts.flatMap(post => post.tags || []))).sort()], [posts]);
     const filteredPosts = useMemo(() => posts.filter(post => (post.title.toLowerCase().includes(searchQuery.toLowerCase()) || post.summary.toLowerCase().includes(searchQuery.toLowerCase())) && (selectedCategory === 'All' || post.category === selectedCategory) && (selectedTag === 'All' || (post.tags && post.tags.includes(selectedTag)))), [selectedCategory, selectedTag, searchQuery, posts]);
@@ -154,11 +160,78 @@ const BlogPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const handlePostClick = (post: Post) => { setSelectedPost(post); window.scrollTo(0, 0); };
     const handleBack = () => { setSelectedPost(null); window.scrollTo(0, 0); };
 
+    // Effect to parse headings for TOC
+    useEffect(() => {
+        if (selectedPost) {
+            const newHeadings: {id: string, text: string, level: number, index: number}[] = [];
+            const slugify = (text: string) => text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+            
+            selectedPost.content.split('\n\n').forEach((block, index) => {
+                const trimmedBlock = block.trim();
+                if (trimmedBlock.startsWith('## ')) {
+                    const text = trimmedBlock.replace('## ', '');
+                    newHeadings.push({ id: `${slugify(text)}-${index}`, text, level: 2, index });
+                } else if (trimmedBlock.startsWith('### ')) {
+                    const text = trimmedBlock.replace('### ', '');
+                    newHeadings.push({ id: `${slugify(text)}-${index}`, text, level: 3, index });
+                }
+            });
+            setHeadings(newHeadings);
+            setActiveHeadingId(newHeadings.length > 0 ? newHeadings[0].id : null);
+        } else {
+            setHeadings([]);
+            setActiveHeadingId(null);
+        }
+    }, [selectedPost]);
+
+    // Effect for scroll spying
+    useEffect(() => {
+        if (headings.length === 0) return;
+
+        let throttleTimeout: number | null = null;
+        
+        const handleScroll = () => {
+            if (throttleTimeout) return;
+            throttleTimeout = window.setTimeout(() => {
+                let currentActiveId: string | null = headings[0]?.id || null;
+                const fromTop = 150;
+
+                for (let i = headings.length - 1; i >= 0; i--) {
+                    const heading = headings[i];
+                    const element = document.getElementById(heading.id);
+                    if (element && element.getBoundingClientRect().top <= fromTop) {
+                        currentActiveId = heading.id;
+                        break;
+                    }
+                }
+                setActiveHeadingId(currentActiveId);
+                throttleTimeout = null;
+            }, 100);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            if (throttleTimeout) clearTimeout(throttleTimeout);
+        };
+    }, [headings]);
+
     const renderContent = (content: string) => content.split('\n\n').map((block, index) => {
         const trimmedBlock = block.trim();
-        if (trimmedBlock.startsWith('## ')) return <h2 key={index} className="text-3xl font-bold text-masa-charcoal mt-10 mb-6 border-b pb-2 border-gray-100">{trimmedBlock.replace('## ', '')}</h2>;
-        if (trimmedBlock.startsWith('### ')) return <h3 key={index} className="text-2xl font-bold text-masa-charcoal mt-8 mb-4">{trimmedBlock.replace('### ', '')}</h3>;
+        const heading = headings.find(h => h.index === index);
+
+        if (heading) {
+            if (trimmedBlock.startsWith('## ')) {
+                return <h2 key={index} id={heading.id} className="text-3xl font-bold text-masa-charcoal mt-10 mb-6 border-b pb-2 border-gray-100 scroll-mt-24">{heading.text}</h2>;
+            }
+            if (trimmedBlock.startsWith('### ')) {
+                return <h3 key={index} id={heading.id} className="text-2xl font-bold text-masa-charcoal mt-8 mb-4 scroll-mt-24">{heading.text}</h3>;
+            }
+        }
+        
         if (index === 0 && !trimmedBlock.startsWith('#')) return <p key={index} className="mb-8 text-xl leading-relaxed text-gray-600 font-light first-letter:text-5xl first-letter:font-bold first-letter:text-masa-blue first-letter:mr-3 first-letter:float-left">{trimmedBlock}</p>;
+        if (trimmedBlock.startsWith('## ')) return <h2 key={index} className="text-3xl font-bold text-masa-charcoal mt-10 mb-6 border-b pb-2 border-gray-100 scroll-mt-24">{trimmedBlock.replace('## ', '')}</h2>;
+        if (trimmedBlock.startsWith('### ')) return <h3 key={index} className="text-2xl font-bold text-masa-charcoal mt-8 mb-4 scroll-mt-24">{trimmedBlock.replace('### ', '')}</h3>;
         return <p key={index} className="mb-6 leading-relaxed text-lg text-gray-700">{trimmedBlock}</p>;
     });
 
@@ -166,10 +239,24 @@ const BlogPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         return (
             <div className="bg-white min-h-screen">
                 <BlogPostSchema post={selectedPost} />
-                <div className="bg-gray-50 border-b border-gray-200 sticky top-20 z-10"><div className="container mx-auto px-4 py-4"><button onClick={handleBack} className="flex items-center text-masa-charcoal hover:text-masa-orange font-bold transition-colors"><SimpleArrowLeftIcon className="h-5 w-5 mr-2" /> Back to Blog</button></div></div>
+                <div className="bg-gray-50 border-b border-gray-200 sticky top-16 z-10"><div className="container mx-auto px-4 py-4"><button onClick={handleBack} className="flex items-center text-masa-charcoal hover:text-masa-orange font-bold transition-colors"><SimpleArrowLeftIcon className="h-5 w-5 mr-2" /> Back to Blog</button></div></div>
                 <article className="pb-24">
                     <div className="relative h-[400px] md:h-[500px]"><img src={selectedPost.image} alt={selectedPost.title} className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex items-end"><div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 text-white"><div className="flex items-center gap-4 mb-4 text-sm font-semibold uppercase tracking-wider"><span className="bg-masa-orange px-3 py-1 rounded-full">{selectedPost.category}</span><span>{selectedPost.date}</span><span className="flex items-center gap-1 opacity-90"><ClockIcon className="h-4 w-4"/> {calculateReadingTime(selectedPost.content)}</span></div><h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl drop-shadow-lg">{selectedPost.title}</h1></div></div></div>
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12"><div className="flex flex-col lg:flex-row gap-16"><div className="lg:w-3/4"><div className="prose lg:prose-lg max-w-none text-gray-700"><p className="lead text-xl font-medium text-gray-900 mb-10 border-l-4 border-masa-orange pl-6 py-2 bg-gray-50 rounded-r-lg italic leading-relaxed text-justify">{selectedPost.summary}</p><div className="text-justify">{renderContent(selectedPost.content)}</div></div><div className="mt-12 pt-8 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between"><div className="flex flex-wrap gap-2">{selectedPost.tags?.map(tag => <span key={tag} className="flex items-center px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm"><TagIcon className="h-3 w-3 mr-1" /> {tag}</span>)}</div><div className="flex items-center gap-2"><UserCircleIcon className="h-10 w-10 text-gray-400" /><div><p className="text-sm font-bold text-masa-charcoal">{selectedPost.author || "MASA Team"}</p><p className="text-xs text-gray-500">Author</p></div></div></div><div className="mt-8"><SocialShareButtons post={selectedPost} /></div></div><div className="lg:w-1/4 space-y-8"><div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 sticky top-32"><h3 className="text-xl font-bold text-masa-blue mb-4">Be the Change</h3><p className="text-gray-600 mb-6 text-sm leading-relaxed text-justify">Inspired by this story? Join us in making a difference.</p><div className="space-y-3"><button onClick={() => navigateTo('volunteer')} className="w-full bg-masa-blue text-white py-3 rounded-lg font-bold hover:bg-blue-900 transition-colors text-sm">Volunteer Now</button><button onClick={() => navigateTo('donate')} className="w-full bg-white border border-masa-orange text-masa-orange py-3 rounded-lg font-bold hover:bg-orange-50 transition-colors text-sm">Make a Donation</button></div></div></div></div></div>
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12"><div className="flex flex-col lg:flex-row gap-16"><div className="lg:w-3/4"><div className="prose lg:prose-lg max-w-none text-gray-700"><p className="lead text-xl font-medium text-gray-900 mb-10 border-l-4 border-masa-orange pl-6 py-2 bg-gray-50 rounded-r-lg italic leading-relaxed text-left">{selectedPost.summary}</p><div className="text-left">{renderContent(selectedPost.content)}</div></div><div className="mt-12 pt-8 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between"><div className="flex flex-wrap gap-2">{selectedPost.tags?.map(tag => <span key={tag} className="flex items-center px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm"><TagIcon className="h-3 w-3 mr-1" /> {tag}</span>)}</div><div className="flex items-center gap-2"><UserCircleIcon className="h-10 w-10 text-gray-400" /><div><p className="text-sm font-bold text-masa-charcoal">{selectedPost.author || "MASA Team"}</p><p className="text-xs text-gray-500">Author</p></div></div></div><div className="mt-8"><SocialShareButtons post={selectedPost} /></div></div>
+                    <div className="lg:w-1/4">
+                        <div className="lg:sticky top-32 space-y-8">
+                            {headings.length > 1 && (
+                                <TableOfContents 
+                                    headings={headings}
+                                    activeId={activeHeadingId}
+                                    isCollapsed={isTocCollapsed}
+                                    onToggleCollapse={() => setIsTocCollapsed(!isTocCollapsed)}
+                                />
+                            )}
+                            <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100"><h3 className="text-xl font-bold text-masa-blue mb-4">Be the Change</h3><p className="text-gray-600 mb-6 text-sm leading-relaxed text-left">Inspired by this story? Join us in making a difference.</p><div className="space-y-3"><button onClick={() => navigateTo('volunteer')} className="w-full bg-masa-blue text-white py-3 rounded-lg font-bold hover:bg-blue-900 transition-colors text-sm">Volunteer Now</button><button onClick={() => navigateTo('donate')} className="w-full bg-white border border-masa-orange text-masa-orange py-3 rounded-lg font-bold hover:bg-orange-50 transition-colors text-sm">Make a Donation</button></div></div>
+                        </div>
+                    </div>
+                </div></div>
                 </article>
             </div>
         );
@@ -182,7 +269,7 @@ const BlogPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <div className="lg:w-2/3 lg:order-1">
                     {featuredPost && (
                         <div onClick={() => handlePostClick(featuredPost)} className="group mb-16 bg-masa-charcoal rounded-3xl overflow-hidden shadow-2xl hover:shadow-masa-orange/20 transition-all duration-500 cursor-pointer relative aspect-video">
-                            <img src={featuredPost.image} alt={featuredPost.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 opacity-40 group-hover:opacity-50" />
+                            <img src={featuredPost.image} alt={featuredPost.title} className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 opacity-40 group-hover:opacity-50" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                             <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-10 text-white">
                                 <div className="flex items-center gap-4 mb-4"><span className="bg-masa-orange text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">Featured Post</span><span className="text-sm text-gray-300">{featuredPost.category}</span></div>

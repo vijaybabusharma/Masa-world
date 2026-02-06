@@ -2,7 +2,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { NavigationProps } from '../types';
 import { XIcon } from '../components/icons/UiIcons';
-import { HeartIcon, UsersIcon, SparklesIcon, CalendarDaysIcon, MapPinIcon } from '../components/icons/FeatureIcons';
+import { HeartIcon, UsersIcon, SparklesIcon, CalendarDaysIcon, MapPinIcon, PlusIcon, CameraIcon } from '../components/icons/FeatureIcons';
+import GalleryUploadModal from '../components/GalleryUploadModal';
+import AiImageGeneratorModal from '../components/AiImageGeneratorModal';
 
 // --- Data ---
 const galleryCategories = [
@@ -140,15 +142,27 @@ const LightboxModal: React.FC<{ item: any; onClose: () => void }> = ({ item, onC
 const GalleryPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [activeCategory, setActiveCategory] = useState('All');
     const [selectedItem, setSelectedItem] = useState<any | null>(null);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [isAiModalOpen, setIsAiModalOpen] = useState(false);
 
     const filteredItems = useMemo(() => {
         if (activeCategory === 'All') return galleryData;
         return galleryData.filter(item => item.category === activeCategory);
     }, [activeCategory]);
     
+    const handleSubmitToGallery = (base64Data: string) => {
+        // This is a mock. In a real app, this would likely involve more data.
+        console.log("Submitting AI Image to gallery workflow...", base64Data.substring(0, 50) + "...");
+        setIsAiModalOpen(false);
+        // Can open upload modal with pre-filled image if desired
+        setIsUploadModalOpen(true); 
+    };
+
     return (
         <div className="bg-gray-50">
             {selectedItem && <LightboxModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
+            {isUploadModalOpen && <GalleryUploadModal categories={galleryCategories.filter(c => c !== 'All')} onClose={() => setIsUploadModalOpen(false)} />}
+            {isAiModalOpen && <AiImageGeneratorModal onClose={() => setIsAiModalOpen(false)} onSubmitToGallery={handleSubmitToGallery} />}
 
             {/* 1. Hero Section */}
             <section className="relative bg-masa-charcoal py-24 text-white text-center">
@@ -160,9 +174,23 @@ const GalleryPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">A visual journey of our work across sports, education, culture, and community development.</p>
                 </div>
             </section>
+            
+            {/* Action Bar */}
+            <div className="bg-white py-3 border-b border-gray-200">
+                <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-4">
+                    <button onClick={() => setIsUploadModalOpen(true)} className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white border-2 border-masa-blue text-masa-blue px-4 py-2 rounded-full font-bold text-sm hover:bg-blue-50 transition-colors">
+                        <CameraIcon className="h-4 w-4" />
+                        Upload Media
+                    </button>
+                    <button onClick={() => setIsAiModalOpen(true)} className="w-full sm:w-auto flex items-center justify-center gap-2 bg-masa-orange text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-orange-600 transition-colors">
+                        <SparklesIcon className="h-4 w-4" />
+                        Generate with AI
+                    </button>
+                </div>
+            </div>
 
             {/* 2. Category Filters */}
-            <nav className="sticky top-20 bg-white/80 backdrop-blur-md shadow-sm z-30">
+            <nav className="sticky top-16 md:top-20 bg-white/80 backdrop-blur-md shadow-sm z-30">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-center overflow-x-auto no-scrollbar">
                         {galleryCategories.map(category => (

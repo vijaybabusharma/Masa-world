@@ -25,7 +25,7 @@ const OurStorySection: React.FC = () => (
     <section className="py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid md:grid-cols-2 gap-16 items-center">
-                <div className="prose lg:prose-lg text-gray-600 max-w-full text-justify">
+                <div className="prose lg:prose-lg text-gray-600 max-w-full text-left">
                     <span className="text-masa-blue font-bold uppercase tracking-widest text-sm mb-2 block text-left">Our Origin</span>
                     <h2 className="text-3xl md:text-4xl font-extrabold text-masa-charcoal mb-6 leading-tight text-left">From a Sports Field to a Global Movement</h2>
                     <p>
@@ -57,7 +57,7 @@ const MissionVisionSection: React.FC = () => (
                         </div>
                         <h2 className="text-3xl font-bold text-masa-charcoal">Our Mission</h2>
                     </div>
-                    <p className="text-lg text-gray-700 leading-relaxed font-medium mb-6 flex-grow text-justify">
+                    <p className="text-lg text-gray-700 leading-relaxed font-medium mb-6 flex-grow text-left">
                         “To empower youth and communities by providing access to sports, education, and cultural opportunities that foster discipline, leadership, self-reliance, and social responsibility.”
                     </p>
                 </div>
@@ -70,7 +70,7 @@ const MissionVisionSection: React.FC = () => (
                         </div>
                         <h2 className="text-3xl font-bold text-masa-charcoal">Our Vision</h2>
                     </div>
-                    <p className="text-lg text-gray-700 leading-relaxed font-medium mb-6 flex-grow text-justify">
+                    <p className="text-lg text-gray-700 leading-relaxed font-medium mb-6 flex-grow text-left">
                         “To build a world where every young individual has the opportunity, guidance, and confidence to lead positive change—locally and globally.”
                     </p>
                 </div>
@@ -104,7 +104,7 @@ const CoreValuesSection: React.FC = () => {
                                 <v.icon className="h-7 w-7" />
                             </div>
                             <h3 className="font-bold text-lg text-masa-charcoal mb-2">{v.title}</h3>
-                            <p className="text-base text-gray-600 leading-relaxed text-justify">{v.text}</p>
+                            <p className="text-base text-gray-600 leading-relaxed">{v.text}</p>
                         </div>
                     ))}
                 </div>
@@ -131,7 +131,7 @@ const TimelineSection: React.FC = () => {
                 </div>
                 <div className="relative max-w-4xl mx-auto">
                     {/* Vertical line: positioned left on mobile, center on md+ */}
-                    <div className="absolute top-0 left-4 md:left-1/2 w-0.5 h-full bg-gray-700 -translate-x-1/2"></div>
+                    <div className="absolute top-0 left-4 md:left-1/2 w-0.5 h-full bg-gray-700 md:-translate-x-1/2"></div>
                     
                     <div className="space-y-16">
                         {events.map((event, index) => (
@@ -140,17 +140,12 @@ const TimelineSection: React.FC = () => {
                                 <div className="absolute top-1 left-4 md:left-1/2 w-4 h-4 bg-masa-orange rounded-full -translate-x-1/2 border-4 border-masa-charcoal"></div>
                                 
                                 {/* Content container */}
-                                <div className={`pl-12 md:pl-0 md:flex items-start ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
-                                    {/* Spacer for desktop */}
-                                    <div className="md:w-1/2"></div>
-                                    
-                                    {/* Content */}
-                                    <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:pl-8' : 'md:pr-8'}`}>
-                                        <div className={index % 2 !== 0 ? 'md:text-right' : 'md:text-left'}>
-                                            <h3 className="text-3xl font-bold text-masa-orange">{event.year}</h3>
-                                            <h4 className="text-xl font-bold mt-1">{event.title}</h4>
-                                            <p className="mt-2 text-base text-gray-400 leading-relaxed text-justify">{event.description}</p>
-                                        </div>
+                                <div className={`w-full pl-12 md:pl-0 md:grid md:grid-cols-2 md:gap-8 items-start`}>
+                                    {/* Left or Right Content based on index */}
+                                    <div className={index % 2 === 0 ? 'md:col-start-2' : 'md:col-start-1 md:row-start-1 md:text-right'}>
+                                        <h3 className="text-3xl font-bold text-masa-orange">{event.year}</h3>
+                                        <h4 className="text-xl font-bold mt-1">{event.title}</h4>
+                                        <p className="mt-2 text-base text-gray-400 leading-relaxed">{event.description}</p>
                                     </div>
                                 </div>
                             </div>

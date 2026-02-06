@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { NavigationProps } from '../types';
-import { GoogleGenAI, Modality } from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 import { 
     SparklesIcon, LightBulbIcon, CameraIcon, MicrophoneIcon, DocumentTextIcon, 
     GlobeIcon, UsersIcon, LaptopIcon, ArrowRightIcon, BriefcaseIcon, TrophyIcon, 
@@ -255,10 +255,14 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                         else if (part.text) responseText += part.text;
                     }
                 } else {
+                    const imageConfig: { aspectRatio: string, imageSize?: "1K" } = { aspectRatio };
+                    if (model === 'gemini-3-pro-image-preview') {
+                        imageConfig.imageSize = "1K";
+                    }
                     const response = await ai.models.generateContent({
                         model: model,
                         contents: { parts: [{ text: prompt }] },
-                        config: { imageConfig: { aspectRatio: aspectRatio, imageSize: "1K" } }
+                        config: { imageConfig }
                     });
                     for (const part of response.candidates?.[0]?.content?.parts || []) {
                         if (part.inlineData) responseImage = `data:image/png;base64,${part.inlineData.data}`;
