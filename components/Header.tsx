@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { Page, NavItem, DropdownNavItem, MenuItem } from '../types';
+import { Page, NavItem, DropdownNavItem, MenuItem, SmartButton, PaymentLink } from '../types';
 import { MenuIcon, XIcon, ChevronDownIcon } from './icons/UiIcons';
 import { HeartIcon } from './icons/FeatureIcons';
 import { ContentManager } from '../utils/contentManager';
+import { handleSmartButtonClick } from '../utils/buttonHelper';
 
 interface HeaderProps {
   navigateTo: (page: Page) => void;
@@ -18,21 +19,32 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
   const [navItems, setNavItems] = useState<MenuItem[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openMobileSubMenu, setOpenMobileSubMenu] = useState<string | null>(null);
+  const [donateBtn, setDonateBtn] = useState<SmartButton | null>(null);
+  const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
 
   useEffect(() => {
-    const loadNav = () => {
+    const loadSettings = () => {
         const settings = ContentManager.getSettings();
         setNavItems(settings.navigation.headerMenu);
+        if (settings.buttons && settings.buttons.zones) {
+            setDonateBtn(settings.buttons.zones['header_donate']);
+            setPaymentLinks(settings.buttons.paymentLinks);
+        }
     };
-    loadNav();
-    window.addEventListener('masa-settings-updated', loadNav);
-    return () => window.removeEventListener('masa-settings-updated', loadNav);
+    loadSettings();
+    window.addEventListener('masa-settings-updated', loadSettings);
+    return () => window.removeEventListener('masa-settings-updated', loadSettings);
   }, []);
 
   const handleNavClick = (page: Page) => {
     navigateTo(page);
     setIsMenuOpen(false);
     setOpenMobileSubMenu(null);
+  };
+
+  const onSmartBtnClick = (btn: SmartButton) => {
+      handleSmartButtonClick(btn, paymentLinks, navigateTo);
+      setIsMenuOpen(false);
   };
 
   const toggleMobileSubMenu = (label: string) => {
@@ -104,13 +116,15 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
               })}
             </nav>
 
-            <button 
-                onClick={() => navigateTo('donate')} 
-                className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all duration-300 flex items-center gap-1.5 active:scale-95 bg-masa-orange text-white hover:bg-orange-600 shadow-sm hover:shadow-md`}
-            >
-                <HeartIcon className="h-4 w-4" />
-                <span>Donate</span>
-            </button>
+            {donateBtn && donateBtn.visible && (
+                <button 
+                    onClick={() => onSmartBtnClick(donateBtn)} 
+                    className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all duration-300 flex items-center gap-1.5 active:scale-95 bg-masa-orange text-white hover:bg-orange-600 shadow-sm hover:shadow-md`}
+                >
+                    <HeartIcon className="h-4 w-4" />
+                    <span>{donateBtn.label}</span>
+                </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -170,15 +184,17 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
             ))}
             
             {/* Mobile Donate Button */}
-            <div className="pt-6 px-4">
-                <button 
-                    onClick={() => handleNavClick('donate')} 
-                    className="w-full bg-masa-orange text-white px-6 py-4 rounded-lg text-lg font-bold hover:bg-orange-600 shadow-md transition-colors duration-300 flex items-center justify-center gap-2 active:scale-95"
-                >
-                    <HeartIcon className="h-5 w-5" />
-                    <span>Donate Now</span>
-                </button>
-            </div>
+            {donateBtn && donateBtn.visible && (
+                <div className="pt-6 px-4">
+                    <button 
+                        onClick={() => onSmartBtnClick(donateBtn)} 
+                        className="w-full bg-masa-orange text-white px-6 py-4 rounded-lg text-lg font-bold hover:bg-orange-600 shadow-md transition-colors duration-300 flex items-center justify-center gap-2 active:scale-95"
+                    >
+                        <HeartIcon className="h-5 w-5" />
+                        <span>{donateBtn.label}</span>
+                    </button>
+                </div>
+            )}
           </div>
         </div>
       )}

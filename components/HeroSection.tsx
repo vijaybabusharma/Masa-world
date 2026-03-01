@@ -1,16 +1,23 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { NavigationProps, SliderItem } from '../types';
+import { NavigationProps, SliderItem, SmartButton, PaymentLink, Page } from '../types';
 import { ContentManager } from '../utils/contentManager';
+import { handleSmartButtonClick } from '../utils/buttonHelper';
 
 const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [slides, setSlides] = useState<SliderItem[]>([]);
     const [current, setCurrent] = useState(0);
+    const [heroCta, setHeroCta] = useState<SmartButton | null>(null);
+    const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
 
     useEffect(() => {
         const loadSlides = () => {
             const settings = ContentManager.getSettings();
             setSlides(settings.homepage.slider.slides || []);
+            if (settings.buttons && settings.buttons.zones) {
+                setHeroCta(settings.buttons.zones['hero_cta']);
+                setPaymentLinks(settings.buttons.paymentLinks);
+            }
         };
         loadSlides();
         window.addEventListener('masa-settings-updated', loadSlides);
@@ -25,6 +32,10 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
             return () => clearInterval(timer); 
         }
     }, [next, slides.length]);
+
+    const onSmartBtnClick = (btn: SmartButton) => {
+        handleSmartButtonClick(btn, paymentLinks, navigateTo);
+    };
 
     if (slides.length === 0) {
         return <section className="h-[90vh] min-h-[600px] bg-gray-200 flex items-center justify-center text-gray-500">Loading Hero...</section>;
@@ -46,9 +57,16 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                     <div key={current} className="animate-fade-in-up">
                         <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight drop-shadow-lg leading-tight">{slides[current].headline}</h1>
                         <p className="mt-8 text-xl md:text-2xl text-gray-100 max-w-3xl drop-shadow-md font-light leading-relaxed">{slides[current].subtext}</p>
-                        <button onClick={() => navigateTo(slides[current].cta.page)} className="mt-10 md:mt-12 bg-masa-orange text-white px-8 py-4 md:px-10 md:py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                            {slides[current].cta.label}
-                        </button>
+                        
+                        {heroCta && heroCta.visible ? (
+                            <button onClick={() => onSmartBtnClick(heroCta)} className="mt-10 md:mt-12 bg-masa-orange text-white px-8 py-4 md:px-10 md:py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                                {heroCta.label}
+                            </button>
+                        ) : (
+                            <button onClick={() => navigateTo(slides[current].cta.page)} className="mt-10 md:mt-12 bg-masa-orange text-white px-8 py-4 md:px-10 md:py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                                {slides[current].cta.label}
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

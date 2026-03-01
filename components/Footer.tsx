@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { NavigationProps, Page, SocialLink, NavItem } from '../types';
+import { NavigationProps, Page, SocialLink, NavItem, SmartButton, PaymentLink } from '../types';
 import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon, YouTubeIcon, WhatsAppIcon } from './icons/SocialIcons';
 import { EnvelopeIcon, MapPinIcon, ArrowRightIcon } from './icons/FeatureIcons';
 import { ContentManager } from '../utils/contentManager';
+import { handleSmartButtonClick } from '../utils/buttonHelper';
 
 const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
@@ -14,6 +15,8 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
     resources: [] as NavItem[],
     policies: [] as NavItem[],
   });
+  const [finalCta, setFinalCta] = useState<SmartButton | null>(null);
+  const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
 
   useEffect(() => {
       const loadSettings = () => {
@@ -26,12 +29,20 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
               resources: settings.navigation.footerResourceLinks || [],
               policies: settings.navigation.footerPolicyLinks || [],
           });
+          if (settings.buttons && settings.buttons.zones) {
+              setFinalCta(settings.buttons.zones['final_cta']);
+              setPaymentLinks(settings.buttons.paymentLinks);
+          }
       };
       loadSettings();
       window.addEventListener('masa-settings-updated', loadSettings);
       return () => window.removeEventListener('masa-settings-updated', loadSettings);
   }, []);
   
+  const onSmartBtnClick = (btn: SmartButton) => {
+      handleSmartButtonClick(btn, paymentLinks, navigateTo);
+  };
+
   const getSocialIcon = (platform: string) => {
       switch(platform) {
           case 'facebook': return <FacebookIcon />;
@@ -98,8 +109,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
                 {renderLinkList(navLinks.resources)}
               </div>
           </div>
-          
-          {/* New Contact Block */}
+                    {/* New Contact Block */}
           <div className="md:col-span-2 xl:col-span-3 bg-masa-blue/20 backdrop-blur-sm p-8 rounded-2xl border border-white/10">
             <h4 className="font-semibold tracking-wider uppercase text-gray-300 text-sm mb-4">Connect With Us</h4>
             <p className="text-gray-300 text-sm mb-6">Have a question or a proposal? We'd love to hear from you.</p>
@@ -110,33 +120,23 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
                 </a>
             </div>
 
-            {/*
-              BUTTON STYLE VARIATIONS
-              To change the button style, copy a `className` string from an option below and replace the one on the <button> element.
-
-              1. Solid with Soft Glow (Currently Active):
-                 A bold, confident CTA with an elevated feel.
-                 className="group w-full bg-masa-orange text-white py-3 px-6 rounded-full font-bold hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
-
-              2. Outline with Fill Animation:
-                 A modern, high-contrast style for a clean look.
-                 className="group w-full bg-transparent border-2 border-masa-orange text-masa-orange py-3 px-6 rounded-full font-bold hover:bg-masa-orange hover:text-white transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
-
-              3. Gradient for a Premium Feel:
-                 A subtle gradient that adds depth and a modern touch.
-                 className="group w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-6 rounded-full font-bold hover:from-orange-600 hover:to-red-600 transition-all duration-300 shadow-lg hover:shadow-red-500/30 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
-
-              4. Minimal Flat Style:
-                 A clean, flat style with a simple color shift on hover.
-                 className="group w-full bg-transparent text-masa-orange py-3 px-6 rounded-full font-bold transition-colors duration-300 flex items-center justify-center gap-2 hover:text-orange-400"
-            */}
-            <button 
-                onClick={() => navigateTo('contact')} 
-                className="group w-full bg-masa-orange text-white py-3 px-6 rounded-full font-bold hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
-            >
-                <span>Send a Message</span>
-                <ArrowRightIcon className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
+            {finalCta && finalCta.visible ? (
+                <button 
+                    onClick={() => onSmartBtnClick(finalCta)} 
+                    className="group w-full bg-masa-orange text-white py-3 px-6 rounded-full font-bold hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                >
+                    <span>{finalCta.label}</span>
+                    <ArrowRightIcon className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </button>
+            ) : (
+                <button 
+                    onClick={() => navigateTo('contact')} 
+                    className="group w-full bg-masa-orange text-white py-3 px-6 rounded-full font-bold hover:bg-orange-600 transition-all duration-300 shadow-lg hover:shadow-orange-500/30 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                >
+                    <span>Send a Message</span>
+                    <ArrowRightIcon className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </button>
+            )}
           </div>
         </div>
 

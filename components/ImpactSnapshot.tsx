@@ -7,6 +7,7 @@ import {
     ClockIcon
 } from './icons/FeatureIcons';
 import { getStats } from '../utils/mockBackend';
+import { ContentManager } from '../utils/contentManager';
 
 const ImpactSnapshot: React.FC = () => {
     const [stats, setStats] = useState({
@@ -18,18 +19,35 @@ const ImpactSnapshot: React.FC = () => {
 
     useEffect(() => {
         const calculateStats = () => {
-            const backendStats = getStats();
-            const foundationStartYear = 2011;
-            const currentYear = new Date().getFullYear();
+            const settings = ContentManager.getSettings();
+            const overrides = settings.homepage.impactStats;
 
-            setStats({
-                youth: 75000 + (backendStats.members + backendStats.pledges + backendStats.enrollments),
-                programs: 650 + (backendStats.volunteers + backendStats.enrollments),
-                globalReach: 114 + (backendStats.countries),
-                years: currentYear - foundationStartYear,
-            });
+            if (overrides && overrides.enabled) {
+                setStats({
+                    youth: overrides.youth,
+                    programs: overrides.programs,
+                    globalReach: overrides.globalReach,
+                    years: overrides.years,
+                });
+            } else {
+                const backendStats = getStats();
+                const foundationStartYear = 2011;
+                const currentYear = new Date().getFullYear();
+
+                setStats({
+                    youth: 75000 + (backendStats.members + backendStats.pledges + backendStats.enrollments),
+                    programs: 650 + (backendStats.volunteers + backendStats.enrollments),
+                    globalReach: 114 + (backendStats.countries),
+                    years: currentYear - foundationStartYear,
+                });
+            }
         };
+
         calculateStats();
+        
+        const handleSettingsUpdate = () => calculateStats();
+        window.addEventListener('masa-settings-updated', handleSettingsUpdate);
+        return () => window.removeEventListener('masa-settings-updated', handleSettingsUpdate);
     }, []);
 
     const metrics = [

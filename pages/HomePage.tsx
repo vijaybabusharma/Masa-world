@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { NavigationProps, PartnershipType, GlobalSettings } from '../types';
+import { NavigationProps, PartnershipType, GlobalSettings, DeliveryAreaItem } from '../types';
 import FounderMessageSection from '../components/FounderMessageSection';
 import ImpactSnapshot from '../components/ImpactSnapshot';
 import WhatWeDoSection from '../components/WhatWeDoSection';
 import CommunityVoicesSection from '../components/CommunityVoicesSection';
 import TrustSection from '../components/TrustSection';
 import LatestNewsAndEvents from '../components/LatestNewsAndEvents';
-import IncredibleSection, { DeliveryAreaItem } from '../components/IncredibleSection';
+import IncredibleSection from '../components/IncredibleSection';
 import HowWeWorkSection from '../components/HowWeWorkSection';
 import CareersSection from '../components/CareersSection';
 import HeroSection from '../components/HeroSection';
@@ -30,12 +30,12 @@ const HomePage: React.FC<NavigationProps> = ({ navigateTo }) => {
         return () => window.removeEventListener('masa-settings-updated', loadSettings);
     }, []);
 
-    const deliveryItems: DeliveryAreaItem[] = [
-        { type: 'Events', title: 'Events', description: 'National & international programs, competitions, and social initiatives.' },
-        { type: 'Trainings', title: 'Trainings', description: 'Skill development, leadership, and discipline-focused programs.' },
-        { type: 'Awards', title: 'Awards', description: 'Recognition of excellence, dedication, and real-life heroes.' },
-        { type: 'Records', title: 'Records', description: 'Documenting extraordinary achievements and milestones.' },
-        { type: 'Conferences', title: 'Conferences', description: 'Knowledge sharing, collaboration, and global dialogue.' }
+    const deliveryItems: DeliveryAreaItem[] = settings.deliveryItems || [
+        { id: 'del-events', type: 'Events', title: 'Events', description: 'National & international programs, competitions, and social initiatives.' },
+        { id: 'del-trainings', type: 'Trainings', title: 'Trainings', description: 'Skill development, leadership, and discipline-focused programs.' },
+        { id: 'del-awards', type: 'Awards', title: 'Awards', description: 'Recognition of excellence, dedication, and real-life heroes.' },
+        { id: 'del-records', type: 'Records', title: 'Records', description: 'Documenting extraordinary achievements and milestones.' },
+        { id: 'del-conferences', type: 'Conferences', title: 'Conferences', description: 'Knowledge sharing, collaboration, and global dialogue.' }
     ];
 
     const sections = settings.sections;

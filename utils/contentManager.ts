@@ -1,6 +1,6 @@
 
 import { eventsData, postsData, coursesData } from './data';
-import { Post, GlobalSettings, PageMetadata, MasaEvent, Course, MenuItem, NavItem, SliderItem, PillarItem, Testimonial, GalleryItem } from '../types';
+import { Post, GlobalSettings, PageMetadata, MasaEvent, Course, MenuItem, NavItem, SliderItem, PillarItem, Testimonial, GalleryItem, FounderMessageContent, ImpactStatsOverride, DeliveryAreaItem, ProcessStep, ButtonSettings } from '../types';
 
 // Keys for LocalStorage
 const KEYS = {
@@ -11,6 +11,8 @@ const KEYS = {
     SETTINGS: 'masa_global_settings',
     PAGES: 'masa_content_pages'
 };
+
+
 
 // Default Navigation Menus
 const defaultHeaderMenu: MenuItem[] = [
@@ -38,23 +40,18 @@ const defaultHeaderMenu: MenuItem[] = [
     { id: 'nav-initiatives', label: 'Initiatives', page: 'initiatives' },
     { id: 'nav-gallery', label: 'Gallery', page: 'gallery' },
     { 
-        id: 'nav-media', label: 'Media & Resources', page: 'media-reports',
-        subItems: [
-            { id: 'nav-media-highlights', label: 'Media Highlights', page: 'media-highlights' },
-            { id: 'nav-reports', label: 'Annual Reports', page: 'media-reports' },
-            { id: 'nav-courses', label: 'Courses & Trainings', page: 'courses' },
-            { id: 'nav-events', label: 'Events', page: 'events' },
-            { id: 'nav-awards', label: 'Awards', page: 'awards' },
-            { id: 'nav-records', label: 'Records', page: 'records' },
-        ]
-    },
-    { 
         id: 'nav-get-involved', label: 'Get Involved', page: 'get-involved',
         subItems: [
             { id: 'nav-donate', label: 'Donate Now', page: 'donate' },
             { id: 'nav-volunteer', label: 'Volunteer', page: 'volunteer' },
             { id: 'nav-membership', label: 'Become a Member', page: 'membership' },
             { id: 'nav-careers', label: 'Careers & Internships', page: 'careers' },
+            { id: 'nav-media-highlights', label: 'Media Highlights', page: 'media-highlights' },
+            { id: 'nav-reports', label: 'Annual Reports', page: 'media-reports' },
+            { id: 'nav-courses', label: 'Courses & Trainings', page: 'courses' },
+            { id: 'nav-events', label: 'Events', page: 'events' },
+            { id: 'nav-awards', label: 'Awards', page: 'awards' },
+            { id: 'nav-records', label: 'Records', page: 'records' },
         ]
     },
     { id: 'nav-blog', label: 'Blog', page: 'blog' },
@@ -203,24 +200,28 @@ const defaultPillars: PillarItem[] = [
 
 const defaultTestimonials: Testimonial[] = [
     {
+        id: 'test-1',
         quote: "I joined MASA as a student looking for a certificate. I stayed because I found a purpose. The leadership training didn't just teach me how to manage a team; it taught me how to manage myself.",
         author: "Vikram Singh",
         role: "Student Volunteer, 3 Years",
         image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80"
     },
     {
+        id: 'test-2',
         quote: "As a donor, transparency is everything. MASA's regular impact reports and the ability to see exactly where my funds go give me immense confidence. It's rare to see such professionalism.",
         author: "Mrs. Anjali Kapoor",
         role: "Life Member & Donor",
         image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80"
     },
     {
+        id: 'test-3',
         quote: "The sports kit provided to our village team changed everything. We went from playing barefoot to winning the district championship. MASA believed in us when no one else did.",
         author: "Rahul D.",
         role: "Beneficiary, Sports Program",
         image: "https://images.unsplash.com/photo-1534030347209-467a5b0aa3e6?auto=format&fit=crop&w=200&q=80"
     },
     {
+        id: 'test-4',
         quote: "What I love about MASA is the diversity. At the Cultural Utsav, I met people from 10 different states. It reminded me of the strength in our unity.",
         author: "Priya Menon",
         role: "Cultural Event Participant",
@@ -239,6 +240,50 @@ const defaultGalleryItems: GalleryItem[] = [
     { id: 8, category: 'Community Outreach', title: 'City Cleanliness Drive', location: 'Pune', date: 'Mar 12, 2024', imageUrl: 'https://images.unsplash.com/photo-1618521630643-b19623e4d872?auto=format&fit=crop&w=800&q=80', description: 'Hundreds of volunteers joined hands to create a cleaner city, spreading awareness about waste segregation and our collective civic duty.', tags: ['Community', 'Environment', 'Volunteer', 'SwachhBharat'] },
 ];
 
+const defaultDeliveryItems: DeliveryAreaItem[] = [
+    { id: 'del-events', type: 'Events', title: 'Events', description: 'National & international programs, competitions, and social initiatives.' },
+    { id: 'del-trainings', type: 'Trainings', title: 'Trainings', description: 'Skill development, leadership, and discipline-focused programs.' },
+    { id: 'del-awards', type: 'Awards', title: 'Awards', description: 'Recognition of excellence, dedication, and real-life heroes.' },
+    { id: 'del-records', type: 'Records', title: 'Records', description: 'Documenting extraordinary achievements and milestones.' },
+    { id: 'del-conferences', type: 'Conferences', title: 'Conferences', description: 'Knowledge sharing, collaboration, and global dialogue.' }
+];
+
+const defaultProcessSteps: ProcessStep[] = [
+    { id: 'step-1', icon: 'SearchIcon', title: "Identify", description: "We locate vulnerable communities and critical gaps in social support through grassroots research." },
+    { id: 'step-2', icon: 'UsersIcon', title: "Mobilize", description: "We gather resources, passionate volunteers, and local leadership to build a strong foundation for action." },
+    { id: 'step-3', icon: 'SparklesIcon', title: "Empower", description: "We execute targeted programs for skills, health, and rights, giving communities the tools they need." },
+    { id: 'step-4', icon: 'PresentationChartBarIcon', title: "Sustain", description: "We ensure long-term impact by fostering community ownership and creating self-reliant models for change." },
+];
+
+const defaultFounderMessageContent: FounderMessageContent = {
+    image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=782,fit=crop/AMq4Dg7v0wH5yKM1/founder-B9OrhqqUN6Kq3Qir.jpeg',
+    name: "Vijay Babu Sharma",
+    title: "Founder & Chairman",
+    quote: "At MASA World Foundation, we believe that sports, education, and culture together shape confident individuals and responsible communities.",
+    text: "Our mission is to empower youth, recognize real heroes, and create lasting impact through disciplined action. We invite you to join this movement of positive change."
+};
+
+const defaultImpactStats: ImpactStatsOverride = {
+    enabled: false,
+    youth: 75000,
+    programs: 650,
+    globalReach: 114,
+    years: 13
+};
+
+const defaultButtonSettings: ButtonSettings = {
+    paymentLinks: [
+        { id: 'pl-general', name: 'General Donation', url: 'https://razorpay.me/@masaworldfoundation', provider: 'Razorpay', active: true },
+        { id: 'pl-membership', name: 'Membership Fee', url: 'https://razorpay.me/@masaworldfoundation', provider: 'Razorpay', active: true },
+    ],
+    zones: {
+        'header_donate': { id: 'header_donate', label: 'Donate', actionType: 'link', target: 'donate', visible: true, style: 'primary' },
+        'hero_cta': { id: 'hero_cta', label: 'Get Involved', actionType: 'link', target: 'get-involved', visible: true, style: 'primary' },
+        'final_cta': { id: 'final_cta', label: 'Become a Member Today', actionType: 'link', target: 'membership', visible: true, style: 'primary' },
+    },
+    floatingButton: { id: 'floating_donate', label: 'Donate Now', actionType: 'payment', target: 'pl-general', visible: false, position: 'bottom-right', style: 'primary' }
+};
+
 // Default Settings
 const defaultSettings: GlobalSettings = {
     general: { siteName: 'MASA World Foundation', contactEmail: 'masaworldfoundation@gmail.com', enableRegistrations: true, maintenanceMode: false },
@@ -246,6 +291,10 @@ const defaultSettings: GlobalSettings = {
         slider: { slides: defaultSliderItems, autoplaySpeed: 7000 },
         pillars: defaultPillars,
         testimonials: defaultTestimonials,
+        deliveryItems: defaultDeliveryItems,
+        processSteps: defaultProcessSteps,
+        founderMessageContent: defaultFounderMessageContent,
+        impactStats: defaultImpactStats,
         sections: {
             impactSnapshot: { visible: true },
             whatWeDo: { visible: true, title: "What We Do", subtitle: "Our holistic development ecosystem." },
@@ -277,6 +326,7 @@ const defaultSettings: GlobalSettings = {
     appearance: { customCss: '', enableCustomCss: false },
     payments: { currency: 'INR', razorpayEnabled: true, razorpayKey: '', stripeEnabled: false, stripeKey: '', paypalEnabled: false, paypalClientId: '', manualPaymentEnabled: true, manualPaymentInstructions: 'Contact for details.', donationSuccessMessage: 'Thank you!', donationFailureMessage: 'Payment failed.' },
     features: { blogEnabled: true, eventsEnabled: true, coursesEnabled: true, whatsAppIntegrationEnabled: false, whatsAppNumber: '' },
+    buttons: defaultButtonSettings,
 };
 
 const defaultPages: PageMetadata[] = [
@@ -309,11 +359,16 @@ const initializeData = () => {
             slider: { ...defaultSettings.homepage.slider, ...(existingSettings.homepage?.slider || {}), slides: defaultSliderItems },
             pillars: existingSettings.homepage?.pillars && existingSettings.homepage.pillars.length > 0 ? existingSettings.homepage.pillars : defaultSettings.homepage.pillars,
             testimonials: existingSettings.homepage?.testimonials && existingSettings.homepage.testimonials.length > 0 ? existingSettings.homepage.testimonials : defaultSettings.homepage.testimonials,
+            deliveryItems: existingSettings.homepage?.deliveryItems && existingSettings.homepage.deliveryItems.length > 0 ? existingSettings.homepage.deliveryItems : defaultSettings.homepage.deliveryItems,
+            processSteps: existingSettings.homepage?.processSteps && existingSettings.homepage.processSteps.length > 0 ? existingSettings.homepage.processSteps : defaultSettings.homepage.processSteps,
+            founderMessageContent: existingSettings.homepage?.founderMessageContent || defaultSettings.homepage.founderMessageContent,
+            impactStats: existingSettings.homepage?.impactStats || defaultSettings.homepage.impactStats,
             sections: { ...defaultSettings.homepage.sections, ...(existingSettings.homepage?.sections || {}) },
         },
-        navigation: { ...defaultSettings.navigation, ...existingSettings.navigation },
+        navigation: { ...defaultSettings.navigation, ...existingSettings.navigation, headerMenu: defaultHeaderMenu },
         scripts: { ...defaultSettings.scripts, ...existingSettings.scripts },
         features: { ...defaultSettings.features, ...existingSettings.features },
+        buttons: { ...defaultButtonSettings, ...(existingSettings.buttons || {}) },
     };
     localStorage.setItem(KEYS.SETTINGS, JSON.stringify(mergedSettings));
 };

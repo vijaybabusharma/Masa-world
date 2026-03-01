@@ -66,6 +66,7 @@ export interface MasaEvent {
 }
 
 export interface Testimonial {
+    id: string;
     quote: string;
     author: string;
     role: string;
@@ -155,6 +156,36 @@ export interface HomepageSection {
     // other section-specific properties
 }
 
+export interface FounderMessageContent {
+    image: string;
+    name: string;
+    title: string;
+    quote: string;
+    text: string;
+}
+
+export interface ImpactStatsOverride {
+    enabled: boolean;
+    youth: number;
+    programs: number;
+    globalReach: number;
+    years: number;
+}
+
+export interface DeliveryAreaItem {
+    id: string;
+    type: 'Events' | 'Trainings' | 'Awards' | 'Records' | 'Conferences';
+    title: string;
+    description: string;
+}
+
+export interface ProcessStep {
+    id: string;
+    title: string;
+    description: string;
+    icon: string;
+}
+
 export interface HomepageSettings {
     slider: {
         slides: SliderItem[];
@@ -162,6 +193,10 @@ export interface HomepageSettings {
     };
     pillars: PillarItem[];
     testimonials: Testimonial[];
+    deliveryItems: DeliveryAreaItem[];
+    processSteps: ProcessStep[];
+    founderMessageContent: FounderMessageContent;
+    impactStats: ImpactStatsOverride;
     sections: {
         impactSnapshot: HomepageSection;
         whatWeDo: HomepageSection & { title: string; subtitle: string; };
@@ -174,6 +209,30 @@ export interface HomepageSettings {
         getInvolved: HomepageSection & { title: string; subtitle: string; };
         finalCta: HomepageSection;
     };
+}
+
+export interface PaymentLink {
+    id: string;
+    name: string;
+    url: string;
+    provider: 'Razorpay' | 'Stripe' | 'PayPal' | 'Other';
+    active: boolean;
+}
+
+export interface SmartButton {
+    id: string;
+    label: string;
+    actionType: 'link' | 'payment' | 'scroll';
+    target: string; // URL or PaymentLink ID or Element ID
+    visible: boolean;
+    newTab?: boolean;
+    style?: 'primary' | 'secondary' | 'outline';
+}
+
+export interface ButtonSettings {
+    paymentLinks: PaymentLink[];
+    zones: Record<string, SmartButton>;
+    floatingButton: SmartButton & { position: 'bottom-right' | 'bottom-left' };
 }
 
 // --- Global Settings & Modules ---
@@ -234,4 +293,5 @@ export interface GlobalSettings {
         whatsAppIntegrationEnabled: boolean;
         whatsAppNumber: string;
     };
+    buttons: ButtonSettings;
 }

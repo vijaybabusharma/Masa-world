@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { AdminUser, AuthState, GlobalSettings, PageMetadata, Post, UserRole, MenuItem, SliderItem, Page, NavItem, MasaEvent, Course, Submission, GalleryItem } from '../types';
+import { AdminUser, AuthState, GlobalSettings, PageMetadata, Post, UserRole, MenuItem, SliderItem, Page, NavItem, MasaEvent, Course, Submission, GalleryItem, DeliveryAreaItem, Testimonial, ProcessStep } from '../types';
 import { ContentManager } from '../utils/contentManager';
 import { AuthService } from '../utils/authService';
 import { getSubmissions, getStats } from '../utils/mockBackend';
@@ -635,6 +635,83 @@ const SettingsModule: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* Founder Message */}
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Founder Message</h3>
+                        <div className="space-y-4">
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <InputField 
+                                    label="Name" 
+                                    value={settings.homepage.founderMessageContent.name} 
+                                    onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, founderMessageContent: { ...settings.homepage.founderMessageContent, name: e.target.value } } })} 
+                                />
+                                <InputField 
+                                    label="Title" 
+                                    value={settings.homepage.founderMessageContent.title} 
+                                    onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, founderMessageContent: { ...settings.homepage.founderMessageContent, title: e.target.value } } })} 
+                                />
+                            </div>
+                            <InputField 
+                                label="Image URL" 
+                                value={settings.homepage.founderMessageContent.image} 
+                                onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, founderMessageContent: { ...settings.homepage.founderMessageContent, image: e.target.value } } })} 
+                            />
+                            <TextareaField 
+                                label="Quote" 
+                                value={settings.homepage.founderMessageContent.quote} 
+                                onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, founderMessageContent: { ...settings.homepage.founderMessageContent, quote: e.target.value } } })} 
+                                rows={3}
+                            />
+                            <TextareaField 
+                                label="Text" 
+                                value={settings.homepage.founderMessageContent.text} 
+                                onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, founderMessageContent: { ...settings.homepage.founderMessageContent, text: e.target.value } } })} 
+                                rows={5}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Impact Stats */}
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-bold text-gray-800">Impact Stats Override</h3>
+                            <ToggleSwitch 
+                                checked={settings.homepage.impactStats.enabled} 
+                                onChange={(val) => setSettings({ ...settings, homepage: { ...settings.homepage, impactStats: { ...settings.homepage.impactStats, enabled: val } } })} 
+                            />
+                        </div>
+                        <p className="text-sm text-gray-500 mb-4">Enable this to manually set the impact numbers instead of calculating them from data.</p>
+                        
+                        {settings.homepage.impactStats.enabled && (
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <InputField 
+                                    label="Youth Impacted" 
+                                    type="number"
+                                    value={settings.homepage.impactStats.youth} 
+                                    onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, impactStats: { ...settings.homepage.impactStats, youth: parseInt(e.target.value) || 0 } } })} 
+                                />
+                                <InputField 
+                                    label="Programs Conducted" 
+                                    type="number"
+                                    value={settings.homepage.impactStats.programs} 
+                                    onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, impactStats: { ...settings.homepage.impactStats, programs: parseInt(e.target.value) || 0 } } })} 
+                                />
+                                <InputField 
+                                    label="Global Reach (Countries)" 
+                                    type="number"
+                                    value={settings.homepage.impactStats.globalReach} 
+                                    onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, impactStats: { ...settings.homepage.impactStats, globalReach: parseInt(e.target.value) || 0 } } })} 
+                                />
+                                <InputField 
+                                    label="Years of Impact" 
+                                    type="number"
+                                    value={settings.homepage.impactStats.years} 
+                                    onChange={(e) => setSettings({ ...settings, homepage: { ...settings.homepage, impactStats: { ...settings.homepage.impactStats, years: parseInt(e.target.value) || 0 } } })} 
+                                />
+                            </div>
+                        )}
+                    </div>
+
                     {/* Pillars */}
                     <div className="bg-white p-6 rounded-lg border border-gray-200">
                         <h3 className="text-lg font-bold text-gray-800 mb-4">Core Pillars</h3>
@@ -668,6 +745,198 @@ const SettingsModule: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* Process Steps (How We Work) */}
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Process Steps (How We Work)</h3>
+                        <div className="space-y-6">
+                            {settings.homepage.processSteps.map((step, index) => (
+                                <div key={step.id} className="p-4 bg-gray-50 rounded-lg border relative group">
+                                    <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                        <InputField 
+                                            label="Title" 
+                                            value={step.title} 
+                                            onChange={(e) => {
+                                                const newSteps = [...settings.homepage.processSteps];
+                                                newSteps[index].title = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, processSteps: newSteps } });
+                                            }} 
+                                        />
+                                        <SelectField 
+                                            label="Icon" 
+                                            value={step.icon} 
+                                            onChange={(e) => {
+                                                const newSteps = [...settings.homepage.processSteps];
+                                                newSteps[index].icon = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, processSteps: newSteps } });
+                                            }}
+                                        >
+                                            <option value="SearchIcon">Search</option>
+                                            <option value="UsersIcon">Users</option>
+                                            <option value="SparklesIcon">Sparkles</option>
+                                            <option value="PresentationChartBarIcon">Chart</option>
+                                        </SelectField>
+                                    </div>
+                                    <TextareaField 
+                                        label="Description" 
+                                        value={step.description} 
+                                        onChange={(e) => {
+                                            const newSteps = [...settings.homepage.processSteps];
+                                            newSteps[index].description = e.target.value;
+                                            setSettings({ ...settings, homepage: { ...settings.homepage, processSteps: newSteps } });
+                                        }} 
+                                        rows={2}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Delivery Items (Incredible Section) */}
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Incredible Section Items</h3>
+                        <div className="space-y-6">
+                            {settings.homepage.deliveryItems.map((item, index) => (
+                                <div key={item.id} className="p-4 bg-gray-50 rounded-lg border relative group">
+                                    <button 
+                                        onClick={() => {
+                                            const newItems = settings.homepage.deliveryItems.filter((_, i) => i !== index);
+                                            setSettings({ ...settings, homepage: { ...settings.homepage, deliveryItems: newItems } });
+                                        }}
+                                        className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1"
+                                    >
+                                        <TrashIcon className="h-4 w-4"/>
+                                    </button>
+                                    <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                        <InputField 
+                                            label="Title" 
+                                            value={item.title} 
+                                            onChange={(e) => {
+                                                const newItems = [...settings.homepage.deliveryItems];
+                                                newItems[index].title = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, deliveryItems: newItems } });
+                                            }} 
+                                        />
+                                        <SelectField 
+                                            label="Type (Icon)" 
+                                            value={item.type} 
+                                            onChange={(e) => {
+                                                const newItems = [...settings.homepage.deliveryItems];
+                                                newItems[index].type = e.target.value as any;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, deliveryItems: newItems } });
+                                            }}
+                                        >
+                                            <option value="Events">Events</option>
+                                            <option value="Trainings">Trainings</option>
+                                            <option value="Awards">Awards</option>
+                                            <option value="Records">Records</option>
+                                            <option value="Conferences">Conferences</option>
+                                        </SelectField>
+                                    </div>
+                                    <TextareaField 
+                                        label="Description" 
+                                        value={item.description} 
+                                        onChange={(e) => {
+                                            const newItems = [...settings.homepage.deliveryItems];
+                                            newItems[index].description = e.target.value;
+                                            setSettings({ ...settings, homepage: { ...settings.homepage, deliveryItems: newItems } });
+                                        }} 
+                                        rows={2}
+                                    />
+                                </div>
+                            ))}
+                             <button 
+                                onClick={() => {
+                                    const newItem: DeliveryAreaItem = {
+                                        id: `del-${Date.now()}`,
+                                        type: 'Events',
+                                        title: 'New Item',
+                                        description: 'Description here.'
+                                    };
+                                    setSettings({ ...settings, homepage: { ...settings.homepage, deliveryItems: [...settings.homepage.deliveryItems, newItem] } });
+                                }}
+                                className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 font-bold hover:border-masa-blue hover:text-masa-blue transition-colors flex items-center justify-center gap-2"
+                            >
+                                <PlusIcon className="h-5 w-5"/> Add Item
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Testimonials */}
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Testimonials</h3>
+                        <div className="space-y-6">
+                            {settings.homepage.testimonials.map((testimonial, index) => (
+                                <div key={testimonial.id} className="p-4 bg-gray-50 rounded-lg border relative group">
+                                    <button 
+                                        onClick={() => {
+                                            const newTestimonials = settings.homepage.testimonials.filter((_, i) => i !== index);
+                                            setSettings({ ...settings, homepage: { ...settings.homepage, testimonials: newTestimonials } });
+                                        }}
+                                        className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1"
+                                    >
+                                        <TrashIcon className="h-4 w-4"/>
+                                    </button>
+                                    <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                        <InputField 
+                                            label="Name" 
+                                            value={testimonial.author} 
+                                            onChange={(e) => {
+                                                const newTestimonials = [...settings.homepage.testimonials];
+                                                newTestimonials[index].author = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, testimonials: newTestimonials } });
+                                            }} 
+                                        />
+                                        <InputField 
+                                            label="Role" 
+                                            value={testimonial.role} 
+                                            onChange={(e) => {
+                                                const newTestimonials = [...settings.homepage.testimonials];
+                                                newTestimonials[index].role = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, testimonials: newTestimonials } });
+                                            }} 
+                                        />
+                                    </div>
+                                    <TextareaField 
+                                        label="Quote" 
+                                        value={testimonial.quote} 
+                                        onChange={(e) => {
+                                            const newTestimonials = [...settings.homepage.testimonials];
+                                            newTestimonials[index].quote = e.target.value;
+                                            setSettings({ ...settings, homepage: { ...settings.homepage, testimonials: newTestimonials } });
+                                        }} 
+                                        rows={3}
+                                    />
+                                    <div className="mt-4">
+                                         <InputField 
+                                            label="Image URL" 
+                                            value={testimonial.image} 
+                                            onChange={(e) => {
+                                                const newTestimonials = [...settings.homepage.testimonials];
+                                                newTestimonials[index].image = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, testimonials: newTestimonials } });
+                                            }} 
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                            <button 
+                                onClick={() => {
+                                    const newTestimonial: Testimonial = {
+                                        id: `test-${Date.now()}`,
+                                        author: 'New Name',
+                                        role: 'New Role',
+                                        quote: 'New Quote',
+                                        image: 'https://via.placeholder.com/150'
+                                    };
+                                    setSettings({ ...settings, homepage: { ...settings.homepage, testimonials: [...settings.homepage.testimonials, newTestimonial] } });
+                                }}
+                                className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 font-bold hover:border-masa-blue hover:text-masa-blue transition-colors flex items-center justify-center gap-2"
+                            >
+                                <PlusIcon className="h-5 w-5"/> Add Testimonial
+                            </button>
+                        </div>
+                    </div>
+
                     {/* Sections Visibility */}
                     <div className="bg-white p-6 rounded-lg border border-gray-200">
                         <h3 className="text-lg font-bold text-gray-800 mb-4">Homepage Sections</h3>
@@ -691,7 +960,7 @@ const SettingsModule: React.FC = () => {
                                         )}
                                     </div>
                                     <ToggleSwitch 
-                                        checked={section.visible} 
+                                        checked={(section as any).visible} 
                                         onChange={(val) => {
                                             const newSections = { ...settings.homepage.sections };
                                             (newSections as any)[key].visible = val;
@@ -973,27 +1242,260 @@ const EventManagerModule: React.FC = () => {
 
 const UserManagerModule: React.FC = () => {
     const [users, setUsers] = useState<AdminUser[]>([]);
-    useEffect(() => { setUsers(AuthService.getUsers()); }, []);
-    // Mock UI - In a real app, this would have edit/delete functionality
+    const [view, setView] = useState<'list' | 'edit'>('list');
+    const [currentUser, setCurrentUser] = useState<Partial<AdminUser> & { password?: string } | null>(null);
+
+    const loadUsers = () => setUsers(AuthService.getUsers());
+
+    useEffect(() => { loadUsers(); }, []);
+
+    const handleEdit = (user: AdminUser) => { setCurrentUser({ ...user }); setView('edit'); };
+    const handleNew = () => {
+        setCurrentUser({ name: '', email: '', role: 'Editor', password: '' });
+        setView('edit');
+    };
+    
+    const handleSave = () => {
+        if (currentUser && currentUser.name && currentUser.email) {
+            AuthService.saveUser(currentUser as AdminUser, currentUser.password);
+            loadUsers();
+            setView('list');
+            setCurrentUser(null);
+        } else {
+            alert('Name and Email are required.');
+        }
+    };
+
+    const handleDelete = (id: string) => {
+        if (window.confirm('Are you sure you want to delete this user?')) {
+            AuthService.deleteUser(id);
+            loadUsers();
+        }
+    };
+
+    if (view === 'edit' && currentUser) {
+        return (
+            <div className="animate-fade-in-up">
+                <button onClick={() => setView('list')} className="mb-4 text-sm font-bold text-masa-blue">&larr; Back to Users</button>
+                <ModuleHeader title={currentUser.id ? 'Edit User' : 'New User'} />
+                <div className="bg-white p-6 rounded-lg border space-y-4 max-w-2xl">
+                    <InputField label="Name" value={currentUser.name} onChange={e => setCurrentUser({ ...currentUser, name: e.target.value })} />
+                    <InputField label="Email" type="email" value={currentUser.email} onChange={e => setCurrentUser({ ...currentUser, email: e.target.value })} />
+                    <SelectField label="Role" value={currentUser.role} onChange={e => setCurrentUser({ ...currentUser, role: e.target.value as UserRole })}>
+                        <option value="Super Admin">Super Admin</option>
+                        <option value="Editor">Editor</option>
+                        <option value="Event Manager">Event Manager</option>
+                        <option value="Course Manager">Course Manager</option>
+                    </SelectField>
+                    <InputField 
+                        label={currentUser.id ? "New Password (leave blank to keep current)" : "Password"} 
+                        type="password" 
+                        value={currentUser.password || ''} 
+                        onChange={e => setCurrentUser({ ...currentUser, password: e.target.value })} 
+                    />
+                    <button onClick={handleSave} className="bg-masa-blue text-white px-6 py-2 rounded-lg font-bold mt-4">Save User</button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="animate-fade-in-up">
-            <ModuleHeader title="User Management" />
-            <div className="bg-white rounded-xl shadow-sm border p-4">
-                 {users.map(user => (
-                    <div key={user.id} className="p-3 border-b flex justify-between items-center">
-                        <div>
-                            <p className="font-bold">{user.name} <span className="text-xs text-gray-500">({user.email})</span></p>
-                            <p className="text-sm text-masa-orange font-semibold">{user.role}</p>
-                        </div>
-                        <div>
-                            <button className="text-sm text-masa-blue font-bold mr-4">Edit</button>
-                            <button className="text-sm text-red-500 font-bold">Delete</button>
-                        </div>
-                    </div>
-                 ))}
+            <ModuleHeader title="User Management" onAction={handleNew} actionLabel="Add User" />
+            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                 <table className="w-full text-sm">
+                    <thead className="bg-gray-50 text-gray-500 uppercase font-bold">
+                        <tr>
+                            <th className="p-4 text-left">User</th>
+                            <th className="p-4 text-left">Role</th>
+                            <th className="p-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                        {users.map(user => (
+                            <tr key={user.id} className="hover:bg-gray-50 transition-colors">
+                                <td className="p-4">
+                                    <div className="flex items-center gap-3">
+                                        <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full" />
+                                        <div>
+                                            <div className="font-bold text-gray-800">{user.name}</div>
+                                            <div className="text-xs text-gray-500">{user.email}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="p-4">
+                                    <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                        user.role === 'Super Admin' ? 'bg-purple-100 text-purple-700' : 
+                                        user.role === 'Editor' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
+                                    }`}>
+                                        {user.role}
+                                    </span>
+                                </td>
+                                <td className="p-4 text-right space-x-2">
+                                    <button onClick={() => handleEdit(user)} className="text-masa-blue font-bold hover:underline">Edit</button>
+                                    {user.role !== 'Super Admin' && (
+                                        <button onClick={() => handleDelete(user.id)} className="text-red-500 font-bold hover:underline">Delete</button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                 </table>
             </div>
         </div>
-    )
+    );
+};
+
+const ButtonManagerModule: React.FC = () => {
+    const [settings, setSettings] = useState<GlobalSettings>(ContentManager.getSettings());
+    const [activeTab, setActiveTab] = useState<'links' | 'zones'>('links');
+
+    const handleSave = () => {
+        ContentManager.saveSettings(settings);
+        alert('Button settings saved!');
+    };
+
+    const addPaymentLink = () => {
+        const newLink: any = { id: `pl-${Date.now()}`, name: 'New Link', url: '', provider: 'Razorpay', active: true };
+        setSettings({ ...settings, buttons: { ...settings.buttons, paymentLinks: [...settings.buttons.paymentLinks, newLink] } });
+    };
+
+    const updatePaymentLink = (index: number, field: string, value: any) => {
+        const newLinks = [...settings.buttons.paymentLinks];
+        newLinks[index] = { ...newLinks[index], [field]: value };
+        setSettings({ ...settings, buttons: { ...settings.buttons, paymentLinks: newLinks } });
+    };
+
+    const removePaymentLink = (index: number) => {
+        const newLinks = settings.buttons.paymentLinks.filter((_, i) => i !== index);
+        setSettings({ ...settings, buttons: { ...settings.buttons, paymentLinks: newLinks } });
+    };
+
+    const updateZone = (zoneId: string, field: string, value: any) => {
+        setSettings({
+            ...settings,
+            buttons: {
+                ...settings.buttons,
+                zones: {
+                    ...settings.buttons.zones,
+                    [zoneId]: { ...settings.buttons.zones[zoneId], [field]: value }
+                }
+            }
+        });
+    };
+
+    const updateFloatingButton = (field: string, value: any) => {
+        setSettings({
+            ...settings,
+            buttons: {
+                ...settings.buttons,
+                floatingButton: { ...settings.buttons.floatingButton, [field]: value }
+            }
+        });
+    };
+
+    return (
+        <div className="animate-fade-in-up">
+            <ModuleHeader title="Button & Payment Manager" />
+            <div className="flex gap-4 mb-6 border-b border-gray-200">
+                <button onClick={() => setActiveTab('links')} className={`pb-2 font-bold ${activeTab === 'links' ? 'text-masa-blue border-b-2 border-masa-blue' : 'text-gray-500'}`}>Payment Links</button>
+                <button onClick={() => setActiveTab('zones')} className={`pb-2 font-bold ${activeTab === 'zones' ? 'text-masa-blue border-b-2 border-masa-blue' : 'text-gray-500'}`}>Button Placement</button>
+            </div>
+
+            {activeTab === 'links' && (
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="font-bold text-gray-800">Payment Links</h3>
+                            <button onClick={addPaymentLink} className="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold hover:bg-green-200">+ Add Link</button>
+                        </div>
+                        <div className="space-y-4">
+                            {settings.buttons.paymentLinks.map((link, index) => (
+                                <div key={link.id} className="p-4 bg-gray-50 rounded-lg border relative group">
+                                    <button onClick={() => removePaymentLink(index)} className="absolute top-2 right-2 text-red-500 hover:text-red-700"><TrashIcon className="h-4 w-4"/></button>
+                                    <div className="grid md:grid-cols-2 gap-4 mb-2">
+                                        <InputField label="Name (Internal)" value={link.name} onChange={e => updatePaymentLink(index, 'name', e.target.value)} />
+                                        <SelectField label="Provider" value={link.provider} onChange={e => updatePaymentLink(index, 'provider', e.target.value)}>
+                                            <option value="Razorpay">Razorpay</option>
+                                            <option value="Stripe">Stripe</option>
+                                            <option value="PayPal">PayPal</option>
+                                            <option value="Other">Other</option>
+                                        </SelectField>
+                                    </div>
+                                    <InputField label="Payment URL" value={link.url} onChange={e => updatePaymentLink(index, 'url', e.target.value)} placeholder="https://..." />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {activeTab === 'zones' && (
+                <div className="space-y-6">
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="font-bold text-gray-800 mb-4">Button Zones</h3>
+                        <div className="space-y-6">
+                            {Object.entries(settings.buttons.zones).map(([key, btn]) => (
+                                <div key={key} className="p-4 bg-gray-50 rounded-lg border">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <span className="font-bold text-sm uppercase text-gray-500">{key.replace('_', ' ')}</span>
+                                        <ToggleSwitch checked={btn.visible} onChange={val => updateZone(key, 'visible', val)} />
+                                    </div>
+                                    <div className="grid md:grid-cols-3 gap-4">
+                                        <InputField label="Label" value={btn.label} onChange={e => updateZone(key, 'label', e.target.value)} />
+                                        <SelectField label="Action Type" value={btn.actionType} onChange={e => updateZone(key, 'actionType', e.target.value)}>
+                                            <option value="link">Page Link</option>
+                                            <option value="payment">Payment Link</option>
+                                        </SelectField>
+                                        {btn.actionType === 'payment' ? (
+                                            <SelectField label="Payment Link" value={btn.target} onChange={e => updateZone(key, 'target', e.target.value)}>
+                                                <option value="">Select a link...</option>
+                                                {settings.buttons.paymentLinks.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                                            </SelectField>
+                                        ) : (
+                                            <InputField label="Target URL / Page" value={btn.target} onChange={e => updateZone(key, 'target', e.target.value)} />
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="font-bold text-gray-800">Floating Action Button</h3>
+                            <ToggleSwitch checked={settings.buttons.floatingButton.visible} onChange={val => updateFloatingButton('visible', val)} />
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4 mb-4">
+                            <InputField label="Label" value={settings.buttons.floatingButton.label} onChange={e => updateFloatingButton('label', e.target.value)} />
+                            <SelectField label="Position" value={settings.buttons.floatingButton.position} onChange={e => updateFloatingButton('position', e.target.value)}>
+                                <option value="bottom-right">Bottom Right</option>
+                                <option value="bottom-left">Bottom Left</option>
+                            </SelectField>
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                            <SelectField label="Action Type" value={settings.buttons.floatingButton.actionType} onChange={e => updateFloatingButton('actionType', e.target.value)}>
+                                <option value="link">Page Link</option>
+                                <option value="payment">Payment Link</option>
+                            </SelectField>
+                            {settings.buttons.floatingButton.actionType === 'payment' ? (
+                                <SelectField label="Payment Link" value={settings.buttons.floatingButton.target} onChange={e => updateFloatingButton('target', e.target.value)}>
+                                    <option value="">Select a link...</option>
+                                    {settings.buttons.paymentLinks.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                                </SelectField>
+                            ) : (
+                                <InputField label="Target URL / Page" value={settings.buttons.floatingButton.target} onChange={e => updateFloatingButton('target', e.target.value)} />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            <div className="mt-6">
+                <button onClick={handleSave} className="bg-masa-blue text-white px-8 py-3 rounded-lg font-bold shadow-lg hover:bg-blue-900 transition-colors w-full md:w-auto">Save All Changes</button>
+            </div>
+        </div>
+    );
 };
 
 const BackupRestoreModule: React.FC = () => {
@@ -1078,6 +1580,7 @@ const AdminDashboardPage: React.FC = () => {
             case 'users': return hasPermission(['Super Admin']) ? <UserManagerModule /> : <p>Permission Denied</p>;
             case 'backup': return hasPermission(['Super Admin']) ? <BackupRestoreModule /> : <p>Permission Denied</p>;
             case 'settings': return hasPermission(['Super Admin']) ? <SettingsModule /> : <p>Permission Denied</p>;
+            case 'buttons': return hasPermission(['Super Admin']) ? <ButtonManagerModule /> : <p>Permission Denied</p>;
             default: return <div>Select a module</div>;
         }
     };
@@ -1107,6 +1610,7 @@ const AdminDashboardPage: React.FC = () => {
 
                     {hasPermission(['Super Admin']) && <>
                         <div className="px-4 py-2 text-xs font-bold text-gray-500 uppercase mt-2">Configuration</div>
+                        <SidebarItem id="buttons" label="Buttons & Payments" icon={CreditCardIcon} isActive={activeView === 'buttons'} onClick={() => handleSidebarClick('buttons')} />
                         <SidebarItem id="settings" label="Site Settings" icon={LockClosedIcon} isActive={activeView === 'settings'} onClick={() => handleSidebarClick('settings')} />
                         <SidebarItem id="backup" label="Backup / Restore" icon={ShieldCheckIcon} isActive={activeView === 'backup'} onClick={() => handleSidebarClick('backup')} />
                     </>}

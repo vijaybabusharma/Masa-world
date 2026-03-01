@@ -31,7 +31,7 @@ import MissionVisionPage from './pages/MissionVisionPage';
 import CoreValuesPage from './pages/CoreValuesPage';
 import GovernancePage from './pages/GovernancePage';
 import GlobalImpactPage from './pages/GlobalImpactPage';
-import { Page } from './types';
+import { Page, SmartButton, PaymentLink } from './types';
 import { logAnalyticsEvent } from './utils/mockBackend';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -59,10 +59,32 @@ import GlobalScriptManager from './components/GlobalScriptManager';
 import CredibilityBanner from './components/CredibilityBanner';
 import PreviewBanner from './components/PreviewBanner';
 import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
+import { ContentManager } from './utils/contentManager';
+import { HeartIcon } from './components/icons/FeatureIcons';
+import { handleSmartButtonClick } from './utils/buttonHelper';
 
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [floatingBtn, setFloatingBtn] = useState<SmartButton | null>(null);
+  const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
+
+  useEffect(() => {
+    const loadSettings = () => {
+        const settings = ContentManager.getSettings();
+        if (settings.buttons && settings.buttons.floatingButton) {
+            setFloatingBtn(settings.buttons.floatingButton);
+            setPaymentLinks(settings.buttons.paymentLinks);
+        }
+    };
+    loadSettings();
+    window.addEventListener('masa-settings-updated', loadSettings);
+    return () => window.removeEventListener('masa-settings-updated', loadSettings);
+  }, []);
+
+  const onSmartBtnClick = (btn: SmartButton) => {
+      handleSmartButtonClick(btn, paymentLinks, navigateTo);
+  };
 
   const navigateTo = useCallback((page: Page, anchor?: string) => {
     const doScroll = () => {
@@ -172,6 +194,18 @@ const App: React.FC = () => {
       {!isDashboard && <ScrollToTopButton />}
       {!isDashboard && <AccessibilityWidget />}
       {!isDashboard && <LiveActivityToast />}
+      
+      {!isDashboard && floatingBtn && floatingBtn.visible && (
+          <button 
+            onClick={() => handleSmartButtonClick(floatingBtn)}
+            className={`fixed z-40 bg-masa-orange text-white px-6 py-3 rounded-full font-bold shadow-2xl hover:bg-orange-600 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2 animate-bounce-subtle ${
+                floatingBtn.position === 'bottom-left' ? 'bottom-24 left-6' : 'bottom-24 right-6'
+            }`}
+          >
+              <HeartIcon className="h-5 w-5" />
+              <span>{floatingBtn.label}</span>
+          </button>
+      )}
     </div>
   );
 };

@@ -1,14 +1,24 @@
 
-import React from 'react';
-import { NavigationProps } from '../types';
+import React, { useState, useEffect } from 'react';
+import { NavigationProps, FounderMessageContent } from '../types';
 import { ArrowRightIcon, QuoteIcon } from './icons/FeatureIcons';
-import { FOUNDER_IMAGE_URL } from '../utils/data';
+import { ContentManager } from '../utils/contentManager';
 
 interface FounderMessageSectionProps extends NavigationProps {
     bgColor?: string;
 }
 
 const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor = 'bg-white', navigateTo }) => {
+    const [content, setContent] = useState<FounderMessageContent>(ContentManager.getSettings().homepage.founderMessageContent);
+
+    useEffect(() => {
+        const handleSettingsUpdate = () => {
+            setContent(ContentManager.getSettings().homepage.founderMessageContent);
+        };
+        window.addEventListener('masa-settings-updated', handleSettingsUpdate);
+        return () => window.removeEventListener('masa-settings-updated', handleSettingsUpdate);
+    }, []);
+
     return (
         <section className={`py-16 ${bgColor}`}>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,8 +28,8 @@ const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor =
                     <div className="flex justify-center md:justify-end">
                          <div className="relative w-full max-w-md">
                             <img 
-                                src={FOUNDER_IMAGE_URL}
-                                alt="Vijay Babu Sharma, Founder of Masa World Foundation" 
+                                src={content.image}
+                                alt={`${content.name}, ${content.title}`} 
                                 className="rounded-2xl shadow-xl w-full h-auto object-cover aspect-[4/5] bg-gray-100"
                                 loading="lazy"
                                 onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80'; }}
@@ -38,17 +48,17 @@ const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor =
                         </h2>
                         
                         <blockquote className="text-xl text-gray-800 leading-relaxed font-serif italic border-l-4 border-masa-orange pl-6 mb-6 text-justify">
-                            "At MASA World Foundation, we believe that sports, education, and culture together shape confident individuals and responsible communities."
+                            "{content.quote}"
                         </blockquote>
                         
                         <p className="text-gray-600 leading-relaxed mb-8 text-lg text-justify">
-                            Our mission is to empower youth, recognize real heroes, and create lasting impact through disciplined action. We invite you to join this movement of positive change.
+                            {content.text}
                         </p>
                         
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-t border-gray-200 pt-6">
                             <div>
-                                <p className="text-lg font-bold text-masa-charcoal">Vijay Babu Sharma</p>
-                                <p className="text-sm text-gray-500 font-medium">Founder & Chairman</p>
+                                <p className="text-lg font-bold text-masa-charcoal">{content.name}</p>
+                                <p className="text-sm text-gray-500 font-medium">{content.title}</p>
                             </div>
                             <button 
                                 onClick={() => navigateTo('founder-message')} 

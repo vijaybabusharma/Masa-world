@@ -1,30 +1,28 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchIcon, UsersIcon, SparklesIcon, PresentationChartBarIcon } from './icons/FeatureIcons';
+import { ContentManager } from '../utils/contentManager';
+import { ProcessStep } from '../types';
 
 const HowWeWorkSection: React.FC = () => {
-    const steps = [
-        {
-            icon: SearchIcon,
-            title: "Identify",
-            description: "We locate vulnerable communities and critical gaps in social support through grassroots research."
-        },
-        {
-            icon: UsersIcon,
-            title: "Mobilize",
-            description: "We gather resources, passionate volunteers, and local leadership to build a strong foundation for action."
-        },
-        {
-            icon: SparklesIcon,
-            title: "Empower",
-            description: "We execute targeted programs for skills, health, and rights, giving communities the tools they need."
-        },
-        {
-            icon: PresentationChartBarIcon,
-            title: "Sustain",
-            description: "We ensure long-term impact by fostering community ownership and creating self-reliant models for change."
-        },
-    ];
+    const [steps, setSteps] = useState<ProcessStep[]>([]);
+    
+    useEffect(() => {
+        const loadContent = () => {
+            const settings = ContentManager.getSettings();
+            setSteps(settings.homepage.processSteps || []);
+        };
+        loadContent();
+        window.addEventListener('masa-settings-updated', loadContent);
+        return () => window.removeEventListener('masa-settings-updated', loadContent);
+    }, []);
+
+    const iconMap: Record<string, React.FC<any>> = {
+        SearchIcon,
+        UsersIcon,
+        SparklesIcon,
+        PresentationChartBarIcon
+    };
 
     return (
         <section className="py-24 bg-white">
@@ -46,17 +44,20 @@ const HowWeWorkSection: React.FC = () => {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative">
-                        {steps.map((step, index) => (
-                            <div key={index} className="flex flex-col items-center text-center">
-                                <div className="relative z-10 w-24 h-24 rounded-full flex items-center justify-center bg-white border-4 border-masa-blue shadow-lg mb-6">
-                                     <div className="w-16 h-16 rounded-full flex items-center justify-center bg-blue-50 text-masa-blue">
-                                        <step.icon className="h-8 w-8" />
+                        {steps.map((step, index) => {
+                            const Icon = iconMap[step.icon] || SearchIcon;
+                            return (
+                                <div key={index} className="flex flex-col items-center text-center">
+                                    <div className="relative z-10 w-24 h-24 rounded-full flex items-center justify-center bg-white border-4 border-masa-blue shadow-lg mb-6">
+                                         <div className="w-16 h-16 rounded-full flex items-center justify-center bg-blue-50 text-masa-blue">
+                                            <Icon className="h-8 w-8" />
+                                        </div>
                                     </div>
+                                    <h3 className="text-xl font-bold text-masa-charcoal mb-2">{step.title}</h3>
+                                    <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
                                 </div>
-                                <h3 className="text-xl font-bold text-masa-charcoal mb-2">{step.title}</h3>
-                                <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>

@@ -13,10 +13,17 @@ const iconMap = {
 
 const WhatWeDoSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [pillars, setPillars] = useState<PillarItem[]>([]);
+    const [sectionSettings, setSectionSettings] = useState(ContentManager.getSettings().homepage.sections.whatWeDo);
     
     useEffect(() => {
-        const settings = ContentManager.getSettings();
-        setPillars(settings.homepage.pillars || []);
+        const loadContent = () => {
+            const settings = ContentManager.getSettings();
+            setPillars(settings.homepage.pillars || []);
+            setSectionSettings(settings.homepage.sections.whatWeDo);
+        };
+        loadContent();
+        window.addEventListener('masa-settings-updated', loadContent);
+        return () => window.removeEventListener('masa-settings-updated', loadContent);
     }, []);
 
     const colors = {
@@ -25,14 +32,16 @@ const WhatWeDoSection: React.FC<NavigationProps> = ({ navigateTo }) => {
         green: { bg: 'bg-green-500/10', text: 'text-green-500', ring: 'ring-green-500/20' },
     };
 
+    if (!sectionSettings.visible) return null;
+
     return (
         <section className="py-24 bg-gray-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-20 max-w-4xl mx-auto">
                     <span className="text-sm font-bold uppercase tracking-widest text-masa-orange">OUR PILLARS</span>
-                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-masa-charcoal mt-4 mb-6">Holistic Development Ecosystem</h2>
+                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-masa-charcoal mt-4 mb-6">{sectionSettings.title}</h2>
                     <p className="text-xl text-gray-600 leading-relaxed">
-                        We don’t just focus on one aspect. We build a connected ecosystem where sports, education, and culture reinforce each other.
+                        {sectionSettings.subtitle}
                     </p>
                 </div>
                 

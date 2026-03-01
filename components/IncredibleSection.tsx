@@ -1,13 +1,7 @@
 
 import React from 'react';
-import { NavigationProps } from '../types';
+import { NavigationProps, DeliveryAreaItem } from '../types';
 import { CalendarDaysIcon, AcademicCapIcon, TrophyIcon, DocumentCheckIcon, MicrophoneIcon } from './icons/FeatureIcons';
-
-export interface DeliveryAreaItem {
-    type: 'Events' | 'Trainings' | 'Awards' | 'Records' | 'Conferences';
-    title: string;
-    description: string;
-}
 
 interface DeliveryAreasModuleProps extends NavigationProps {
     title: string;
@@ -50,7 +44,7 @@ const IncredibleSection: React.FC<DeliveryAreasModuleProps> = ({ navigateTo, tit
                         
                         return (
                             <div 
-                                key={item.title} 
+                                key={item.id || index} 
                                 onClick={() => navigateTo(route)}
                                 className="flex flex-col items-center text-center group cursor-pointer"
                             >

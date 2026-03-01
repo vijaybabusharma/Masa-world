@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { NavigationProps, Event } from '../types';
+import { NavigationProps, MasaEvent } from '../types';
 import { ContentManager } from '../utils/contentManager';
 import { CalendarDaysIcon, ArrowRightIcon, MapPinIcon } from './icons/FeatureIcons';
 
 const LatestNewsAndEvents: React.FC<NavigationProps> = ({ navigateTo }) => {
-    const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+    const [upcomingEvents, setUpcomingEvents] = useState<MasaEvent[]>([]);
     const [sectionSettings, setSectionSettings] = useState(ContentManager.getSettings().homepage.sections.upcomingEvents);
 
     useEffect(() => {
