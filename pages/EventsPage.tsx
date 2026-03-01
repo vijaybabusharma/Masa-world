@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { NavigationProps, Event } from '../types';
+import { NavigationProps, MasaEvent } from '../types';
 import { 
     CalendarDaysIcon, 
     UsersIcon, 
@@ -24,7 +24,7 @@ import { ContentManager } from '../utils/contentManager';
 
 // --- EVENT REGISTRATION MODAL ---
 interface EventRegistrationModalProps {
-    event: Event;
+    event: MasaEvent;
     onClose: () => void;
 }
 
@@ -174,8 +174,8 @@ const PageHeader: React.FC<{ title: string; subtitle: string; bgImage?: string }
 );
 
 const EventsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
-    const [events, setEvents] = useState<Event[]>([]);
-    const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+    const [events, setEvents] = useState<MasaEvent[]>([]);
+    const [selectedEvent, setSelectedEvent] = useState<MasaEvent | null>(null);
     const [features, setFeatures] = useState({ eventsEnabled: true });
     
     // Filters
@@ -193,11 +193,11 @@ const EventsPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         return () => window.removeEventListener('masa-settings-updated', loadContent);
     }, []);
 
-    const handleParticipate = (event: Event) => {
+    const handleParticipate = (event: MasaEvent) => {
         setSelectedEvent(event);
     };
 
-    const handleViewReport = (event: Event) => {
+    const handleViewReport = (event: MasaEvent) => {
         navigateTo('gallery');
         // The alert guides the user on how to find the event photos on the gallery page.
         setTimeout(() => {

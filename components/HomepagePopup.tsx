@@ -53,8 +53,8 @@ const HomepagePopup: React.FC<HomepagePopupProps> = ({ navigateTo, onClose }) =>
           <XIcon className="h-6 w-6" />
         </button>
 
-        <div className="w-16 h-16 mx-auto bg-masa-blue text-white rounded-full flex items-center justify-center mb-4 overflow-hidden">
-            <img src="logo.svg" alt="MASA Logo" className="h-8 w-auto" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+        <div className="w-16 h-16 mx-auto bg-white text-white rounded-full flex items-center justify-center mb-4 overflow-hidden shadow-md">
+            <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png" alt="MASA Logo" className="h-12 w-auto" />
         </div>
 
         <h2 id="popup-title" className="text-2xl font-bold text-masa-charcoal">

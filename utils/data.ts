@@ -1,5 +1,5 @@
 
-import { Post, Course, Event } from '../types';
+import { Post, Course, MasaEvent } from '../types';
 
 // Replaced with a professional placeholder representing leadership
 export const FOUNDER_IMAGE_URL = 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=782,fit=crop/AMq4Dg7v0wH5yKM1/founder-B9OrhqqUN6Kq3Qir.jpeg';
@@ -96,7 +96,7 @@ export const coursesData: Course[] = [
 
 // --- EVENTS DATA ---
 // FIX: Explicitly typed the array as Event[] to match the expected type definition.
-export const eventsData: Event[] = [
+export const eventsData: MasaEvent[] = [
     {
         id: 'evt-017',
         title: "National Kabaddi Championship",

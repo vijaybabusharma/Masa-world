@@ -52,17 +52,9 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
           <div className="flex-shrink-0">
             <button onClick={() => navigateTo('home')} className="flex-shrink-0 focus:outline-none">
               <img 
-                src="logo.svg" 
+                src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png" 
                 alt="MASA World Foundation" 
                 className={`h-10 w-auto transition-all duration-300`}
-                onError={(e) => { 
-                    const target = e.target as HTMLImageElement;
-                    const fallbackSrc = 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png';
-                    if (!target.src.endsWith(fallbackSrc)) {
-                        target.src = fallbackSrc; 
-                        target.classList.remove('filter', 'invert', 'grayscale', 'brightness-200', 'drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]');
-                    }
-                }} 
               />
             </button>
           </div>

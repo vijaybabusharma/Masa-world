@@ -42,11 +42,11 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                 Masa World Foundation
             </div>
             <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 z-10">
-                <div className="max-w-3xl text-left">
+                <div className="max-w-4xl text-left">
                     <div key={current} className="animate-fade-in-up">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight drop-shadow-md">{slides[current].headline}</h1>
-                        <p className="mt-6 text-base md:text-lg text-gray-200 max-w-2xl drop-shadow">{slides[current].subtext}</p>
-                        <button onClick={() => navigateTo(slides[current].cta.page)} className="mt-8 md:mt-10 bg-masa-orange text-white px-6 py-3 md:px-8 md:py-4 rounded-full text-base md:text-lg font-bold hover:bg-orange-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight drop-shadow-lg leading-tight">{slides[current].headline}</h1>
+                        <p className="mt-8 text-xl md:text-2xl text-gray-100 max-w-3xl drop-shadow-md font-light leading-relaxed">{slides[current].subtext}</p>
+                        <button onClick={() => navigateTo(slides[current].cta.page)} className="mt-10 md:mt-12 bg-masa-orange text-white px-8 py-4 md:px-10 md:py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
                             {slides[current].cta.label}
                         </button>
                     </div>

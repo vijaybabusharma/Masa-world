@@ -68,15 +68,15 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     return (
         <div className="bg-gray-50">
             {/* Hero Section */}
-            <section className="bg-masa-charcoal py-20 text-white text-center">
+            <section className="bg-masa-charcoal py-24 text-white text-center">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Volunteer With MASA</h1>
-                    <p className="mt-4 text-xl text-gray-300 max-w-2xl mx-auto">
+                    <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">Volunteer With MASA</h1>
+                    <p className="mt-6 text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
                         Contribute your time, skills, and passion to create real impact on the ground.
                     </p>
                     <button 
                         onClick={() => document.getElementById('volunteer-form')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="mt-8 bg-masa-orange text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-all shadow-lg transform hover:-translate-y-1"
+                        className="mt-10 bg-masa-orange text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-orange-600 transition-all shadow-xl transform hover:-translate-y-1"
                     >
                         Apply as Volunteer
                     </button>
@@ -84,17 +84,17 @@ const VolunteerPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             </section>
 
             {/* Opportunities Section */}
-            <section className="py-16 bg-white">
+            <section className="py-20 bg-white">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-3xl font-bold text-center text-masa-charcoal mb-12">Opportunities</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-center text-masa-charcoal mb-16">Opportunities</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
                         {roles.map((role, idx) => (
-                            <div key={idx} className="bg-gray-50 p-6 rounded-xl border border-gray-100 text-center hover:shadow-lg transition-all duration-300">
-                                <div className="w-14 h-14 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4 text-masa-blue">
-                                    <role.icon className="h-7 w-7" />
+                            <div key={idx} className="bg-white p-8 rounded-2xl border border-gray-100 text-center hover:shadow-xl transition-all duration-300 group">
+                                <div className="w-20 h-20 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-6 text-masa-blue group-hover:bg-masa-blue group-hover:text-white transition-colors duration-300">
+                                    <role.icon className="h-10 w-10" />
                                 </div>
-                                <h3 className="font-bold text-gray-800 mb-2">{role.title}</h3>
-                                <p className="text-sm text-gray-600">{role.desc}</p>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-3">{role.title}</h3>
+                                <p className="text-base text-gray-600 leading-relaxed">{role.desc}</p>
                             </div>
                         ))}
                     </div>

@@ -1,12 +1,13 @@
 
 import { eventsData, postsData, coursesData } from './data';
-import { Post, GlobalSettings, PageMetadata, Event, Course, MenuItem, NavItem, SliderItem, PillarItem, Testimonial } from '../types';
+import { Post, GlobalSettings, PageMetadata, MasaEvent, Course, MenuItem, NavItem, SliderItem, PillarItem, Testimonial, GalleryItem } from '../types';
 
 // Keys for LocalStorage
 const KEYS = {
     EVENTS: 'masa_content_events',
     BLOGS: 'masa_content_blogs',
     COURSES: 'masa_content_courses',
+    GALLERY: 'masa_content_gallery',
     SETTINGS: 'masa_global_settings',
     PAGES: 'masa_content_pages'
 };
@@ -105,8 +106,69 @@ const defaultFooterLinks: { about: NavItem[], work: NavItem[], involved: NavItem
 };
 
 const defaultSliderItems: SliderItem[] = [
-    { id: 'slide1', headline: "Empowering Youth. Building Nations.", subtext: "We forge future leaders through sports, education, and culture.", image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1800&q=80", cta: { label: "Get Involved", page: "get-involved" } },
-    { id: 'slide2', headline: "Action Today. Impact for Generations.", subtext: "Our model builds character, fosters social unity, and nurtures responsible citizens.", image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1800&q=80", cta: { label: "Explore Programs", page: "programs-overview" } },
+    { 
+        id: 'slide-empower', 
+        headline: "Empowering Youth. Building Nations.", 
+        subtext: "We forge future leaders through sports, education, and culture.", 
+        image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1800&q=80", 
+        cta: { label: "Get Involved", page: "get-involved" } 
+    },
+    { 
+        id: 'slide-events', 
+        headline: "Global Stages, Local Impact.", 
+        subtext: "From national competitions to international exchange programs, we create platforms for youth to shine.", 
+        image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1800&q=80", 
+        cta: { label: "View Events", page: "events" } 
+    },
+    { 
+        id: 'slide-trainings', 
+        headline: "Forging Leaders of Tomorrow.", 
+        subtext: "Discipline-focused training and skill development that builds character and competence.", 
+        image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=1800&q=80", 
+        cta: { label: "Join Training", page: "trainings" } 
+    },
+    { 
+        id: 'slide-awards', 
+        headline: "Honoring Real-Life Heroes.", 
+        subtext: "Recognizing the dedication and excellence of those who go above and beyond for society.", 
+        image: "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=1800&q=80", 
+        cta: { label: "See Awardees", page: "awards" } 
+    },
+    { 
+        id: 'slide-records', 
+        headline: "Breaking Boundaries.", 
+        subtext: "Documenting extraordinary human achievements and milestones that inspire us all.", 
+        image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1800&q=80", 
+        cta: { label: "View Records", page: "records" } 
+    },
+    { 
+        id: 'slide-conferences', 
+        headline: "Conversations That Shape the Future.", 
+        subtext: "Bringing together thought leaders to drive meaningful social progress.", 
+        image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1800&q=80", 
+        cta: { label: "Our Conferences", page: "conferences" } 
+    },
+    {
+        id: 'slide-sports',
+        headline: "Champions in the Making.",
+        subtext: "Nurturing talent, discipline, and teamwork through world-class sports programs.",
+        image: "https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&w=1800&q=80",
+        cta: { label: "Explore Sports", page: "sports" }
+    },
+    {
+        id: 'slide-culture',
+        headline: "Celebrating Our Roots.",
+        subtext: "Preserving heritage and fostering unity through vibrant cultural exchange.",
+        image: "https://images.unsplash.com/photo-1604580864964-c8d0b3e830a4?auto=format&fit=crop&w=1800&q=80",
+        cta: { label: "View Culture", page: "culture" }
+    },
+    {
+        id: 'slide-volunteer',
+        headline: "Be the Change You Wish to See.",
+        subtext: "Join thousands of volunteers making a tangible difference in communities every day.",
+        image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1800&q=80",
+        cta: { label: "Volunteer Now", page: "volunteer" }
+    }
 ];
 
 const defaultPillars: PillarItem[] = [
@@ -166,6 +228,17 @@ const defaultTestimonials: Testimonial[] = [
     }
 ];
 
+const defaultGalleryItems: GalleryItem[] = [
+    { id: 1, category: 'Sports Events', title: 'Annual Sports Day', location: 'New Delhi', date: 'Aug 15, 2024', imageUrl: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=800&q=80', description: 'A vibrant celebration of sportsmanship where over 500 young athletes showcased incredible determination and talent in track and field events.', tags: ['Sports', 'Youth', 'Competition', 'Athletics'] },
+    { id: 2, category: 'Community Outreach', title: 'Rural Health Camp', location: 'Uttar Pradesh', date: 'Jul 20, 2024', imageUrl: 'https://images.unsplash.com/photo-1628348070889-cb656243b487?auto=format&fit=crop&w=800&q=80', description: 'Our dedicated team of doctors and volunteers provided essential healthcare screenings to over 1,000 people in a single day, bridging critical gaps in medical access.', tags: ['Health', 'Community', 'Service', 'Medical'] },
+    { id: 3, category: 'Trainings & Workshops', title: 'Leadership Bootcamp', location: 'Mumbai', date: 'Jul 10, 2024', imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80', description: 'An intensive 3-day workshop that transformed aspiring students into confident leaders through sessions on public speaking, strategic thinking, and team management.', tags: ['Education', 'Leadership', 'Youth', 'Skills'] },
+    { id: 4, category: 'Awards & Recognition', title: 'Real Hero Awards', location: 'New Delhi', date: 'Jun 05, 2024', imageUrl: 'https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=800&q=80', description: 'A night dedicated to honoring the unsung heroes of our society. We celebrated 20 individuals whose selfless work inspires us all.', tags: ['Awards', 'Recognition', 'Community', 'Heroes'] },
+    { id: 5, category: 'Conferences & Seminars', title: 'National Youth Conclave', location: 'Bangalore', date: 'May 15, 2024', imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80', description: 'A vital platform where policymakers and student leaders engaged in fruitful discussions on education reform and the future of India\'s youth.', tags: ['Conference', 'Youth', 'Policy', 'Debate'] },
+    { id: 6, category: 'International Programs', title: 'Global Exchange Forum', location: 'Virtual', date: 'Apr 22, 2024', imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80', description: 'Connecting bright young minds from India and around the world to collaborate on sustainable development goals and foster global understanding.', tags: ['Global', 'International', 'Culture', 'SDGs'] },
+    { id: 7, category: 'Sports Events', title: 'District Football League', location: 'Kolkata', date: 'Mar 30, 2024', imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80', description: 'The finals of our district league, where fierce competition, incredible teamwork, and the pure joy of the game were on full display.', tags: ['Sports', 'Football', 'Youth', 'Teamwork'] },
+    { id: 8, category: 'Community Outreach', title: 'City Cleanliness Drive', location: 'Pune', date: 'Mar 12, 2024', imageUrl: 'https://images.unsplash.com/photo-1618521630643-b19623e4d872?auto=format&fit=crop&w=800&q=80', description: 'Hundreds of volunteers joined hands to create a cleaner city, spreading awareness about waste segregation and our collective civic duty.', tags: ['Community', 'Environment', 'Volunteer', 'SwachhBharat'] },
+];
+
 // Default Settings
 const defaultSettings: GlobalSettings = {
     general: { siteName: 'MASA World Foundation', contactEmail: 'masaworldfoundation@gmail.com', enableRegistrations: true, maintenanceMode: false },
@@ -221,6 +294,7 @@ const initializeData = () => {
     initKey(KEYS.EVENTS, eventsData);
     initKey(KEYS.BLOGS, postsData);
     initKey(KEYS.COURSES, coursesData);
+    initKey(KEYS.GALLERY, defaultGalleryItems);
     initKey(KEYS.PAGES, defaultPages);
     
     // Smartly merge settings to add new fields without overwriting user changes
@@ -232,7 +306,7 @@ const initializeData = () => {
         homepage: {
             ...defaultSettings.homepage,
             ...(existingSettings.homepage || {}),
-            slider: { ...defaultSettings.homepage.slider, ...(existingSettings.homepage?.slider || {}) },
+            slider: { ...defaultSettings.homepage.slider, ...(existingSettings.homepage?.slider || {}), slides: defaultSliderItems },
             pillars: existingSettings.homepage?.pillars && existingSettings.homepage.pillars.length > 0 ? existingSettings.homepage.pillars : defaultSettings.homepage.pillars,
             testimonials: existingSettings.homepage?.testimonials && existingSettings.homepage.testimonials.length > 0 ? existingSettings.homepage.testimonials : defaultSettings.homepage.testimonials,
             sections: { ...defaultSettings.homepage.sections, ...(existingSettings.homepage?.sections || {}) },
@@ -279,12 +353,12 @@ export const ContentManager = {
     },
 
     // --- EVENTS ---
-    getEvents: (): Event[] => {
+    getEvents: (): MasaEvent[] => {
         if (typeof window === 'undefined') return eventsData;
         const data = localStorage.getItem(KEYS.EVENTS);
         return data ? JSON.parse(data) : [];
     },
-    saveEvent: (event: Event) => {
+    saveEvent: (event: MasaEvent) => {
         if (typeof window === 'undefined') return;
         const events = ContentManager.getEvents();
         const index = events.findIndex(e => e.id === event.id);
@@ -342,6 +416,28 @@ export const ContentManager = {
         if (typeof window === 'undefined') return;
         const courses = ContentManager.getCourses().filter(c => c.id !== id);
         localStorage.setItem(KEYS.COURSES, JSON.stringify(courses));
+        window.dispatchEvent(new Event('masa-settings-updated'));
+    },
+
+    // --- GALLERY ---
+    getGalleryItems: (): GalleryItem[] => {
+        if (typeof window === 'undefined') return defaultGalleryItems;
+        const data = localStorage.getItem(KEYS.GALLERY);
+        return data ? JSON.parse(data) : [];
+    },
+    saveGalleryItem: (item: GalleryItem) => {
+        if (typeof window === 'undefined') return;
+        const items = ContentManager.getGalleryItems();
+        const index = items.findIndex(i => i.id === item.id);
+        if (index >= 0) items[index] = item;
+        else items.unshift(item);
+        localStorage.setItem(KEYS.GALLERY, JSON.stringify(items));
+        window.dispatchEvent(new Event('masa-settings-updated'));
+    },
+    deleteGalleryItem: (id: number | string) => {
+        if (typeof window === 'undefined') return;
+        const items = ContentManager.getGalleryItems().filter(i => i.id !== id);
+        localStorage.setItem(KEYS.GALLERY, JSON.stringify(items));
         window.dispatchEvent(new Event('masa-settings-updated'));
     },
 };

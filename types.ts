@@ -5,6 +5,18 @@ export interface NavigationProps {
   navigateTo: (page: Page, anchor?: string) => void;
 }
 
+export interface GalleryItem {
+    id: number | string;
+    category: string;
+    title: string;
+    location: string;
+    date: string;
+    imageUrl: string;
+    videoUrl?: string;
+    description: string;
+    tags: string[];
+}
+
 export interface Post {
     id: number;
     title: string;
@@ -40,7 +52,7 @@ export interface Course {
     price: string;
 }
 
-export interface Event {
+export interface MasaEvent {
     id: string;
     title: string;
     category: 'Conference' | 'Training' | 'Sports' | 'Community' | 'Award';

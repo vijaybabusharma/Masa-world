@@ -4,10 +4,10 @@ import { FOUNDER_IMAGE_URL } from '../utils/data';
 import { NavigationProps } from '../types';
 
 const PageHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
-    <div className="bg-masa-charcoal py-20 text-white text-center">
+    <div className="bg-masa-charcoal py-24 text-white text-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">{title}</h1>
-            <p className="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">{subtitle}</p>
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6">{title}</h1>
+            <p className="mt-6 text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">{subtitle}</p>
         </div>
     </div>
 );
@@ -51,8 +51,8 @@ const FounderMessagePage: React.FC<NavigationProps> = ({ navigateTo }) => {
 
                         {/* Right Column: Message Content */}
                         <div className="w-full lg:w-7/12 order-2 lg:order-2">
-                            <div className="prose lg:prose-lg max-w-none text-gray-700 space-y-6 text-left">
-                                <p className="text-xl font-bold text-masa-charcoal mb-8">
+                            <div className="prose lg:prose-lg max-w-none text-gray-700 space-y-6 text-justify">
+                                <p className="text-xl font-bold text-masa-charcoal mb-8 text-left">
                                     Dear Friends and Supporters,
                                 </p>
 

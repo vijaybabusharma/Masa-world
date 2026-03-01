@@ -64,22 +64,22 @@ const GetInvolvedSection: React.FC<GetInvolvedSectionProps> = ({ navigateTo, onP
     return (
         <section className="py-24 bg-gray-50">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16 max-w-3xl mx-auto">
-                    <h2 className="text-3xl font-bold text-masa-charcoal">Get Involved</h2>
-                    <p className="mt-4 text-lg text-gray-600">Join our mission to create a lasting impact. Whether you volunteer, donate, or partner with us, your contribution matters.</p>
+                <div className="text-center mb-20 max-w-4xl mx-auto">
+                    <h2 className="text-4xl md:text-5xl font-extrabold text-masa-charcoal tracking-tight mb-6">Get Involved</h2>
+                    <p className="text-xl text-gray-600 leading-relaxed">Join our mission to create a lasting impact. Whether you volunteer, donate, or partner with us, your contribution matters.</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {actions.map((a) => (
-                        <div key={a.title} className={`p-8 rounded-2xl shadow-lg flex flex-col text-center items-center group transition-all duration-300 transform hover:-translate-y-1 ${a.color === 'highlight' ? 'bg-masa-orange text-white' : 'bg-white border border-gray-200'}`}>
-                            <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 transition-colors duration-300 ${a.color === 'highlight' ? 'bg-white/20' : 'bg-orange-50 group-hover:bg-masa-orange'}`}>
-                                <a.icon className={`h-8 w-8 transition-colors duration-300 ${a.color === 'highlight' ? 'text-white' : 'text-masa-orange group-hover:text-white'}`} />
+                        <div key={a.title} className={`p-8 rounded-3xl shadow-xl flex flex-col text-center items-center group transition-all duration-300 transform hover:-translate-y-2 ${a.color === 'highlight' ? 'bg-masa-orange text-white' : 'bg-white border border-gray-100'}`}>
+                            <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 transition-colors duration-300 ${a.color === 'highlight' ? 'bg-white/20' : 'bg-orange-50 group-hover:bg-masa-orange'}`}>
+                                <a.icon className={`h-10 w-10 transition-colors duration-300 ${a.color === 'highlight' ? 'text-white' : 'text-masa-orange group-hover:text-white'}`} />
                             </div>
-                            <h3 className={`text-xl font-bold ${a.color === 'highlight' ? 'text-white' : 'text-masa-charcoal'}`}>{a.title}</h3>
-                            <p className={`my-4 flex-grow text-sm ${a.color === 'highlight' ? 'text-orange-100' : 'text-gray-600'}`}>{a.desc}</p>
+                            <h3 className={`text-2xl font-bold mb-3 ${a.color === 'highlight' ? 'text-white' : 'text-masa-charcoal'}`}>{a.title}</h3>
+                            <p className={`mb-8 flex-grow text-base leading-relaxed ${a.color === 'highlight' ? 'text-orange-100' : 'text-gray-600'}`}>{a.desc}</p>
                             
                             <button 
                                 onClick={() => handleClick(a)} 
-                                className={`mt-auto font-bold py-3 px-6 rounded-full transition-all duration-300 w-full text-sm ${
+                                className={`mt-auto font-bold py-4 px-8 rounded-full transition-all duration-300 w-full text-base shadow-md hover:shadow-lg ${
                                     a.color === 'highlight' ? 'bg-white text-masa-orange hover:bg-orange-50' : 
                                     (a.color === 'orange' ? 'bg-masa-orange text-white hover:bg-orange-600' : 'bg-white border-2 border-masa-blue text-masa-blue hover:bg-masa-blue hover:text-white')
                                 }`}

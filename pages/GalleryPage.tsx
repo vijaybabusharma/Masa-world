@@ -1,26 +1,16 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { NavigationProps } from '../types';
+import { NavigationProps, GalleryItem } from '../types';
 import { XIcon } from '../components/icons/UiIcons';
 import { HeartIcon, UsersIcon, SparklesIcon, CalendarDaysIcon, MapPinIcon, PlusIcon, CameraIcon } from '../components/icons/FeatureIcons';
 import GalleryUploadModal from '../components/GalleryUploadModal';
 import AiImageGeneratorModal from '../components/AiImageGeneratorModal';
+import { ContentManager } from '../utils/contentManager';
 
 // --- Data ---
 const galleryCategories = [
     'All', 'Sports Events', 'Trainings & Workshops', 'Awards & Recognition', 
     'Conferences & Seminars', 'Community Outreach', 'International Programs'
-];
-
-const galleryData = [
-    { id: 1, category: 'Sports Events', title: 'Annual Sports Day', location: 'New Delhi', date: 'Aug 15, 2024', imageUrl: 'https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=800&q=80', description: 'A vibrant celebration of sportsmanship where over 500 young athletes showcased incredible determination and talent in track and field events.', tags: ['Sports', 'Youth', 'Competition', 'Athletics'] },
-    { id: 2, category: 'Community Outreach', title: 'Rural Health Camp', location: 'Uttar Pradesh', date: 'Jul 20, 2024', imageUrl: 'https://images.unsplash.com/photo-1628348070889-cb656243b487?auto=format&fit=crop&w=800&q=80', description: 'Our dedicated team of doctors and volunteers provided essential healthcare screenings to over 1,000 people in a single day, bridging critical gaps in medical access.', tags: ['Health', 'Community', 'Service', 'Medical'] },
-    { id: 3, category: 'Trainings & Workshops', title: 'Leadership Bootcamp', location: 'Mumbai', date: 'Jul 10, 2024', imageUrl: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80', description: 'An intensive 3-day workshop that transformed aspiring students into confident leaders through sessions on public speaking, strategic thinking, and team management.', tags: ['Education', 'Leadership', 'Youth', 'Skills'] },
-    { id: 4, category: 'Awards & Recognition', title: 'Real Hero Awards', location: 'New Delhi', date: 'Jun 05, 2024', imageUrl: 'https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=800&q=80', description: 'A night dedicated to honoring the unsung heroes of our society. We celebrated 20 individuals whose selfless work inspires us all.', tags: ['Awards', 'Recognition', 'Community', 'Heroes'] },
-    { id: 5, category: 'Conferences & Seminars', title: 'National Youth Conclave', location: 'Bangalore', date: 'May 15, 2024', imageUrl: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80', description: 'A vital platform where policymakers and student leaders engaged in fruitful discussions on education reform and the future of India\'s youth.', tags: ['Conference', 'Youth', 'Policy', 'Debate'] },
-    { id: 6, category: 'International Programs', title: 'Global Exchange Forum', location: 'Virtual', date: 'Apr 22, 2024', imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80', description: 'Connecting bright young minds from India and around the world to collaborate on sustainable development goals and foster global understanding.', tags: ['Global', 'International', 'Culture', 'SDGs'] },
-    { id: 7, category: 'Sports Events', title: 'District Football League', location: 'Kolkata', date: 'Mar 30, 2024', imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80', description: 'The finals of our district league, where fierce competition, incredible teamwork, and the pure joy of the game were on full display.', tags: ['Sports', 'Football', 'Youth', 'Teamwork'] },
-    { id: 8, category: 'Community Outreach', title: 'City Cleanliness Drive', location: 'Pune', date: 'Mar 12, 2024', imageUrl: 'https://images.unsplash.com/photo-1618521630643-b19623e4d872?auto=format&fit=crop&w=800&q=80', description: 'Hundreds of volunteers joined hands to create a cleaner city, spreading awareness about waste segregation and our collective civic duty.', tags: ['Community', 'Environment', 'Volunteer', 'SwachhBharat'] },
 ];
 
 // --- Components ---
@@ -144,11 +134,19 @@ const GalleryPage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [selectedItem, setSelectedItem] = useState<any | null>(null);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+    const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+
+    useEffect(() => {
+        setGalleryItems(ContentManager.getGalleryItems());
+        const handleUpdate = () => setGalleryItems(ContentManager.getGalleryItems());
+        window.addEventListener('masa-settings-updated', handleUpdate);
+        return () => window.removeEventListener('masa-settings-updated', handleUpdate);
+    }, []);
 
     const filteredItems = useMemo(() => {
-        if (activeCategory === 'All') return galleryData;
-        return galleryData.filter(item => item.category === activeCategory);
-    }, [activeCategory]);
+        if (activeCategory === 'All') return galleryItems;
+        return galleryItems.filter(item => item.category === activeCategory);
+    }, [activeCategory, galleryItems]);
     
     const handleSubmitToGallery = (base64Data: string) => {
         // This is a mock. In a real app, this would likely involve more data.
