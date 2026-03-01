@@ -335,68 +335,93 @@ const defaultPages: PageMetadata[] = [
 
 // Helper to initialize data if empty
 const initializeData = () => {
-    if (typeof window === 'undefined') return;
-
-    const initKey = (key: string, data: any) => {
-        if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(data));
-    };
-
-    initKey(KEYS.EVENTS, eventsData);
-    initKey(KEYS.BLOGS, postsData);
-    initKey(KEYS.COURSES, coursesData);
-    initKey(KEYS.GALLERY, defaultGalleryItems);
-    initKey(KEYS.PAGES, defaultPages);
-    
-    // Smartly merge settings to add new fields without overwriting user changes
-    const existingSettings = JSON.parse(localStorage.getItem(KEYS.SETTINGS) || '{}');
-    const mergedSettings = {
-        ...defaultSettings,
-        ...existingSettings,
-        general: { ...defaultSettings.general, ...existingSettings.general },
-        homepage: {
-            ...defaultSettings.homepage,
-            ...(existingSettings.homepage || {}),
-            slider: { ...defaultSettings.homepage.slider, ...(existingSettings.homepage?.slider || {}), slides: defaultSliderItems },
-            pillars: existingSettings.homepage?.pillars && existingSettings.homepage.pillars.length > 0 ? existingSettings.homepage.pillars : defaultSettings.homepage.pillars,
-            testimonials: existingSettings.homepage?.testimonials && existingSettings.homepage.testimonials.length > 0 ? existingSettings.homepage.testimonials : defaultSettings.homepage.testimonials,
-            deliveryItems: existingSettings.homepage?.deliveryItems && existingSettings.homepage.deliveryItems.length > 0 ? existingSettings.homepage.deliveryItems : defaultSettings.homepage.deliveryItems,
-            processSteps: existingSettings.homepage?.processSteps && existingSettings.homepage.processSteps.length > 0 ? existingSettings.homepage.processSteps : defaultSettings.homepage.processSteps,
-            founderMessageContent: existingSettings.homepage?.founderMessageContent || defaultSettings.homepage.founderMessageContent,
-            impactStats: existingSettings.homepage?.impactStats || defaultSettings.homepage.impactStats,
-            sections: { ...defaultSettings.homepage.sections, ...(existingSettings.homepage?.sections || {}) },
-        },
-        navigation: { ...defaultSettings.navigation, ...existingSettings.navigation, headerMenu: defaultHeaderMenu },
-        scripts: { ...defaultSettings.scripts, ...existingSettings.scripts },
-        features: { ...defaultSettings.features, ...existingSettings.features },
-        buttons: { ...defaultButtonSettings, ...(existingSettings.buttons || {}) },
-    };
-    localStorage.setItem(KEYS.SETTINGS, JSON.stringify(mergedSettings));
+    // No-op: Data should be managed on the server
 };
 
 if (typeof window !== 'undefined') {
-    initializeData();
+    // ContentManager.syncWithServer(); // We'll call this explicitly when needed
 }
 
 export const ContentManager = {
+    // --- SYNC ---
+    syncWithServer: async () => {
+        if (typeof window === 'undefined') return;
+        try {
+            const fetchJson = async (url: string) => {
+                const r = await fetch(url);
+                if (!r.ok) return null;
+                return r.json();
+            };
+
+            const [settings, pages, events, posts, courses, gallery] = await Promise.all([
+                fetchJson('/api/content/settings'),
+                fetchJson('/api/content/pages'),
+                fetchJson('/api/content/events'),
+                fetchJson('/api/content/posts'),
+                fetchJson('/api/content/courses'),
+                fetchJson('/api/content/gallery')
+            ]);
+
+            if (settings && typeof settings === 'object' && !Array.isArray(settings) && !settings.message) {
+                localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings));
+            }
+            if (Array.isArray(pages)) localStorage.setItem(KEYS.PAGES, JSON.stringify(pages));
+            if (Array.isArray(events)) localStorage.setItem(KEYS.EVENTS, JSON.stringify(events));
+            if (Array.isArray(posts)) localStorage.setItem(KEYS.BLOGS, JSON.stringify(posts));
+            if (Array.isArray(courses)) localStorage.setItem(KEYS.COURSES, JSON.stringify(courses));
+            if (Array.isArray(gallery)) localStorage.setItem(KEYS.GALLERY, JSON.stringify(gallery));
+            
+            window.dispatchEvent(new Event('masa-settings-updated'));
+        } catch (err) {
+            console.error('Failed to sync content', err);
+        }
+    },
+
+    // --- FORMS ---
+    submitForm: async (data: any) => {
+        try {
+            const res = await fetch('/api/forms/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            return await res.json();
+        } catch (err) {
+            console.error('Form submission failed', err);
+            throw err;
+        }
+    },
+
     // --- SETTINGS ---
     getSettings: (): GlobalSettings => {
         if (typeof window === 'undefined') return defaultSettings;
         const data = localStorage.getItem(KEYS.SETTINGS);
         return data ? JSON.parse(data) : defaultSettings;
     },
-    saveSettings: (settings: GlobalSettings) => {
+    saveSettings: async (settings: GlobalSettings) => {
         if (typeof window === 'undefined') return;
         localStorage.setItem(KEYS.SETTINGS, JSON.stringify(settings));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            });
+        } catch (err) { console.error('Failed to save settings to server', err); }
     },
 
     // --- PAGES ---
     getPages: (): PageMetadata[] => {
         if (typeof window === 'undefined') return defaultPages;
         const data = localStorage.getItem(KEYS.PAGES);
-        return data ? JSON.parse(data) : defaultPages;
+        if (!data) return defaultPages;
+        try {
+            const parsed = JSON.parse(data);
+            return Array.isArray(parsed) ? parsed : defaultPages;
+        } catch { return defaultPages; }
     },
-    savePage: (page: PageMetadata) => {
+    savePage: async (page: PageMetadata) => {
         if (typeof window === 'undefined') return;
         const pages = ContentManager.getPages();
         const index = pages.findIndex(p => p.id === page.id);
@@ -405,15 +430,26 @@ export const ContentManager = {
         else pages.push(page);
         localStorage.setItem(KEYS.PAGES, JSON.stringify(pages));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/pages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pages)
+            });
+        } catch (err) { console.error('Failed to save pages to server', err); }
     },
 
     // --- EVENTS ---
     getEvents: (): MasaEvent[] => {
         if (typeof window === 'undefined') return eventsData;
         const data = localStorage.getItem(KEYS.EVENTS);
-        return data ? JSON.parse(data) : [];
+        if (!data) return eventsData;
+        try {
+            const parsed = JSON.parse(data);
+            return Array.isArray(parsed) && parsed.length > 0 ? parsed : eventsData;
+        } catch { return eventsData; }
     },
-    saveEvent: (event: MasaEvent) => {
+    saveEvent: async (event: MasaEvent) => {
         if (typeof window === 'undefined') return;
         const events = ContentManager.getEvents();
         const index = events.findIndex(e => e.id === event.id);
@@ -421,21 +457,39 @@ export const ContentManager = {
         else events.unshift(event);
         localStorage.setItem(KEYS.EVENTS, JSON.stringify(events));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(events)
+            });
+        } catch (err) { console.error('Failed to save events to server', err); }
     },
-    deleteEvent: (id: string) => {
+    deleteEvent: async (id: string) => {
         if (typeof window === 'undefined') return;
         const events = ContentManager.getEvents().filter(e => e.id !== id);
         localStorage.setItem(KEYS.EVENTS, JSON.stringify(events));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(events)
+            });
+        } catch (err) { console.error('Failed to delete event on server', err); }
     },
 
     // --- BLOGS ---
     getPosts: (): Post[] => {
         if (typeof window === 'undefined') return postsData;
         const data = localStorage.getItem(KEYS.BLOGS);
-        return data ? JSON.parse(data) : [];
+        if (!data) return postsData;
+        try {
+            const parsed = JSON.parse(data);
+            return Array.isArray(parsed) && parsed.length > 0 ? parsed : postsData;
+        } catch { return postsData; }
     },
-    savePost: (post: Post) => {
+    savePost: async (post: Post) => {
         if (typeof window === 'undefined') return;
         const posts = ContentManager.getPosts();
         const index = posts.findIndex(p => p.id === post.id);
@@ -444,21 +498,39 @@ export const ContentManager = {
         else posts.unshift(post);
         localStorage.setItem(KEYS.BLOGS, JSON.stringify(posts));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/posts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(posts)
+            });
+        } catch (err) { console.error('Failed to save posts to server', err); }
     },
-    deletePost: (id: number) => {
+    deletePost: async (id: number) => {
         if (typeof window === 'undefined') return;
         const posts = ContentManager.getPosts().filter(p => p.id !== id);
         localStorage.setItem(KEYS.BLOGS, JSON.stringify(posts));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/posts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(posts)
+            });
+        } catch (err) { console.error('Failed to delete post on server', err); }
     },
 
     // --- COURSES ---
     getCourses: (): Course[] => {
         if (typeof window === 'undefined') return coursesData;
         const data = localStorage.getItem(KEYS.COURSES);
-        return data ? JSON.parse(data) : [];
+        if (!data) return coursesData;
+        try {
+            const parsed = JSON.parse(data);
+            return Array.isArray(parsed) && parsed.length > 0 ? parsed : coursesData;
+        } catch { return coursesData; }
     },
-    saveCourse: (course: Course) => {
+    saveCourse: async (course: Course) => {
         if (typeof window === 'undefined') return;
         const courses = ContentManager.getCourses();
         const index = courses.findIndex(c => c.id === course.id);
@@ -466,21 +538,39 @@ export const ContentManager = {
         else courses.unshift(course);
         localStorage.setItem(KEYS.COURSES, JSON.stringify(courses));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/courses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(courses)
+            });
+        } catch (err) { console.error('Failed to save courses to server', err); }
     },
-    deleteCourse: (id: number) => {
+    deleteCourse: async (id: number) => {
         if (typeof window === 'undefined') return;
         const courses = ContentManager.getCourses().filter(c => c.id !== id);
         localStorage.setItem(KEYS.COURSES, JSON.stringify(courses));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/courses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(courses)
+            });
+        } catch (err) { console.error('Failed to delete course on server', err); }
     },
 
     // --- GALLERY ---
     getGalleryItems: (): GalleryItem[] => {
         if (typeof window === 'undefined') return defaultGalleryItems;
         const data = localStorage.getItem(KEYS.GALLERY);
-        return data ? JSON.parse(data) : [];
+        if (!data) return defaultGalleryItems;
+        try {
+            const parsed = JSON.parse(data);
+            return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultGalleryItems;
+        } catch { return defaultGalleryItems; }
     },
-    saveGalleryItem: (item: GalleryItem) => {
+    saveGalleryItem: async (item: GalleryItem) => {
         if (typeof window === 'undefined') return;
         const items = ContentManager.getGalleryItems();
         const index = items.findIndex(i => i.id === item.id);
@@ -488,11 +578,25 @@ export const ContentManager = {
         else items.unshift(item);
         localStorage.setItem(KEYS.GALLERY, JSON.stringify(items));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/gallery', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(items)
+            });
+        } catch (err) { console.error('Failed to save gallery to server', err); }
     },
-    deleteGalleryItem: (id: number | string) => {
+    deleteGalleryItem: async (id: number | string) => {
         if (typeof window === 'undefined') return;
         const items = ContentManager.getGalleryItems().filter(i => i.id !== id);
         localStorage.setItem(KEYS.GALLERY, JSON.stringify(items));
         window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/gallery', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(items)
+            });
+        } catch (err) { console.error('Failed to delete gallery item on server', err); }
     },
 };

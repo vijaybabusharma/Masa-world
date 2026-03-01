@@ -1,0 +1,525 @@
+import express from 'express';
+import { createServer as createViteServer } from 'vite';
+import path from 'path';
+import fs from 'fs';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import multer from 'multer';
+import { defaultSettings, defaultPages } from './utils/defaultData';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET || 'masa-super-secret-key-change-in-prod';
+const DATA_DIR = path.join(process.cwd(), 'data');
+const USERS_FILE = path.join(DATA_DIR, 'users.json');
+const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
+
+// Ensure directories exist
+[DATA_DIR, UPLOADS_DIR].forEach(dir => {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
+
+// Configure Multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, UPLOADS_DIR),
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage });
+
+// Serve uploads statically
+app.use('/uploads', express.static(UPLOADS_DIR));
+
+// Ensure users file exists
+if (!fs.existsSync(USERS_FILE)) {
+    fs.writeFileSync(USERS_FILE, '[]');
+}
+
+// Ensure content files exist with defaults
+const initContentFiles = () => {
+    const files = [
+        { name: 'content_settings.json', data: defaultSettings },
+        { name: 'content_pages.json', data: defaultPages },
+        { name: 'content_events.json', data: [] },
+        { name: 'content_posts.json', data: [] },
+        { name: 'content_courses.json', data: [] },
+        { name: 'content_gallery.json', data: [] },
+        { name: 'submissions.json', data: [] },
+        { name: 'donations.json', data: [] },
+        { name: 'activity_logs.json', data: [] }
+    ];
+
+    files.forEach(f => {
+        const filePath = path.join(DATA_DIR, f.name);
+        if (!fs.existsSync(filePath)) {
+            fs.writeFileSync(filePath, JSON.stringify(f.data, null, 2));
+        }
+    });
+};
+
+initContentFiles();
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(cookieParser());
+
+// Helper to read/write users
+const readJsonFile = (filePath: string, defaultValue: any = []) => {
+    try {
+        if (!fs.existsSync(filePath)) return defaultValue;
+        const content = fs.readFileSync(filePath, 'utf-8');
+        if (!content) return defaultValue;
+        return JSON.parse(content);
+    } catch (e) {
+        console.error(`Error reading file ${filePath}`, e);
+        return defaultValue;
+    }
+};
+
+const getUsers = () => readJsonFile(USERS_FILE, []);
+const saveUsers = (users: any[]) => fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+
+// Initialize default admin if no users exist
+const initDefaultAdmin = async () => {
+    const users = getUsers();
+    if (users.length === 0) {
+        const hashedPassword = await bcrypt.hash('Masa@world@vijay123', 10);
+        const adminUser = {
+            id: 'u1',
+            name: 'Super Admin',
+            email: 'vijaybabusharma0@gmail.com',
+            role: 'Super Admin',
+            passwordHash: hashedPassword,
+            avatar: 'https://ui-avatars.com/api/?name=Super+Admin&background=1E3A8A&color=fff',
+            active: true,
+            createdAt: new Date().toISOString()
+        };
+        saveUsers([adminUser]);
+        console.log('Default admin user created.');
+    }
+};
+
+initDefaultAdmin();
+
+// Middleware to verify JWT and Role
+const requirePermission = (allowedRoles: string[]) => (req: any, res: any, next: any) => {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+    jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
+        if (err) return res.status(403).json({ message: 'Forbidden' });
+        if (!allowedRoles.includes(decoded.role)) {
+            return res.status(403).json({ message: 'Insufficient permissions' });
+        }
+        req.user = decoded;
+        next();
+    });
+};
+
+const authenticateToken = (req: any, res: any, next: any) => {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+    jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
+        if (err) return res.status(403).json({ message: 'Forbidden' });
+        req.user = user;
+        next();
+    });
+};
+
+const requireAdmin = requirePermission(['Super Admin']);
+const requireEditor = requirePermission(['Super Admin', 'Admin / Manager', 'Editor']);
+const requireFinance = requirePermission(['Super Admin', 'Accountant / Finance']);
+const requireVolunteerCoord = requirePermission(['Super Admin', 'Admin / Manager', 'Volunteer Coordinator']);
+
+// --- Activity Logs ---
+const LOGS_FILE = path.join(DATA_DIR, 'activity_logs.json');
+const logAction = (userId: string, userName: string, action: string, target: string, details?: string) => {
+    let logs = readJsonFile(LOGS_FILE, []);
+    logs.unshift({
+        id: `log-${Date.now()}`,
+        userId,
+        userName,
+        action,
+        target,
+        timestamp: new Date().toISOString(),
+        details
+    });
+    fs.writeFileSync(LOGS_FILE, JSON.stringify(logs.slice(0, 1000), null, 2));
+};
+
+// --- Email Notification Helper ---
+const sendEmailNotification = (to: string, subject: string, body: string) => {
+    console.log(`[EMAIL NOTIFICATION]
+To: ${to}
+Subject: ${subject}
+Body: ${body}
+---------------------------`);
+    // In a real self-hosted environment, you would use nodemailer here.
+    // For this CMS conversion, we log it to demonstrate server-side handling.
+};
+
+app.get('/api/logs', requireAdmin, (req, res) => {
+    const logs = readJsonFile(LOGS_FILE, []);
+    res.json(logs);
+});
+
+// --- Donations ---
+const DONATIONS_FILE = path.join(DATA_DIR, 'donations.json');
+app.get('/api/donations', requireFinance, (req, res) => {
+    const donations = readJsonFile(DONATIONS_FILE, []);
+    res.json(donations);
+});
+
+app.post('/api/donations', requireFinance, (req, res) => {
+    const donation = { id: `don-${Date.now()}`, ...req.body, date: new Date().toISOString() };
+    let donations = readJsonFile(DONATIONS_FILE, []);
+    donations.unshift(donation);
+    fs.writeFileSync(DONATIONS_FILE, JSON.stringify(donations, null, 2));
+    res.json(donation);
+});
+
+// --- Auth Routes ---
+
+app.post('/api/auth/login', async (req, res) => {
+    const { email, password, remember } = req.body;
+    const users = getUsers();
+    const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
+
+    if (!user || user.status === 'Disabled') {
+        return res.status(401).json({ message: 'Invalid credentials or account disabled.' });
+    }
+
+    const validPassword = await bcrypt.compare(password, user.passwordHash);
+    if (!validPassword) {
+        return res.status(401).json({ message: 'Invalid credentials.' });
+    }
+
+    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: remember ? '30d' : '24h' });
+    
+    user.lastLogin = new Date().toISOString();
+    saveUsers(users);
+
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: true, // Required for SameSite=None
+        sameSite: 'none', // Required for cross-origin iframe
+        maxAge: remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000
+    });
+
+    const { passwordHash, ...safeUser } = user;
+    res.json({ user: safeUser });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ message: 'Logged out successfully' });
+});
+
+app.get('/api/auth/me', (req: any, res) => {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+    jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
+        if (err) return res.status(403).json({ message: 'Forbidden' });
+        const users = getUsers();
+        const user = users.find((u: any) => u.id === decoded.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        const { passwordHash, ...safeUser } = user;
+        res.json({ user: safeUser });
+    });
+});
+
+app.post('/api/auth/change-password', async (req: any, res) => {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+
+    jwt.verify(token, JWT_SECRET, async (err: any, decoded: any) => {
+        if (err) return res.status(403).json({ message: 'Forbidden' });
+        const { currentPassword, newPassword } = req.body;
+        const users = getUsers();
+        const userIndex = users.findIndex((u: any) => u.id === decoded.id);
+
+        if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
+
+        const user = users[userIndex];
+        const validPassword = await bcrypt.compare(currentPassword, user.passwordHash);
+
+        if (!validPassword) {
+            return res.status(400).json({ message: 'Incorrect current password' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        users[userIndex].passwordHash = hashedPassword;
+        saveUsers(users);
+
+        logAction(user.id, user.name, 'Change Password', 'Self');
+        res.json({ message: 'Password updated successfully' });
+    });
+});
+
+app.post('/api/auth/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    const users = getUsers();
+    const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
+
+    if (user) {
+        const resetToken = jwt.sign({ id: user.id, type: 'reset' }, JWT_SECRET, { expiresIn: '1h' });
+        const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
+        
+        sendEmailNotification(
+            user.email,
+            'Password Reset Request - MASA World',
+            `Hello ${user.name},\n\nYou requested a password reset. Click the link below to reset it:\n${resetLink}\n\nIf you didn't request this, please ignore this email.`
+        );
+    }
+
+    // Always return success to prevent email enumeration
+    res.json({ message: 'If an account exists with that email, a reset link has been sent.' });
+});
+
+app.post('/api/auth/reset-password', async (req, res) => {
+    const { token, newPassword } = req.body;
+    try {
+        const decoded: any = jwt.verify(token, JWT_SECRET);
+        if (decoded.type !== 'reset') throw new Error('Invalid token type');
+
+        const users = getUsers();
+        const userIndex = users.findIndex((u: any) => u.id === decoded.id);
+
+        if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        users[userIndex].passwordHash = hashedPassword;
+        saveUsers(users);
+
+        logAction(users[userIndex].id, users[userIndex].name, 'Reset Password', 'Self');
+        res.json({ message: 'Password reset successfully' });
+    } catch (err) {
+        res.status(400).json({ message: 'Invalid or expired reset token' });
+    }
+});
+
+// --- User Management Routes (Admin Only) ---
+
+app.get('/api/users', requireAdmin, (req, res) => {
+    const users = getUsers();
+    const safeUsers = users.map(({ passwordHash, ...u }: any) => u);
+    res.json(safeUsers);
+});
+
+app.post('/api/users', requireAdmin, async (req: any, res) => {
+    const { name, email, role, password } = req.body;
+    const users = getUsers();
+
+    if (users.find((u: any) => u.email.toLowerCase() === email.toLowerCase())) {
+        return res.status(400).json({ message: 'Email already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password || 'password123', 10);
+    const newUser = {
+        id: `u${Date.now()}`,
+        name,
+        email,
+        role,
+        passwordHash: hashedPassword,
+        avatar: `https://ui-avatars.com/api/?name=${name.replace(' ', '+')}`,
+        status: 'Active',
+        createdAt: new Date().toISOString()
+    };
+
+    users.push(newUser);
+    saveUsers(users);
+
+    logAction(req.user.id, req.user.name, 'Create User', email);
+    const { passwordHash, ...safeUser } = newUser;
+    res.json(safeUser);
+});
+
+app.put('/api/users/:id', requireAdmin, async (req: any, res) => {
+    const { id } = req.params;
+    const { name, email, role, status, password } = req.body;
+    const users = getUsers();
+    const index = users.findIndex((u: any) => u.id === id);
+
+    if (index === -1) return res.status(404).json({ message: 'User not found' });
+
+    users[index] = { ...users[index], name, email, role, status };
+
+    if (password) {
+        users[index].passwordHash = await bcrypt.hash(password, 10);
+    }
+
+    saveUsers(users);
+    logAction(req.user.id, req.user.name, 'Update User', email);
+    const { passwordHash, ...safeUser } = users[index];
+    res.json(safeUser);
+});
+
+app.delete('/api/users/:id', requireAdmin, (req: any, res) => {
+    const { id } = req.params;
+    let users = getUsers();
+    
+    const user = users.find((u: any) => u.id === id);
+    if (user && user.role === 'Super Admin') {
+        const superAdmins = users.filter((u: any) => u.role === 'Super Admin');
+        if (superAdmins.length <= 1) {
+            return res.status(400).json({ message: 'Cannot delete the last Super Admin' });
+        }
+    }
+
+    users = users.filter((u: any) => u.id !== id);
+    saveUsers(users);
+    logAction(req.user.id, req.user.name, 'Delete User', user?.email || id);
+    res.json({ message: 'User deleted' });
+});
+
+// --- Content Management Routes ---
+
+const getContentFile = (type: string) => path.join(DATA_DIR, `content_${type}.json`);
+
+const readContent = (type: string) => {
+    const file = getContentFile(type);
+    return readJsonFile(file, []);
+};
+
+const saveContent = (type: string, data: any) => {
+    const file = getContentFile(type);
+    fs.writeFileSync(file, JSON.stringify(data, null, 2));
+};
+
+// Generic Get
+app.get('/api/content/:type', (req, res) => {
+    const { type } = req.params;
+    const data = readContent(type);
+    res.json(data);
+});
+
+// Generic Save (Full overwrite for settings/lists)
+app.post('/api/content/:type', authenticateToken, requireAdmin, (req, res) => {
+    const { type } = req.params;
+    const data = req.body;
+    saveContent(type, data);
+    logAction((req as any).user.id, (req as any).user.name, 'Update Content', type);
+    res.json({ message: 'Content saved successfully' });
+});
+
+// --- Media Upload ---
+app.post('/api/media/upload', authenticateToken, requireAdmin, upload.single('file'), (req: any, res) => {
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+    
+    const fileUrl = `/uploads/${req.file.filename}`;
+    res.json({ 
+        url: fileUrl,
+        name: req.file.originalname,
+        size: req.file.size,
+        type: req.file.mimetype
+    });
+});
+
+app.get('/api/media', authenticateToken, requireAdmin, (req, res) => {
+    const files = fs.readdirSync(UPLOADS_DIR).map(file => {
+        const stats = fs.statSync(path.join(UPLOADS_DIR, file));
+        return {
+            id: file,
+            name: file,
+            url: `/uploads/${file}`,
+            size: stats.size,
+            date: stats.mtime.toISOString(),
+            type: path.extname(file).slice(1)
+        };
+    });
+    res.json(files);
+});
+
+app.delete('/api/media/:filename', authenticateToken, requireAdmin, (req, res) => {
+    const { filename } = req.params;
+    const filePath = path.join(UPLOADS_DIR, filename);
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        res.json({ message: 'File deleted' });
+    } else {
+        res.status(404).json({ message: 'File not found' });
+    }
+});
+
+// --- Form Submissions ---
+const SUBMISSIONS_FILE = path.join(DATA_DIR, 'submissions.json');
+
+app.get('/api/forms/submissions', authenticateToken, requireAdmin, (req, res) => {
+    const submissions = readJsonFile(SUBMISSIONS_FILE, []);
+    res.json(submissions);
+});
+
+app.post('/api/forms/submit', (req, res) => {
+    const submission = {
+        id: `sub-${Date.now()}`,
+        ...req.body,
+        date: new Date().toISOString(),
+        read: false
+    };
+    
+    let submissions = readJsonFile(SUBMISSIONS_FILE, []);
+    submissions.unshift(submission);
+    fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2));
+    
+    // Send Email Notification
+    sendEmailNotification(
+        'masaworldfoundation@gmail.com',
+        `New Form Submission: ${req.body.formType || 'General'}`,
+        `A new form has been submitted.\n\nDetails:\n${JSON.stringify(req.body, null, 2)}`
+    );
+
+    res.json({ message: 'Submission received', id: submission.id });
+});
+
+// --- Stats ---
+app.get('/api/stats', (req, res) => {
+    const submissions = readJsonFile(SUBMISSIONS_FILE, []);
+    const donations = readJsonFile(DONATIONS_FILE, []);
+    
+    const stats = {
+        volunteers: submissions.filter((s: any) => s.formType === 'volunteer').length,
+        donations: donations.length,
+        members: submissions.filter((s: any) => s.formType === 'membership').length,
+        queries: submissions.filter((s: any) => s.formType === 'contact').length,
+        careers: submissions.filter((s: any) => s.formType === 'career').length,
+        gallery: submissions.filter((s: any) => s.formType === 'gallery').length,
+        enrollments: submissions.filter((s: any) => s.formType === 'enrollment').length,
+        pledges: submissions.filter((s: any) => s.formType === 'pledge').length,
+        countries: 12, // Still mock for now
+    };
+    res.json(stats);
+});
+
+// --- Vite Middleware ---
+
+async function startServer() {
+    if (process.env.NODE_ENV !== 'production') {
+        const vite = await createViteServer({
+            server: { middlewareMode: true },
+            appType: 'spa',
+        });
+        app.use(vite.middlewares);
+    } else {
+        // Serve static files in production
+        app.use(express.static(path.join(process.cwd(), 'dist')));
+        app.get('*', (req, res) => {
+            res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
+        });
+    }
+
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
+
+startServer();

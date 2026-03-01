@@ -29,6 +29,8 @@ export interface Post {
     author?: string;
     tags?: string[];
     status?: 'Draft' | 'Published' | 'Scheduled';
+    approvalStatus?: 'Pending' | 'Approved' | 'Rejected';
+    approvalNotes?: string;
     slug?: string;
     seoTitle?: string;
     metaDescription?: string;
@@ -77,7 +79,17 @@ export type MembershipType = 'Community' | 'Supporting' | 'Life' | 'Internationa
 export type PartnershipType = 'Institutional' | 'Corporate';
 
 // --- Admin & Auth Types ---
-export type UserRole = 'Super Admin' | 'Editor' | 'Event Manager' | 'Course Manager';
+export type UserRole = 'Super Admin' | 'Admin / Manager' | 'Editor' | 'Content Creator' | 'Volunteer Coordinator' | 'Accountant / Finance';
+
+export interface ActivityLog {
+    id: string;
+    userId: string;
+    userName: string;
+    action: string;
+    target: string;
+    timestamp: string;
+    details?: string;
+}
 
 export interface AdminUser {
     id: string;
@@ -85,6 +97,8 @@ export interface AdminUser {
     email: string;
     role: UserRole;
     avatar?: string;
+    status: 'Active' | 'Disabled';
+    lastLogin?: string;
 }
 
 export interface AuthState {
@@ -93,6 +107,29 @@ export interface AuthState {
 }
 
 // --- CMS Content Types ---
+export interface PageSection {
+    id: string;
+    type: 'Hero' | 'Text' | 'Image' | 'Features' | 'Timeline' | 'Contact' | 'Custom' | 'FounderMessage' | 'MissionVision' | 'CoreValues';
+    visible: boolean;
+    title?: string;
+    subtitle?: string;
+    content?: string;
+    image?: string;
+    items?: any[]; // For lists like values, timeline events
+    style?: any;
+}
+
+export interface PageContent {
+    id: string; // Changed from Page to string to allow new pages
+    slug: string;
+    title: string;
+    seoTitle?: string;
+    metaDescription: string;
+    sections: PageSection[];
+    lastModified: string;
+    status: 'Draft' | 'Published';
+}
+
 export interface PageMetadata {
     id: Page;
     title: string;

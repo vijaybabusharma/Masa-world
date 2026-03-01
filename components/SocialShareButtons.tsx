@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { FacebookIcon, TwitterIcon, LinkedInIcon, WhatsAppIcon } from './icons/SocialIcons';
 import { Post } from '../types';
 import { SparklesIcon } from './icons/FeatureIcons';
@@ -9,6 +9,7 @@ interface SocialShareButtonsProps {
 }
 
 const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({ post }) => {
+    const [copied, setCopied] = useState(false);
     // Get base URL dynamically
     const fullUrl = typeof window !== 'undefined' ? `${window.location.origin}${post.url}` : `https://masaworld.org${post.url}`;
 
@@ -22,6 +23,12 @@ const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({ post }) => {
         facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
         linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}&summary=${encodedSummary}`,
         whatsapp: `https://api.whatsapp.com/send?text=${shareText}%20${encodedUrl}`
+    };
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(fullUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     const commonButtonStyles = "flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-full text-white font-bold transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-masa-orange active:scale-95";
@@ -51,16 +58,18 @@ const SocialShareButtons: React.FC<SocialShareButtonsProps> = ({ post }) => {
                          <TwitterIcon className="w-5 h-5" />
                          <span>X</span>
                      </a>
-                     <a href={shareLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn"
-                        className={`${commonButtonStyles} bg-[#0A66C2] hover:bg-[#095ab0] shadow-md hover:shadow-blue-700/30`}>
-                         <LinkedInIcon className="w-5 h-5" />
-                         <span>LinkedIn</span>
-                     </a>
                      <a href={shareLinks.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp"
                         className={`${commonButtonStyles} bg-[#25D366] hover:bg-[#1ebe57] shadow-md hover:shadow-green-500/30`}>
                          <WhatsAppIcon className="w-5 h-5" />
                          <span>WhatsApp</span>
                      </a>
+                     <button onClick={handleCopy} aria-label="Copy Link"
+                        className={`${commonButtonStyles} bg-gray-600 hover:bg-gray-700 shadow-md hover:shadow-gray-500/30`}>
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                         </svg>
+                         <span>{copied ? 'Copied!' : 'Copy Link'}</span>
+                     </button>
                  </div>
              </div>
         </div>

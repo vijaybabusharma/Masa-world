@@ -1,7 +1,6 @@
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { NavigationProps } from '../types';
-import { GoogleGenAI } from '@google/genai';
 import { 
     SparklesIcon, LightBulbIcon, CameraIcon, MicrophoneIcon, DocumentTextIcon, 
     GlobeIcon, UsersIcon, LaptopIcon, ArrowRightIcon, BriefcaseIcon, TrophyIcon, 
@@ -229,151 +228,24 @@ const NgoHelpDeskPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         setSelectedFilePreview(null);
 
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-            let responseText = '';
-            let responseImage = '';
-            let responseVideo = '';
+            // Mock response for self-hosted version
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            let responseText = `[Self-Hosted Mode] This is a simulated response for the "${activeToolDef.name}" tool. 
 
-            // 1. Image Generation Logic
-            if (activeToolDef.id === 'visual' || activeToolDef.id === 'certificate') {
-                const model = activeToolDef.model || 'gemini-2.5-flash-image';
-                const prompt = activeToolDef.id === 'certificate' ? `Create a certificate design: ${userMessage.content}` : userMessage.content;
-                
-                if (currentFile) {
-                    const base64Data = await fileToBase64(currentFile);
-                    const response = await ai.models.generateContent({
-                        model: 'gemini-2.5-flash-image', // Edit mode
-                        contents: {
-                            parts: [
-                                { inlineData: { mimeType: currentFile.type, data: base64Data } },
-                                { text: prompt || "Edit this image" }
-                            ]
-                        }
-                    });
-                    for (const part of response.candidates?.[0]?.content?.parts || []) {
-                        if (part.inlineData) responseImage = `data:image/png;base64,${part.inlineData.data}`;
-                        else if (part.text) responseText += part.text;
-                    }
-                } else {
-                    const imageConfig: { aspectRatio: string, imageSize?: "1K" } = { aspectRatio };
-                    if (model === 'gemini-3-pro-image-preview') {
-                        imageConfig.imageSize = "1K";
-                    }
-                    const response = await ai.models.generateContent({
-                        model: model,
-                        contents: { parts: [{ text: prompt }] },
-                        config: { imageConfig }
-                    });
-                    for (const part of response.candidates?.[0]?.content?.parts || []) {
-                        if (part.inlineData) responseImage = `data:image/png;base64,${part.inlineData.data}`;
-                        else if (part.text) responseText += part.text;
-                    }
-                }
-                if (!responseText && responseImage) responseText = "Image generated successfully.";
-            }
-            // 2. Video Generation Logic
-            else if (activeToolDef.id === 'video') {
-                const model = 'veo-3.1-fast-generate-preview';
-                setMessages(prev => [...prev, { role: 'model', content: "Generating video... this may take 1-2 minutes.", isThinking: true }]);
-                let operation;
-                if (currentFile) {
-                    const base64Data = await fileToBase64(currentFile);
-                    operation = await ai.models.generateVideos({
-                        model, prompt: userMessage.content || "Animate this",
-                        image: { imageBytes: base64Data, mimeType: currentFile.type },
-                        config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
-                    });
-                } else {
-                    operation = await ai.models.generateVideos({
-                        model, prompt: userMessage.content,
-                        config: { numberOfVideos: 1, resolution: '720p', aspectRatio: '16:9' }
-                    });
-                }
-                while (!operation.done) {
-                    await new Promise(resolve => setTimeout(resolve, 5000));
-                    operation = await ai.operations.getVideosOperation({operation: operation});
-                }
-                setMessages(prev => prev.filter(m => !m.isThinking));
-                const videoUri = operation.response?.generatedVideos?.[0]?.video?.uri;
-                if (videoUri) {
-                    responseText = "Video generation complete.";
-                    responseVideo = `${videoUri}&key=${process.env.API_KEY}`;
-                } else {
-                    responseText = "Video generation failed.";
-                }
-            }
-            // 3. Audio Transcription
-            else if (activeToolDef.id === 'transcribe') {
-                if (currentFile) {
-                    const base64Data = await fileToBase64(currentFile);
-                    const response = await ai.models.generateContent({
-                        model: 'gemini-3-flash-preview',
-                        contents: {
-                            parts: [
-                                { inlineData: { mimeType: currentFile.type, data: base64Data } },
-                                { text: "Transcribe this audio file verbatim." }
-                            ]
-                        }
-                    });
-                    responseText = response.text || "Transcription failed.";
-                } else {
-                    responseText = "Please upload an audio file to transcribe.";
-                }
-            }
-            // 4. Research (Grounding)
-            else if (activeToolDef.id === 'research') {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3-flash-preview',
-                    contents: userMessage.content,
-                    config: { tools: [{ googleSearch: {} }] }
-                });
-                responseText = response.text || "No results found.";
-                const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
-                if (chunks) {
-                    responseText += "\n\n**Sources:**\n";
-                    chunks.forEach((c: any) => { if (c.web) responseText += `- [${c.web.title}](${c.web.uri})\n`; });
-                }
-            }
-            // 5. Strategy (Thinking)
-            else if (activeToolDef.id === 'strategy') {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3-pro-preview',
-                    contents: userMessage.content,
-                    config: {
-                        thinkingConfig: { thinkingBudget: 16000 },
-                        systemInstruction: activeToolDef.instruction
-                    }
-                });
-                responseText = response.text || "Strategy generated.";
-            }
-            // 6. Default Text/File Processing (35+ tools)
-            else {
-                const model = activeToolDef.model || 'gemini-3-pro-preview';
-                const parts: any[] = [];
-                if (currentFile) {
-                    const base64Data = await fileToBase64(currentFile);
-                    parts.push({ inlineData: { mimeType: currentFile.type, data: base64Data } });
-                }
-                parts.push({ text: userMessage.content || `Perform the task: ${activeToolDef.instruction}` });
+In the fully independent version of the MASA World Foundation website, external AI services like Gemini have been disabled to ensure 100% uptime and no dependency on third-party API keys.
 
-                const response = await ai.models.generateContent({
-                    model,
-                    contents: { parts },
-                    config: { systemInstruction: activeToolDef.instruction }
-                });
-                responseText = response.text || "Task completed.";
-            }
+Your input was: "${userMessage.content || (currentFile ? 'File uploaded: ' + currentFile.name : 'No text provided')}"
+
+To enable real AI features, you would typically integrate a local LLM or re-enable the Gemini API in the configuration.`;
 
             setMessages(prev => [...prev, { 
                 role: 'model', 
-                content: responseText, 
-                image: responseImage,
-                video: responseVideo
+                content: responseText
             }]);
 
         } catch (error: any) {
             console.error(error);
-            setMessages(prev => prev.filter(m => !m.isThinking));
             setMessages(prev => [...prev, { role: 'model', content: `Error: ${error.message || "Something went wrong. Please try again."}` }]);
         } finally {
             setIsLoading(false);

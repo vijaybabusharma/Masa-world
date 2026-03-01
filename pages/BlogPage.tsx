@@ -166,16 +166,36 @@ const BlogPage: React.FC<NavigationProps> = ({ navigateTo }) => {
             const newHeadings: {id: string, text: string, level: number, index: number}[] = [];
             const slugify = (text: string) => text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
             
-            selectedPost.content.split('\n\n').forEach((block, index) => {
-                const trimmedBlock = block.trim();
-                if (trimmedBlock.startsWith('## ')) {
-                    const text = trimmedBlock.replace('## ', '');
-                    newHeadings.push({ id: `${slugify(text)}-${index}`, text, level: 2, index });
-                } else if (trimmedBlock.startsWith('### ')) {
-                    const text = trimmedBlock.replace('### ', '');
-                    newHeadings.push({ id: `${slugify(text)}-${index}`, text, level: 3, index });
-                }
-            });
+            // Check if content is HTML (contains <p>, <h1>, etc.)
+            const isHtml = /<[a-z][\s\S]*>/i.test(selectedPost.content);
+
+            if (isHtml) {
+                // Parse HTML headings
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(selectedPost.content, 'text/html');
+                const headingElements = doc.querySelectorAll('h1, h2, h3');
+                
+                headingElements.forEach((el, index) => {
+                    const text = el.textContent || '';
+                    const level = parseInt(el.tagName.substring(1), 10);
+                    // We don't modify the actual HTML string here easily to add IDs, 
+                    // but we can generate IDs and rely on the fact that if we render it safely, we might need to inject IDs.
+                    // Actually, dangerouslySetInnerHTML won't have the IDs unless we inject them.
+                    newHeadings.push({ id: `${slugify(text)}-${index}`, text, level, index });
+                });
+            } else {
+                // Parse Markdown headings
+                selectedPost.content.split('\n\n').forEach((block, index) => {
+                    const trimmedBlock = block.trim();
+                    if (trimmedBlock.startsWith('## ')) {
+                        const text = trimmedBlock.replace('## ', '');
+                        newHeadings.push({ id: `${slugify(text)}-${index}`, text, level: 2, index });
+                    } else if (trimmedBlock.startsWith('### ')) {
+                        const text = trimmedBlock.replace('### ', '');
+                        newHeadings.push({ id: `${slugify(text)}-${index}`, text, level: 3, index });
+                    }
+                });
+            }
             setHeadings(newHeadings);
             setActiveHeadingId(newHeadings.length > 0 ? newHeadings[0].id : null);
         } else {
@@ -235,14 +255,65 @@ const BlogPage: React.FC<NavigationProps> = ({ navigateTo }) => {
         return <p key={index} className="mb-6 leading-relaxed text-lg text-gray-700">{trimmedBlock}</p>;
     });
 
+    const getProcessedContent = () => {
+        if (!selectedPost) return '';
+        const isHtml = /<[a-z][\s\S]*>/i.test(selectedPost.content);
+        if (isHtml) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(selectedPost.content, 'text/html');
+            const headingElements = doc.querySelectorAll('h1, h2, h3');
+            const slugify = (text: string) => text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+            
+            headingElements.forEach((el, index) => {
+                const text = el.textContent || '';
+                el.id = `${slugify(text)}-${index}`;
+                // Add some Tailwind classes for styling headings inside dangerouslySetInnerHTML
+                if (el.tagName === 'H1') el.className = (el.className || '') + ' text-4xl font-bold text-masa-charcoal mt-10 mb-6 border-b pb-2 border-gray-100 scroll-mt-24';
+                if (el.tagName === 'H2') el.className = (el.className || '') + ' text-3xl font-bold text-masa-charcoal mt-10 mb-6 border-b pb-2 border-gray-100 scroll-mt-24';
+                if (el.tagName === 'H3') el.className = (el.className || '') + ' text-2xl font-bold text-masa-charcoal mt-8 mb-4 scroll-mt-24';
+            });
+
+            // Also style paragraphs and lists
+            doc.querySelectorAll('p').forEach(p => {
+                p.className = (p.className || '') + ' mb-6 leading-relaxed text-lg text-gray-700';
+            });
+            doc.querySelectorAll('ul').forEach(ul => {
+                ul.className = (ul.className || '') + ' list-disc list-inside mb-6 text-lg text-gray-700 space-y-2';
+            });
+            doc.querySelectorAll('ol').forEach(ol => {
+                ol.className = (ol.className || '') + ' list-decimal list-inside mb-6 text-lg text-gray-700 space-y-2';
+            });
+            doc.querySelectorAll('blockquote').forEach(bq => {
+                bq.className = (bq.className || '') + ' border-l-4 border-masa-orange pl-6 py-2 bg-gray-50 rounded-r-lg italic my-8 text-gray-600';
+            });
+            doc.querySelectorAll('img').forEach(img => {
+                img.className = (img.className || '') + ' rounded-xl shadow-md my-8 max-w-full h-auto';
+            });
+
+            return doc.body.innerHTML;
+        } else {
+            return '';
+        }
+    };
+
+    const isHtmlContent = selectedPost ? /<[a-z][\s\S]*>/i.test(selectedPost.content) : false;
+
     if (selectedPost) {
+        const relatedPosts = posts.filter(p => p.id !== selectedPost.id && (p.category === selectedPost.category || (p.tags && selectedPost.tags && p.tags.some(t => selectedPost.tags?.includes(t))))).slice(0, 3);
+
         return (
             <div className="bg-white min-h-screen">
                 <BlogPostSchema post={selectedPost} />
                 <div className="bg-gray-50 border-b border-gray-200 sticky top-16 z-10"><div className="container mx-auto px-4 py-4"><button onClick={handleBack} className="flex items-center text-masa-charcoal hover:text-masa-orange font-bold transition-colors"><SimpleArrowLeftIcon className="h-5 w-5 mr-2" /> Back to Blog</button></div></div>
-                <article className="pb-24">
+                <article className="pb-12">
                     <div className="relative h-[400px] md:h-[500px]"><img src={selectedPost.image} alt={selectedPost.title} className="w-full h-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex items-end"><div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 text-white"><div className="flex items-center gap-4 mb-4 text-sm font-semibold uppercase tracking-wider"><span className="bg-masa-orange px-3 py-1 rounded-full">{selectedPost.category}</span><span>{selectedPost.date}</span><span className="flex items-center gap-1 opacity-90"><ClockIcon className="h-4 w-4"/> {calculateReadingTime(selectedPost.content)}</span></div><h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl drop-shadow-lg">{selectedPost.title}</h1></div></div></div>
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12"><div className="flex flex-col lg:flex-row gap-16"><div className="lg:w-3/4"><div className="prose lg:prose-lg max-w-none text-gray-700"><p className="lead text-xl font-medium text-gray-900 mb-10 border-l-4 border-masa-orange pl-6 py-2 bg-gray-50 rounded-r-lg italic leading-relaxed text-left">{selectedPost.summary}</p><div className="text-left">{renderContent(selectedPost.content)}</div></div><div className="mt-12 pt-8 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between"><div className="flex flex-wrap gap-2">{selectedPost.tags?.map(tag => <span key={tag} className="flex items-center px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm"><TagIcon className="h-3 w-3 mr-1" /> {tag}</span>)}</div><div className="flex items-center gap-2"><UserCircleIcon className="h-10 w-10 text-gray-400" /><div><p className="text-sm font-bold text-masa-charcoal">{selectedPost.author || "MASA Team"}</p><p className="text-xs text-gray-500">Author</p></div></div></div><div className="mt-8"><SocialShareButtons post={selectedPost} /></div></div>
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12"><div className="flex flex-col lg:flex-row gap-16"><div className="lg:w-3/4"><div className="prose lg:prose-lg max-w-none text-gray-700"><p className="lead text-xl font-medium text-gray-900 mb-10 border-l-4 border-masa-orange pl-6 py-2 bg-gray-50 rounded-r-lg italic leading-relaxed text-left">{selectedPost.summary}</p><div className="text-left">
+                        {isHtmlContent ? (
+                            <div dangerouslySetInnerHTML={{ __html: getProcessedContent() }} />
+                        ) : (
+                            renderContent(selectedPost.content)
+                        )}
+                    </div></div><div className="mt-12 pt-8 border-t border-gray-100 flex flex-wrap gap-4 items-center justify-between"><div className="flex flex-wrap gap-2">{selectedPost.tags?.map(tag => <span key={tag} className="flex items-center px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm"><TagIcon className="h-3 w-3 mr-1" /> {tag}</span>)}</div><div className="flex items-center gap-2"><UserCircleIcon className="h-10 w-10 text-gray-400" /><div><p className="text-sm font-bold text-masa-charcoal">{selectedPost.author || "MASA Team"}</p><p className="text-xs text-gray-500">Author</p></div></div></div><div className="mt-8"><SocialShareButtons post={selectedPost} /></div></div>
                     <div className="lg:w-1/4">
                         <div className="lg:sticky top-32 space-y-8">
                             {headings.length > 1 && (
@@ -258,6 +329,32 @@ const BlogPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                     </div>
                 </div></div>
                 </article>
+                {relatedPosts.length > 0 && (
+                    <div className="bg-gray-50 py-16 border-t border-gray-200">
+                        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                            <h3 className="text-2xl font-bold text-masa-charcoal mb-8 text-center">Related Posts</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {relatedPosts.map(post => {
+                                    const { Icon, color, bg } = getCategoryInfo(post.category);
+                                    return (
+                                        <div key={post.id} onClick={() => handlePostClick(post)} className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group cursor-pointer border border-gray-100 flex flex-col h-full transform hover:-translate-y-1.5">
+                                            <div className="h-48 overflow-hidden relative"><img src={post.image} alt={post.title} loading="lazy" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" /></div>
+                                            <div className="p-6 flex flex-col flex-grow">
+                                                <div className="flex items-center justify-between mb-3 text-xs text-gray-500"><span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold ${bg} ${color}`}><Icon className="h-3 w-3" />{post.category}</span><span>{post.date}</span></div>
+                                                <h3 className="text-lg font-bold text-masa-charcoal mb-2 group-hover:text-masa-blue transition-colors line-clamp-2 leading-snug">{post.title}</h3>
+                                                <p className="text-sm text-gray-600 mb-5 line-clamp-2 flex-grow leading-relaxed">{post.summary}</p>
+                                                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                                                    <div className="flex items-center gap-2"><UserCircleIcon className="h-6 w-6 text-gray-400"/><span className="text-xs font-bold text-gray-600">{post.author}</span></div>
+                                                    <span className="text-masa-orange font-bold text-sm flex items-center group-hover:translate-x-1 transition-transform">Read <ArrowRightIcon className="ml-1 h-3 w-3" /></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }

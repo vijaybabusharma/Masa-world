@@ -197,7 +197,7 @@ const App: React.FC = () => {
       
       {!isDashboard && floatingBtn && floatingBtn.visible && (
           <button 
-            onClick={() => handleSmartButtonClick(floatingBtn)}
+            onClick={() => handleSmartButtonClick(floatingBtn, paymentLinks, navigateTo)}
             className={`fixed z-40 bg-masa-orange text-white px-6 py-3 rounded-full font-bold shadow-2xl hover:bg-orange-600 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2 animate-bounce-subtle ${
                 floatingBtn.position === 'bottom-left' ? 'bottom-24 left-6' : 'bottom-24 right-6'
             }`}

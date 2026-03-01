@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { XIcon } from './icons/UiIcons';
 import { SparklesIcon } from './icons/FeatureIcons';
-import { GoogleGenAI } from "@google/genai";
 
 interface AiImageGeneratorModalProps {
   onClose: () => void;
@@ -38,39 +37,25 @@ const AiImageGeneratorModal: React.FC<AiImageGeneratorModalProps> = ({ onClose, 
         setGeneratedImage(null);
 
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-            const response = await ai.models.generateContent({
-                model: 'gemini-2.5-flash-image',
-                contents: prompt,
-                config: {
-                    imageConfig: { aspectRatio },
-                },
-            });
-
-            let imageFound = false;
-            let failureReason = '';
+            // Mock generation for self-hosted version
+            await new Promise(resolve => setTimeout(resolve, 2000));
             
-            const parts = response.candidates?.[0]?.content?.parts || [];
-
-            for (const part of parts) {
-                if (part.inlineData) {
-                    setGeneratedImage(part.inlineData.data);
-                    imageFound = true;
-                    break;
-                }
-                // If the model refuses to generate an image, it usually returns text explaining why.
-                if (part.text) {
-                    failureReason += part.text;
-                }
-            }
+            // Use a placeholder image from picsum as a "generated" image
+            const placeholderUrl = `https://picsum.photos/seed/${encodeURIComponent(prompt)}/800/600`;
+            const response = await fetch(placeholderUrl);
+            const blob = await response.blob();
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64data = (reader.result as string).split(',')[1];
+                setGeneratedImage(base64data);
+                setIsLoading(false);
+            };
+            reader.readAsDataURL(blob);
             
-            if (!imageFound) {
-                throw new Error(failureReason || "No image was generated. The prompt might have been blocked.");
-            }
+            return; // Exit early as we handle state in reader.onloadend
         } catch (e: any) {
             console.error(e);
-            setError(e.message || 'Failed to generate image. This may be due to a safety policy violation or network issue. Please try a different prompt.');
-        } finally {
+            setError('Failed to simulate image generation. Please try again.');
             setIsLoading(false);
         }
     };

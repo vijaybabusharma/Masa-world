@@ -18,7 +18,7 @@ const ImpactSnapshot: React.FC = () => {
     });
 
     useEffect(() => {
-        const calculateStats = () => {
+        const calculateStats = async () => {
             const settings = ContentManager.getSettings();
             const overrides = settings.homepage.impactStats;
 
@@ -30,14 +30,14 @@ const ImpactSnapshot: React.FC = () => {
                     years: overrides.years,
                 });
             } else {
-                const backendStats = getStats();
+                const backendStats = await getStats();
                 const foundationStartYear = 2011;
                 const currentYear = new Date().getFullYear();
 
                 setStats({
-                    youth: 75000 + (backendStats.members + backendStats.pledges + backendStats.enrollments),
-                    programs: 650 + (backendStats.volunteers + backendStats.enrollments),
-                    globalReach: 114 + (backendStats.countries),
+                    youth: 75000 + ((backendStats.members || 0) + (backendStats.pledges || 0) + (backendStats.enrollments || 0)),
+                    programs: 650 + ((backendStats.volunteers || 0) + (backendStats.enrollments || 0)),
+                    globalReach: 114 + (backendStats.countries || 0),
                     years: currentYear - foundationStartYear,
                 });
             }
