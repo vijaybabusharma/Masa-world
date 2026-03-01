@@ -107,21 +107,21 @@ const defaultSliderItems: SliderItem[] = [
         id: 'slide-empower', 
         headline: "Empowering Youth. Building Nations.", 
         subtext: "We forge future leaders through sports, education, and culture.", 
-        image: "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?auto=format&fit=crop&w=1800&q=80", 
+        image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=1800&q=80", 
         cta: { label: "Get Involved", page: "get-involved" } 
     },
     { 
         id: 'slide-events', 
         headline: "Global Stages, Local Impact.", 
         subtext: "From national competitions to international exchange programs, we create platforms for youth to shine.", 
-        image: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1800&q=80", 
+        image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1800&q=80", 
         cta: { label: "View Events", page: "events" } 
     },
     { 
         id: 'slide-trainings', 
         headline: "Forging Leaders of Tomorrow.", 
         subtext: "Discipline-focused training and skill development that builds character and competence.", 
-        image: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=1800&q=80", 
+        image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1800&q=80", 
         cta: { label: "Join Training", page: "trainings" } 
     },
     { 
@@ -135,7 +135,7 @@ const defaultSliderItems: SliderItem[] = [
         id: 'slide-records', 
         headline: "Breaking Boundaries.", 
         subtext: "Documenting extraordinary human achievements and milestones that inspire us all.", 
-        image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1800&q=80", 
+        image: "https://images.unsplash.com/photo-1552674605-5d226f5abdff?auto=format&fit=crop&w=1800&q=80", 
         cta: { label: "View Records", page: "records" } 
     },
     { 
@@ -149,21 +149,21 @@ const defaultSliderItems: SliderItem[] = [
         id: 'slide-sports',
         headline: "Champions in the Making.",
         subtext: "Nurturing talent, discipline, and teamwork through world-class sports programs.",
-        image: "https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&w=1800&q=80",
+        image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1800&q=80",
         cta: { label: "Explore Sports", page: "sports" }
     },
     {
         id: 'slide-culture',
         headline: "Celebrating Our Roots.",
         subtext: "Preserving heritage and fostering unity through vibrant cultural exchange.",
-        image: "https://images.unsplash.com/photo-1604580864964-c8d0b3e830a4?auto=format&fit=crop&w=1800&q=80",
+        image: "https://images.unsplash.com/photo-1533551030926-9bc2cb24c823?auto=format&fit=crop&w=1800&q=80",
         cta: { label: "View Culture", page: "culture" }
     },
     {
         id: 'slide-volunteer',
         headline: "Be the Change You Wish to See.",
         subtext: "Join thousands of volunteers making a tangible difference in communities every day.",
-        image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1800&q=80",
+        image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1800&q=80",
         cta: { label: "Volunteer Now", page: "volunteer" }
     }
 ];

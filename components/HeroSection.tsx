@@ -45,8 +45,13 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
         <section className="relative bg-masa-charcoal text-white h-[90vh] min-h-[600px] md:min-h-[700px] flex items-center overflow-hidden">
             {slides.map((slide, index) => (
                 <div key={slide.id || index} className={`absolute inset-0 transition-opacity duration-1000 ${index === current ? 'opacity-100' : 'opacity-0'}`}>
-                    <img src={slide.image} alt={slide.headline} className="w-full h-full object-cover animate-ken-burns" />
-                    <div className="absolute inset-0 bg-black/60"></div>
+                    <img 
+                        src={slide.image} 
+                        alt={slide.headline} 
+                        className="w-full h-full object-cover animate-ken-burns" 
+                        loading={index === 0 ? "eager" : "lazy"}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent"></div>
                 </div>
             ))}
             <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 text-white font-bold tracking-widest uppercase text-sm">
