@@ -14,7 +14,34 @@ import HeroSection from '../components/HeroSection';
 import GetInvolvedSection from '../components/GetInvolvedSection';
 import FinalCta from '../components/FinalCta';
 import PartnershipModal from '../components/PartnershipModal';
+import GalleryHighlights from '../components/GalleryHighlights';
+import CoreFocusSection from '../components/CoreFocusSection';
+import CoursesTrainingsSection from '../components/CoursesTrainingsSection';
 import { ContentManager } from '../utils/contentManager';
+
+const SectionWrapper: React.FC<{ 
+    section: any, 
+    children: React.ReactNode, 
+    className?: string 
+}> = ({ section, children, className = "" }) => {
+    if (!section.visible) return null;
+    
+    const style: React.CSSProperties = {
+        paddingTop: section.paddingTop || undefined,
+        paddingBottom: section.paddingBottom || undefined,
+        textAlign: section.textAlign as any || undefined,
+        backgroundColor: section.backgroundColor || undefined,
+        backgroundImage: section.backgroundImage ? `url(${section.backgroundImage})` : undefined,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+    };
+    
+    return (
+        <div style={style} className={className}>
+            {children}
+        </div>
+    );
+};
 
 const HomePage: React.FC<NavigationProps> = ({ navigateTo }) => {
     const [partnershipModal, setPartnershipModal] = useState<PartnershipType | null>(null);
@@ -46,26 +73,58 @@ const HomePage: React.FC<NavigationProps> = ({ navigateTo }) => {
             
             <HeroSection navigateTo={navigateTo} />
             
-            {sections.impactSnapshot.visible && <ImpactSnapshot />}
-            {sections.whatWeDo.visible && <WhatWeDoSection navigateTo={navigateTo} />}
-            {sections.incredibleSection.visible && 
+            <SectionWrapper section={sections.impactSnapshot}>
+                <ImpactSnapshot />
+            </SectionWrapper>
+
+            <SectionWrapper section={sections.whatWeDo}>
+                <WhatWeDoSection navigateTo={navigateTo} />
+            </SectionWrapper>
+
+            <CoreFocusSection navigateTo={navigateTo} />
+
+            <CoursesTrainingsSection navigateTo={navigateTo} />
+
+            <SectionWrapper section={sections.incredibleSection}>
                 <IncredibleSection 
                     navigateTo={navigateTo}
                     title={sections.incredibleSection.title || "Let's Create Incredible!"}
                     description={sections.incredibleSection.subtitle || "We organize, manage, and host impactful activities across sports, education, and culture to engage communities and drive our mission forward—locally and globally."}
                     items={deliveryItems} 
                 />
-            }
+            </SectionWrapper>
 
             <HowWeWorkSection />
 
-            {sections.founderMessage.visible && <FounderMessageSection navigateTo={navigateTo} bgColor="bg-white" />}
-            {sections.trust.visible && <TrustSection navigateTo={navigateTo} />}
-            {sections.upcomingEvents.visible && <LatestNewsAndEvents navigateTo={navigateTo} />}
-            {sections.getInvolved.visible && <GetInvolvedSection navigateTo={navigateTo} onPartnerClick={setPartnershipModal} />}
-            {sections.careers.visible && <CareersSection navigateTo={navigateTo} />}
-            {sections.communityVoices.visible && <CommunityVoicesSection navigateTo={navigateTo} />}
-            {sections.finalCta.visible && <FinalCta navigateTo={navigateTo} />}
+            <SectionWrapper section={sections.founderMessage}>
+                <FounderMessageSection navigateTo={navigateTo} bgColor="bg-white" />
+            </SectionWrapper>
+
+            <SectionWrapper section={sections.trust}>
+                <TrustSection navigateTo={navigateTo} />
+            </SectionWrapper>
+
+            <SectionWrapper section={sections.upcomingEvents}>
+                <LatestNewsAndEvents navigateTo={navigateTo} />
+            </SectionWrapper>
+
+            <GalleryHighlights navigateTo={navigateTo} />
+
+            <SectionWrapper section={sections.getInvolved}>
+                <GetInvolvedSection navigateTo={navigateTo} onPartnerClick={setPartnershipModal} />
+            </SectionWrapper>
+
+            <SectionWrapper section={sections.careers}>
+                <CareersSection navigateTo={navigateTo} />
+            </SectionWrapper>
+
+            <SectionWrapper section={sections.communityVoices}>
+                <CommunityVoicesSection navigateTo={navigateTo} />
+            </SectionWrapper>
+
+            <SectionWrapper section={sections.finalCta}>
+                <FinalCta navigateTo={navigateTo} />
+            </SectionWrapper>
             
              <style>{`
                 @keyframes fade-in-up { 

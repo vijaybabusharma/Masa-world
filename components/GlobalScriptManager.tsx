@@ -27,10 +27,25 @@ const GlobalScriptManager: React.FC = () => {
                 settings = ContentManager.getSettings();
             }
 
-            const { scripts, appearance } = settings;
+            const { scripts, appearance, general } = settings;
 
             // --- 1. CLEANUP PREVIOUS INJECTIONS ---
             document.querySelectorAll('[data-masa-injected]').forEach(el => el.remove());
+
+            // --- 1.5 LOGO & FAVICON ---
+            if (general?.siteFavicon) {
+                let favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
+                if (!favicon) {
+                    favicon = document.createElement('link');
+                    favicon.rel = 'icon';
+                    document.head.appendChild(favicon);
+                }
+                favicon.href = general.siteFavicon;
+                favicon.setAttribute('data-masa-injected', 'favicon');
+            }
+            if (general?.siteName) {
+                document.title = general.siteName;
+            }
 
             // --- Robust HTML Injection Helper ---
             const injectRawHtml = (content: string, target: HTMLElement, baseId: string, prepend: boolean = false) => {
@@ -69,16 +84,36 @@ const GlobalScriptManager: React.FC = () => {
                 }
             };
             
-            // --- 2. CUSTOM CSS ---
-            if (appearance.enableCustomCss && appearance.customCss) {
-                const style = document.createElement('style');
-                style.setAttribute('data-masa-injected', 'css');
-                style.innerHTML = appearance.customCss;
-                document.head.appendChild(style);
-            }
+            // --- 2. CUSTOM CSS & APPEARANCE ---
+            const appearanceStyles = `
+                :root {
+                    ${appearance?.typography?.headingDesktop ? `--font-size-5xl: ${appearance.typography.headingDesktop};` : ''}
+                    ${appearance?.typography?.headingMobile ? `--font-size-2xl: ${appearance.typography.headingMobile};` : ''}
+                    ${appearance?.typography?.paragraph ? `--font-size-base: ${appearance.typography.paragraph};` : ''}
+                    
+                    --masa-btn-padding: ${appearance?.buttons?.padding || '0.75rem 1.5rem'};
+                    --masa-btn-radius: ${appearance?.buttons?.borderRadius || '0.5rem'};
+                    --masa-btn-alignment: ${appearance?.buttons?.alignment || 'center'};
+                    --masa-btn-size: ${appearance?.typography?.button || '1rem'};
+                }
+                
+                /* Apply button styles globally to .btn class or common button patterns */
+                .btn, button:not([role="switch"]):not(.admin-btn):not(.nav-btn) { 
+                    padding: var(--masa-btn-padding) !important;
+                    border-radius: var(--masa-btn-radius) !important;
+                    font-size: var(--masa-btn-size) !important;
+                }
+                
+                ${appearance?.enableCustomCss ? appearance.customCss : ''}
+            `;
+            
+            const style = document.createElement('style');
+            style.setAttribute('data-masa-injected', 'appearance-css');
+            style.innerHTML = appearanceStyles;
+            document.head.appendChild(style);
 
             // --- 3. GOOGLE SEARCH CONSOLE ---
-            if (scripts.enableGoogleSearchConsole && scripts.googleSearchConsole) {
+            if (scripts?.enableGoogleSearchConsole && scripts?.googleSearchConsole) {
                 const meta = document.createElement('meta');
                 meta.setAttribute('name', 'google-site-verification');
                 meta.setAttribute('content', scripts.googleSearchConsole);
@@ -87,7 +122,7 @@ const GlobalScriptManager: React.FC = () => {
             }
 
             // --- 4. GOOGLE ANALYTICS (GA4) ---
-            if (scripts.enableAnalytics && scripts.googleAnalyticsId) {
+            if (scripts?.enableAnalytics && scripts?.googleAnalyticsId) {
                 const gaScript = document.createElement('script');
                 gaScript.setAttribute('data-masa-injected', 'ga');
                 gaScript.async = true;
@@ -106,7 +141,7 @@ const GlobalScriptManager: React.FC = () => {
             }
 
             // --- 5. FACEBOOK PIXEL ---
-            if (scripts.enablePixel && scripts.facebookPixelId) {
+            if (scripts?.enablePixel && scripts?.facebookPixelId) {
                 const pixelScript = document.createElement('script');
                 pixelScript.setAttribute('data-masa-injected', 'fb-pixel');
                 pixelScript.innerHTML = `
@@ -125,7 +160,7 @@ const GlobalScriptManager: React.FC = () => {
             }
 
             // --- 6. GOOGLE ADSENSE ---
-            if (scripts.enableAdsense && scripts.googleAdsenseCode) {
+            if (scripts?.enableAdsense && scripts?.googleAdsenseCode) {
                 if (scripts.googleAdsenseCode.startsWith('ca-pub')) {
                     const adScript = document.createElement('script');
                     adScript.setAttribute('data-masa-injected', 'adsense');
@@ -139,17 +174,17 @@ const GlobalScriptManager: React.FC = () => {
             }
 
             // --- 7. CUSTOM HEAD SCRIPTS ---
-            if (scripts.enableCustomHead && scripts.customHead) {
+            if (scripts?.enableCustomHead && scripts?.customHead) {
                 injectRawHtml(scripts.customHead, document.head, 'custom-head');
             }
 
             // --- 8. CUSTOM BODY SCRIPTS (Start of Body) ---
-            if (scripts.enableCustomBodyStart && scripts.customBodyStart) {
+            if (scripts?.enableCustomBodyStart && scripts?.customBodyStart) {
                 injectRawHtml(scripts.customBodyStart, document.body, 'custom-body-start', true);
             }
 
             // --- 9. CUSTOM FOOTER SCRIPTS (End of Body) ---
-            if (scripts.enableCustomBodyEnd && scripts.customBodyEnd) {
+            if (scripts?.enableCustomBodyEnd && scripts?.customBodyEnd) {
                 injectRawHtml(scripts.customBodyEnd, document.body, 'custom-body-end', false);
             }
         };

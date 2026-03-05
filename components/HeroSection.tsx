@@ -13,7 +13,8 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     useEffect(() => {
         const loadSlides = () => {
             const settings = ContentManager.getSettings();
-            setSlides(settings.homepage.slider.slides || []);
+            const allSlides = settings.homepage.slider.slides || [];
+            setSlides(allSlides.filter(s => s.enabled !== false));
             if (settings.buttons && settings.buttons.zones) {
                 setHeroCta(settings.buttons.zones['hero_cta']);
                 setPaymentLinks(settings.buttons.paymentLinks);
@@ -45,12 +46,15 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
         <section className="relative bg-masa-charcoal text-white h-[90vh] min-h-[600px] md:min-h-[700px] flex items-center overflow-hidden">
             {slides.map((slide, index) => (
                 <div key={slide.id || index} className={`absolute inset-0 transition-opacity duration-1000 ${index === current ? 'opacity-100' : 'opacity-0'}`}>
-                    <img 
-                        src={slide.image} 
-                        alt={slide.headline} 
-                        className="w-full h-full object-cover animate-ken-burns" 
-                        loading={index === 0 ? "eager" : "lazy"}
-                    />
+                    <picture className="w-full h-full">
+                        {slide.mobileImage && <source media="(max-width: 767px)" srcSet={slide.mobileImage} />}
+                        <img 
+                            src={slide.image} 
+                            alt={slide.headline} 
+                            className="w-full h-full object-cover animate-ken-burns" 
+                            loading={index === 0 ? "eager" : "lazy"}
+                        />
+                    </picture>
                     <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent"></div>
                 </div>
             ))}
@@ -58,20 +62,43 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                 Masa World Foundation
             </div>
             <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 z-10">
-                <div className="max-w-4xl text-left">
+                <div className="max-w-5xl text-left">
                     <div key={current} className="animate-fade-in-up">
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight drop-shadow-lg leading-tight">{slides[current].headline}</h1>
-                        <p className="mt-8 text-xl md:text-2xl text-gray-100 max-w-3xl drop-shadow-md font-light leading-relaxed">{slides[current].subtext}</p>
-                        
-                        {heroCta && heroCta.visible ? (
-                            <button onClick={() => onSmartBtnClick(heroCta)} className="mt-10 md:mt-12 bg-masa-orange text-white px-8 py-4 md:px-10 md:py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                                {heroCta.label}
-                            </button>
-                        ) : (
-                            <button onClick={() => navigateTo(slides[current].cta.page)} className="mt-10 md:mt-12 bg-masa-orange text-white px-8 py-4 md:px-10 md:py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                                {slides[current].cta.label}
-                            </button>
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter drop-shadow-2xl leading-[0.9] text-balance">
+                            {slides[current].headline}
+                        </h1>
+                        <p className="mt-8 text-xl md:text-2xl text-gray-100 max-w-3xl drop-shadow-lg font-medium leading-relaxed opacity-90">
+                            {slides[current].subtext}
+                        </p>
+                        {slides[current].description && (
+                            <p className="mt-4 text-lg text-gray-200 max-w-2xl drop-shadow-md font-normal opacity-80">
+                                {slides[current].description}
+                            </p>
                         )}
+                        
+                        <div className="mt-10 md:mt-12 flex flex-wrap gap-4">
+                            {heroCta && heroCta.visible ? (
+                                <button 
+                                    onClick={() => onSmartBtnClick(heroCta)} 
+                                    className="bg-masa-orange text-white px-10 py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-2xl hover:shadow-orange-500/40 transform hover:-translate-y-1 active:scale-95"
+                                >
+                                    {heroCta.label}
+                                </button>
+                            ) : (
+                                <button 
+                                    onClick={() => {
+                                        if (slides[current].cta.url) {
+                                            window.open(slides[current].cta.url, '_blank');
+                                        } else {
+                                            navigateTo(slides[current].cta.page);
+                                        }
+                                    }} 
+                                    className="bg-masa-orange text-white px-10 py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-2xl hover:shadow-orange-500/40 transform hover:-translate-y-1 active:scale-95"
+                                >
+                                    {slides[current].cta.label}
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

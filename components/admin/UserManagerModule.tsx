@@ -60,34 +60,78 @@ const UserManagerModule: React.FC = () => {
 
     if (view === 'edit' && currentUser) {
         return (
-            <div className="animate-fade-in-up">
-                <button onClick={() => setView('list')} className="mb-4 text-sm font-bold text-masa-blue">&larr; Back to Users</button>
-                <ModuleHeader title={currentUser.id && !currentUser.id.startsWith('new') ? 'Edit User' : 'New User'} />
-                <div className="bg-white p-6 rounded-lg border space-y-4 max-w-2xl">
-                    {error && <div className="bg-red-50 text-red-600 p-3 rounded text-sm">{error}</div>}
-                    <InputField label="Name" value={currentUser.name} onChange={e => setCurrentUser({ ...currentUser, name: e.target.value })} />
-                    <InputField label="Email" type="email" value={currentUser.email} onChange={e => setCurrentUser({ ...currentUser, email: e.target.value })} />
-                    <SelectField label="Role" value={currentUser.role} onChange={e => setCurrentUser({ ...currentUser, role: e.target.value as UserRole })}>
-                        <option value="Super Admin">Super Admin</option>
-                        <option value="Admin / Manager">Admin / Manager</option>
-                        <option value="Editor">Editor</option>
-                        <option value="Content Creator">Content Creator</option>
-                        <option value="Volunteer Coordinator">Volunteer Coordinator</option>
-                        <option value="Accountant / Finance">Accountant / Finance</option>
-                    </SelectField>
-                    <SelectField label="Status" value={currentUser.status || 'Active'} onChange={e => setCurrentUser({ ...currentUser, status: e.target.value as any })}>
-                        <option value="Active">Active</option>
-                        <option value="Disabled">Disabled</option>
-                    </SelectField>
-                    <InputField 
-                        label={currentUser.id && !currentUser.id.startsWith('new') ? "New Password (leave blank to keep current)" : "Password"} 
-                        type="password" 
-                        value={currentUser.password || ''} 
-                        onChange={e => setCurrentUser({ ...currentUser, password: e.target.value })} 
-                    />
-                    <button onClick={handleSave} disabled={loading} className="bg-masa-blue text-white px-6 py-2 rounded-lg font-bold mt-4 disabled:opacity-50">
-                        {loading ? 'Saving...' : 'Save User'}
-                    </button>
+            <div className="animate-fade-in-up pb-20">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                    <div>
+                        <button onClick={() => setView('list')} className="text-[10px] font-black text-masa-orange uppercase tracking-widest hover:underline mb-2 flex items-center gap-2">
+                            &larr; Back to Users
+                        </button>
+                        <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">
+                            {currentUser.id && !currentUser.id.startsWith('new') ? `Editing: ${currentUser.name}` : 'Add New User'}
+                        </h2>
+                    </div>
+                    <div className="flex gap-3">
+                        <button onClick={() => setView('list')} className="px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest border border-gray-200 text-gray-700 hover:bg-gray-50 transition-all">Cancel</button>
+                        <button onClick={handleSave} disabled={loading} className="px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest bg-gray-900 text-white hover:bg-masa-orange transition-all disabled:opacity-50 shadow-lg shadow-gray-900/10">
+                            {loading ? 'Saving...' : 'Save User Profile'}
+                        </button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div className="lg:col-span-2 space-y-8">
+                        <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+                            <h3 className="font-black text-[10px] uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-4">Basic Information</h3>
+                            {error && <div className="bg-red-50 text-red-600 p-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-red-100">{error}</div>}
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <InputField label="Full Name" value={currentUser.name} onChange={e => setCurrentUser({ ...currentUser, name: e.target.value })} />
+                                <InputField label="Email Address" type="email" value={currentUser.email} onChange={e => setCurrentUser({ ...currentUser, email: e.target.value })} />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <SelectField label="System Role" value={currentUser.role} onChange={e => setCurrentUser({ ...currentUser, role: e.target.value as UserRole })}>
+                                    <option value="Super Admin">Super Admin</option>
+                                    <option value="Admin / Manager">Admin / Manager</option>
+                                    <option value="Editor">Editor</option>
+                                    <option value="Content Creator">Content Creator</option>
+                                    <option value="Volunteer Coordinator">Volunteer Coordinator</option>
+                                    <option value="Accountant / Finance">Accountant / Finance</option>
+                                </SelectField>
+                                <SelectField label="Account Status" value={currentUser.status || 'Active'} onChange={e => setCurrentUser({ ...currentUser, status: e.target.value as any })}>
+                                    <option value="Active">Active</option>
+                                    <option value="Disabled">Disabled</option>
+                                </SelectField>
+                            </div>
+                        </div>
+
+                        <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+                            <h3 className="font-black text-[10px] uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-4">Security</h3>
+                            <InputField 
+                                label={currentUser.id && !currentUser.id.startsWith('new') ? "Update Password (leave blank to keep current)" : "Initial Password"} 
+                                type="password" 
+                                value={currentUser.password || ''} 
+                                onChange={e => setCurrentUser({ ...currentUser, password: e.target.value })} 
+                            />
+                        </div>
+                    </div>
+
+                    <div className="space-y-8">
+                        <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm text-center">
+                            <h3 className="font-black text-[10px] uppercase tracking-widest text-gray-400 border-b border-gray-100 pb-4 mb-6">User Avatar</h3>
+                            <div className="relative inline-block group">
+                                <img 
+                                    src={currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name || 'User')}&background=random`} 
+                                    alt={currentUser.name} 
+                                    className="w-32 h-32 rounded-[2rem] border-4 border-gray-50 shadow-lg object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-[2rem] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer">
+                                    <span className="text-white text-[10px] font-black uppercase tracking-widest">Change</span>
+                                </div>
+                            </div>
+                            <p className="text-[10px] font-medium text-gray-400 mt-4 italic">Avatars are currently auto-generated based on name if not provided.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -95,51 +139,60 @@ const UserManagerModule: React.FC = () => {
 
     return (
         <div className="animate-fade-in-up">
-            <ModuleHeader title="User Management" onAction={handleNew} actionLabel="Add User" />
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-                 <table className="w-full text-sm">
-                    <thead className="bg-gray-50 text-gray-500 uppercase font-bold">
-                        <tr>
-                            <th className="p-4 text-left">User</th>
-                            <th className="p-4 text-left">Role</th>
-                            <th className="p-4 text-left">Status</th>
-                            <th className="p-4 text-left">Last Login</th>
-                            <th className="p-4 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {users.map(user => (
-                            <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="p-4">
-                                    <div className="flex items-center gap-3">
-                                        <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full" />
-                                        <div>
-                                            <div className="font-bold text-gray-800">{user.name}</div>
-                                            <div className="text-xs text-gray-500">{user.email}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="p-4">
-                                    <span className={`px-2 py-1 text-xs rounded-full font-bold ${
-                                        user.role === 'Super Admin' ? 'bg-purple-100 text-purple-700' : 
-                                        user.role === 'Admin / Manager' ? 'bg-blue-100 text-blue-700' :
-                                        'bg-gray-100 text-gray-700'
-                                    }`}>{user.role}</span>
-                                </td>
-                                <td className="p-4">
-                                    <span className={`px-2 py-1 text-xs rounded-full font-bold ${user.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{user.status || 'Active'}</span>
-                                </td>
-                                <td className="p-4 text-xs text-gray-500">
-                                    {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never'}
-                                </td>
-                                <td className="p-4 text-right">
-                                    <button onClick={() => handleEdit(user)} className="text-masa-blue font-bold mr-3">Edit</button>
-                                    <button onClick={() => handleDelete(user.id)} className="text-red-500 font-bold">Delete</button>
-                                </td>
+            <ModuleHeader title="Team Access" onAction={handleNew} actionLabel="Add New Team Member" />
+            <div className="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left">
+                        <thead className="bg-gray-50/50 text-gray-400 uppercase font-black text-[10px] tracking-[0.2em] border-b border-gray-100">
+                            <tr>
+                                <th className="px-8 py-6">Identity</th>
+                                <th className="px-8 py-6">System Role</th>
+                                <th className="px-8 py-6">Account Status</th>
+                                <th className="px-8 py-6">Last Activity</th>
+                                <th className="px-8 py-6 text-right">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                            {users.map(user => (
+                                <tr key={user.id} className="hover:bg-gray-50/50 transition-all duration-300 group">
+                                    <td className="px-8 py-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="relative">
+                                                <img src={user.avatar} alt={user.name} className="w-12 h-12 rounded-2xl object-cover border-2 border-white shadow-sm" />
+                                                <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${user.status === 'Active' ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+                                            </div>
+                                            <div>
+                                                <div className="font-black text-gray-900 uppercase tracking-tight text-base group-hover:text-masa-orange transition-colors">{user.name}</div>
+                                                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-0.5">{user.email}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <span className={`px-3 py-1.5 text-[9px] rounded-lg font-black uppercase tracking-widest ${
+                                            user.role === 'Super Admin' ? 'bg-purple-100 text-purple-700' : 
+                                            user.role === 'Admin / Manager' ? 'bg-blue-100 text-blue-700' :
+                                            'bg-gray-100 text-gray-700'
+                                        }`}>{user.role}</span>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <span className={`px-3 py-1.5 text-[9px] rounded-lg font-black uppercase tracking-widest ${user.status === 'Active' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>{user.status || 'Active'}</span>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                            {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never Active'}
+                                        </div>
+                                    </td>
+                                    <td className="px-8 py-6 text-right opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
+                                        <div className="flex items-center justify-end gap-4">
+                                            <button onClick={() => handleEdit(user)} className="text-[10px] font-black text-gray-900 uppercase tracking-widest hover:text-masa-orange transition-colors">Edit</button>
+                                            <button onClick={() => handleDelete(user.id)} className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:text-red-600 transition-colors">Revoke</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

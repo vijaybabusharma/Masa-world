@@ -9,7 +9,7 @@ import {
     CalendarDaysIcon, LockClosedIcon, ArrowRightIcon, CheckIcon, GlobeIcon, CreditCardIcon, 
     DocumentTextIcon, PresentationChartBarIcon, SearchIcon, EnvelopeIcon, BellIcon, 
     ShieldCheckIcon, ClockIcon, EyeIcon, SparklesIcon, PlusIcon, TrashIcon,
-    DocumentCheckIcon
+    DocumentCheckIcon, ChatBubbleLeftIcon
 } from '../components/icons/FeatureIcons';
 import { MenuIcon, ChevronDownIcon, ChevronUpIcon, XIcon } from '../components/icons/UiIcons';
 import PageEditorModule from '@/components/admin/PageEditorModule';
@@ -26,6 +26,10 @@ import BackupRestoreModule from '@/components/admin/BackupRestoreModule';
 import ProfileModule from '@/components/admin/ProfileModule';
 import DonationPanel from '@/components/admin/DonationPanel';
 import ActivityLogModule from '@/components/admin/ActivityLogModule';
+import NavigationModule from '@/components/admin/NavigationModule';
+import RedirectModule from '@/components/admin/RedirectModule';
+import TrashModule from '@/components/admin/TrashModule';
+import CommentModerationModule from '@/components/admin/CommentModerationModule';
 import { SidebarItem, ToggleSwitch, InputField, TextareaField, SelectField, ModuleHeader } from '@/components/admin/AdminComponents';
 
 // --- Dashboard Modules ---
@@ -43,84 +47,99 @@ const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => v
     if (!stats) return <div>Loading stats...</div>;
 
     const statCards = [
-        { label: 'Total Volunteers', value: stats.volunteers, icon: UsersIcon, color: 'bg-blue-500' },
-        { label: 'Donations', value: stats.donations, icon: HeartIcon, color: 'bg-red-500' },
-        { label: 'Members', value: stats.members, icon: SparklesIcon, color: 'bg-yellow-500' },
-        { label: 'Queries', value: stats.queries, icon: EnvelopeIcon, color: 'bg-green-500' },
-        { label: 'Careers', value: stats.careers, icon: BriefcaseIcon, color: 'bg-purple-500' },
-        { label: 'Enrollments', value: stats.enrollments, icon: AcademicCapIcon, color: 'bg-indigo-500' },
+        { label: 'Volunteers', value: stats.volunteers, icon: UsersIcon, color: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/20' },
+        { label: 'Donations', value: stats.donations, icon: HeartIcon, color: 'from-red-500 to-red-600', shadow: 'shadow-red-500/20' },
+        { label: 'Members', value: stats.members, icon: SparklesIcon, color: 'from-amber-500 to-amber-600', shadow: 'shadow-amber-500/20' },
+        { label: 'Queries', value: stats.queries, icon: EnvelopeIcon, color: 'from-emerald-500 to-emerald-600', shadow: 'shadow-emerald-500/20' },
+        { label: 'Careers', value: stats.careers, icon: BriefcaseIcon, color: 'from-purple-500 to-purple-600', shadow: 'shadow-purple-500/20' },
+        { label: 'Enrollments', value: stats.enrollments, icon: AcademicCapIcon, color: 'from-indigo-500 to-indigo-600', shadow: 'shadow-indigo-500/20' },
     ];
 
     return (
-        <div className="animate-fade-in-up space-y-8">
-            <div className="flex justify-between items-center">
+        <div className="animate-fade-in-up space-y-10">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-800">Welcome, {user.name}</h1>
-                    <p className="text-gray-500">Here is what's happening on your website today.</p>
+                    <h1 className="text-4xl font-black tracking-tight text-gray-900 uppercase leading-none mb-2">
+                        Welcome, <span className="text-masa-orange">{user.name}</span>
+                    </h1>
+                    <p className="text-gray-500 font-medium text-sm">Here is what's happening on your website today.</p>
                 </div>
-                <div className="text-right">
-                    <p className="text-sm font-bold text-gray-500 uppercase">Current Role</p>
-                    <span className="inline-block bg-masa-orange text-white px-3 py-1 rounded-full text-xs font-bold">{user.role}</span>
+                <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl shadow-sm border border-gray-100">
+                    <div className="text-right">
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Access Level</p>
+                        <p className="text-xs font-bold text-gray-900">{user.role}</p>
+                    </div>
+                    <div className="w-10 h-10 bg-masa-orange/10 rounded-xl flex items-center justify-center">
+                        <ShieldCheckIcon className="h-5 w-5 text-masa-orange" />
+                    </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {statCards.map((stat, idx) => (
-                    <div key={idx} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center gap-4 transition-transform hover:-translate-y-1">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${stat.color}`}>
-                            <stat.icon className="h-6 w-6" />
+                    <div key={idx} className="group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col gap-6 transition-all duration-500 hover:shadow-xl hover:-translate-y-1">
+                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br ${stat.color} ${stat.shadow} transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}>
+                            <stat.icon className="h-7 w-7" />
                         </div>
                         <div>
-                            <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
-                            <p className="text-sm text-gray-500 font-medium uppercase tracking-wide">{stat.label}</p>
+                            <p className="text-4xl font-black text-gray-900 tracking-tighter mb-1">{stat.value}</p>
+                            <p className="text-xs text-gray-400 font-black uppercase tracking-[0.2em]">{stat.label}</p>
                         </div>
                     </div>
                 ))}
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                        <button onClick={() => setActiveView('events')} className="p-4 bg-gray-50 rounded-lg text-center hover:bg-masa-blue hover:text-white transition-colors group">
-                            <CalendarDaysIcon className="h-6 w-6 mx-auto mb-2 text-masa-blue group-hover:text-white" />
-                            <span className="font-bold text-sm">Manage Events</span>
-                        </button>
-                        <button onClick={() => setActiveView('blogs')} className="p-4 bg-gray-50 rounded-lg text-center hover:bg-masa-blue hover:text-white transition-colors group">
-                            <NewspaperIcon className="h-6 w-6 mx-auto mb-2 text-masa-blue group-hover:text-white" />
-                            <span className="font-bold text-sm">Write Blog Post</span>
-                        </button>
-                        <button onClick={() => setActiveView('forms')} className="p-4 bg-gray-50 rounded-lg text-center hover:bg-masa-blue hover:text-white transition-colors group">
-                            <EnvelopeIcon className="h-6 w-6 mx-auto mb-2 text-masa-blue group-hover:text-white" />
-                            <span className="font-bold text-sm">View Inquiries</span>
-                        </button>
-                        <button onClick={() => setActiveView('settings')} className="p-4 bg-gray-50 rounded-lg text-center hover:bg-masa-blue hover:text-white transition-colors group">
-                            <LockClosedIcon className="h-6 w-6 mx-auto mb-2 text-masa-blue group-hover:text-white" />
-                            <span className="font-bold text-sm">Site Settings</span>
-                        </button>
+            <div className="grid lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                    <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Quick Actions</h3>
+                        <div className="h-1 w-12 bg-masa-orange rounded-full"></div>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        {[
+                            { label: 'Events', icon: CalendarDaysIcon, view: 'events' },
+                            { label: 'Blog', icon: NewspaperIcon, view: 'blogs' },
+                            { label: 'Inquiries', icon: EnvelopeIcon, view: 'forms' },
+                            { label: 'Settings', icon: LockClosedIcon, view: 'settings' },
+                        ].map((action, idx) => (
+                            <button 
+                                key={idx}
+                                onClick={() => setActiveView(action.view)} 
+                                className="p-6 bg-gray-50 rounded-2xl text-center hover:bg-masa-orange hover:text-white transition-all duration-300 group"
+                            >
+                                <action.icon className="h-8 w-8 mx-auto mb-3 text-masa-orange group-hover:text-white transition-transform duration-300 group-hover:scale-110" />
+                                <span className="font-black text-[10px] uppercase tracking-widest">{action.label}</span>
+                            </button>
+                        ))}
                     </div>
                 </div>
-                <div className="bg-masa-charcoal text-white p-6 rounded-xl shadow-lg relative overflow-hidden">
-                    <div className="relative z-10">
-                        <h3 className="text-lg font-bold mb-2">System Status</h3>
-                        <div className="space-y-3">
-                            <div className="flex justify-between items-center border-b border-gray-700 pb-2">
-                                <span className="text-gray-400 text-sm">Website Status</span>
-                                <span className="text-green-400 font-bold text-sm flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Live</span>
+                <div className="bg-gray-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden group">
+                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-masa-orange/20 rounded-full blur-[80px] group-hover:bg-masa-orange/30 transition-colors duration-500"></div>
+                    <div className="relative z-10 space-y-8">
+                        <div>
+                            <h3 className="text-xl font-black uppercase tracking-tight mb-1">System Health</h3>
+                            <p className="text-gray-500 text-xs font-medium">Real-time status monitoring</p>
+                        </div>
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5">
+                                <span className="text-gray-400 text-xs font-black uppercase tracking-widest">Website</span>
+                                <span className="text-emerald-400 font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> 
+                                    Online
+                                </span>
                             </div>
-                            <div className="flex justify-between items-center border-b border-gray-700 pb-2">
-                                <span className="text-gray-400 text-sm">Last Backup</span>
-                                <span className="text-white font-bold text-sm">Never</span>
+                            <div className="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5">
+                                <span className="text-gray-400 text-xs font-black uppercase tracking-widest">Database</span>
+                                <span className="text-emerald-400 font-black text-[10px] uppercase tracking-widest">Active</span>
                             </div>
-                            <div className="flex justify-between items-center border-b border-gray-700 pb-2">
-                                <span className="text-gray-400 text-sm">Database</span>
-                                <span className="text-green-400 font-bold text-sm">Connected (Local)</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-gray-400 text-sm">Version</span>
-                                <span className="text-white font-bold text-sm">v1.2.0</span>
+                            <div className="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/5">
+                                <span className="text-gray-400 text-xs font-black uppercase tracking-widest">Version</span>
+                                <span className="text-white font-black text-[10px] uppercase tracking-widest">v1.2.0</span>
                             </div>
                         </div>
+                        <button className="w-full py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all">
+                            View Full Logs
+                        </button>
                     </div>
                 </div>
             </div>
@@ -180,6 +199,7 @@ const AdminDashboardPage: React.FC = () => {
         switch (activeView) {
             case 'dashboard': return <DashboardHome user={auth.user!} setActiveView={setActiveView} />;
             case 'blogs': return hasPermission(['Super Admin', 'Admin / Manager', 'Editor', 'Content Creator']) ? <BlogManagerModule /> : <p>Permission Denied</p>;
+            case 'comments': return hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) ? <CommentModerationModule /> : <p>Permission Denied</p>;
             case 'courses': return hasPermission(['Super Admin', 'Admin / Manager']) ? <CourseManagerModule /> : <p>Permission Denied</p>;
             case 'events': return hasPermission(['Super Admin', 'Admin / Manager']) ? <EventManagerModule /> : <p>Permission Denied</p>;
             case 'gallery': return hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) ? <GalleryManagerModule /> : <p>Permission Denied</p>;
@@ -190,63 +210,81 @@ const AdminDashboardPage: React.FC = () => {
             case 'buttons': return hasPermission(['Super Admin']) ? <ButtonManagerModule /> : <p>Permission Denied</p>;
             case 'pages': return hasPermission(['Super Admin', 'Admin / Manager']) ? <PageEditorModule /> : <p>Permission Denied</p>;
             case 'media': return hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) ? <MediaManagerModule /> : <p>Permission Denied</p>;
+            case 'navigation': return hasPermission(['Super Admin', 'Admin / Manager']) ? <NavigationModule /> : <p>Permission Denied</p>;
+            case 'redirects': return hasPermission(['Super Admin', 'Admin / Manager']) ? <RedirectModule /> : <p>Permission Denied</p>;
             case 'donations': return hasPermission(['Super Admin', 'Accountant / Finance']) ? <DonationPanel /> : <p>Permission Denied</p>;
             case 'logs': return hasPermission(['Super Admin']) ? <ActivityLogModule /> : <p>Permission Denied</p>;
+            case 'trash': return hasPermission(['Super Admin']) ? <TrashModule /> : <p>Permission Denied</p>;
             case 'profile': return <ProfileModule user={auth.user!} />;
             default: return <div>Select a module</div>;
         }
     };
     
     return (
-        <div className="min-h-screen bg-gray-100 flex font-sans text-gray-800">
-            {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-20 lg:hidden" onClick={() => setSidebarOpen(false)}></div>}
-            <aside className={`fixed inset-y-0 left-0 z-30 w-64 bg-gray-900 text-white transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex flex-col shadow-xl lg:shadow-none`}>
-                <div className="h-16 flex items-center px-5 border-b border-gray-800 font-bold text-xl tracking-wide justify-between">
-                    <span>MASA<span className="text-masa-orange">Panel</span></span>
+        <div className="min-h-screen bg-gray-50 flex font-sans text-gray-900">
+            {sidebarOpen && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" onClick={() => setSidebarOpen(false)}></div>}
+            <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-gray-900 text-white transform transition-transform duration-500 ease-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 flex flex-col shadow-2xl`}>
+                <div className="h-20 flex items-center px-8 border-b border-white/5 justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-masa-orange rounded-lg flex items-center justify-center font-black text-white">M</div>
+                        <span className="font-black text-lg tracking-tighter uppercase">Masa<span className="text-masa-orange">Panel</span></span>
+                    </div>
                     <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-400 hover:text-white"><XIcon className="h-5 w-5"/></button>
                 </div>
-                <div className="flex-1 overflow-y-auto py-4 space-y-1">
+                <div className="flex-1 overflow-y-auto py-8 px-4 space-y-1 custom-scrollbar">
                     <SidebarItem id="dashboard" label="Dashboard" icon={PresentationChartBarIcon} isActive={activeView === 'dashboard'} onClick={() => handleSidebarClick('dashboard')} />
                     
-                    <div className="px-4 py-2 text-xs font-bold text-gray-500 uppercase mt-2">Content</div>
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor', 'Content Creator']) && <SidebarItem id="blogs" label="Posts (Blog)" icon={NewspaperIcon} isActive={activeView === 'blogs'} onClick={() => handleSidebarClick('blogs')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="pages" label="Pages" icon={DocumentTextIcon} isActive={activeView === 'pages'} onClick={() => handleSidebarClick('pages')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="events" label="Events" icon={CalendarDaysIcon} isActive={activeView === 'events'} onClick={() => handleSidebarClick('events')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) && <SidebarItem id="gallery" label="Gallery" icon={EyeIcon} isActive={activeView === 'gallery'} onClick={() => handleSidebarClick('gallery')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="courses" label="Courses" icon={AcademicCapIcon} isActive={activeView === 'courses'} onClick={() => handleSidebarClick('courses')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) && <SidebarItem id="media" label="Media Library" icon={CameraIcon} isActive={activeView === 'media'} onClick={() => handleSidebarClick('media')} />}
+                    <div className="px-4 py-6 text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Content Engine</div>
+                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor', 'Content Creator']) && <SidebarItem id="blogs" label="Blog Posts" icon={NewspaperIcon} isActive={activeView === 'blogs'} onClick={() => handleSidebarClick('blogs')} />}
+                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) && <SidebarItem id="comments" label="Moderation" icon={ChatBubbleLeftIcon} isActive={activeView === 'comments'} onClick={() => handleSidebarClick('comments')} />}
+                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="pages" label="Site Pages" icon={DocumentTextIcon} isActive={activeView === 'pages'} onClick={() => handleSidebarClick('pages')} />}
+                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="events" label="Event Calendar" icon={CalendarDaysIcon} isActive={activeView === 'events'} onClick={() => handleSidebarClick('events')} />}
+                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) && <SidebarItem id="gallery" label="Visual Gallery" icon={EyeIcon} isActive={activeView === 'gallery'} onClick={() => handleSidebarClick('gallery')} />}
+                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="courses" label="Academy" icon={AcademicCapIcon} isActive={activeView === 'courses'} onClick={() => handleSidebarClick('courses')} />}
+                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) && <SidebarItem id="media" label="Media Assets" icon={CameraIcon} isActive={activeView === 'media'} onClick={() => handleSidebarClick('media')} />}
+                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="navigation" label="Menu Config" icon={GlobeIcon} isActive={activeView === 'navigation'} onClick={() => handleSidebarClick('navigation')} />}
+                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="redirects" label="Redirects" icon={ArrowRightIcon} isActive={activeView === 'redirects'} onClick={() => handleSidebarClick('redirects')} />}
 
-                    <div className="px-4 py-2 text-xs font-bold text-gray-500 uppercase mt-2">Data & CRM</div>
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Volunteer Coordinator']) && <SidebarItem id="forms" label="Form Submissions" icon={EnvelopeIcon} isActive={activeView === 'forms'} onClick={() => handleSidebarClick('forms')} />}
-                    {hasPermission(['Super Admin', 'Accountant / Finance']) && <SidebarItem id="donations" label="Donations" icon={CreditCardIcon} isActive={activeView === 'donations'} onClick={() => handleSidebarClick('donations')} />}
-                    {hasPermission(['Super Admin']) && <SidebarItem id="users" label="User Management" icon={UsersIcon} isActive={activeView === 'users'} onClick={() => handleSidebarClick('users')} />}
+                    <div className="px-4 py-6 text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Data & CRM</div>
+                    {hasPermission(['Super Admin', 'Admin / Manager', 'Volunteer Coordinator']) && <SidebarItem id="forms" label="Submissions" icon={EnvelopeIcon} isActive={activeView === 'forms'} onClick={() => handleSidebarClick('forms')} />}
+                    {hasPermission(['Super Admin', 'Accountant / Finance']) && <SidebarItem id="donations" label="Finance" icon={CreditCardIcon} isActive={activeView === 'donations'} onClick={() => handleSidebarClick('donations')} />}
+                    {hasPermission(['Super Admin']) && <SidebarItem id="users" label="Team Access" icon={UsersIcon} isActive={activeView === 'users'} onClick={() => handleSidebarClick('users')} />}
 
                     {hasPermission(['Super Admin']) && <>
-                        <div className="px-4 py-2 text-xs font-bold text-gray-500 uppercase mt-2">Configuration</div>
-                        <SidebarItem id="buttons" label="Buttons & Payments" icon={CreditCardIcon} isActive={activeView === 'buttons'} onClick={() => handleSidebarClick('buttons')} />
-                        <SidebarItem id="settings" label="Site Settings" icon={LockClosedIcon} isActive={activeView === 'settings'} onClick={() => handleSidebarClick('settings')} />
-                        <SidebarItem id="logs" label="Activity Logs" icon={ClockIcon} isActive={activeView === 'logs'} onClick={() => handleSidebarClick('logs')} />
-                        <SidebarItem id="backup" label="Backup / Restore" icon={ShieldCheckIcon} isActive={activeView === 'backup'} onClick={() => handleSidebarClick('backup')} />
+                        <div className="px-4 py-6 text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">System</div>
+                        <SidebarItem id="buttons" label="Payments" icon={CreditCardIcon} isActive={activeView === 'buttons'} onClick={() => handleSidebarClick('buttons')} />
+                        <SidebarItem id="settings" label="Site Config" icon={LockClosedIcon} isActive={activeView === 'settings'} onClick={() => handleSidebarClick('settings')} />
+                        <SidebarItem id="logs" label="Audit Logs" icon={ClockIcon} isActive={activeView === 'logs'} onClick={() => handleSidebarClick('logs')} />
+                        <SidebarItem id="trash" label="Trash Bin" icon={TrashIcon} isActive={activeView === 'trash'} onClick={() => handleSidebarClick('trash')} />
+                        <SidebarItem id="backup" label="Infrastructure" icon={ShieldCheckIcon} isActive={activeView === 'backup'} onClick={() => handleSidebarClick('backup')} />
                     </>}
                 </div>
-                <div className="p-4 border-t border-gray-800">
-                    <button onClick={() => handleSidebarClick('profile')} className="flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-3 px-2 w-full">
-                        <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center text-xs font-bold">{auth.user?.name.charAt(0)}</div>
-                        <div className="flex-1 text-left">
-                            <div className="font-bold text-white">{auth.user?.name}</div>
-                            <div className="text-[10px]">My Profile</div>
+                <div className="p-6 border-t border-white/5 bg-black/20">
+                    <button onClick={() => handleSidebarClick('profile')} className="flex items-center gap-4 group mb-6 w-full text-left">
+                        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-lg font-black text-masa-orange border border-white/10 group-hover:border-masa-orange/50 transition-all duration-300">
+                            {auth.user?.name.charAt(0)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="font-black text-sm text-white truncate uppercase tracking-tight">{auth.user?.name}</div>
+                            <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Profile Settings</div>
                         </div>
                     </button>
-                    <button onClick={handleLogout} className="w-full text-center text-xs text-gray-400 hover:text-white bg-gray-800 py-1.5 rounded transition-colors">Log Out</button>
+                    <button onClick={handleLogout} className="w-full py-4 bg-white/5 hover:bg-red-500/10 hover:text-red-500 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] rounded-2xl transition-all duration-300 border border-white/5">Sign Out</button>
                 </div>
             </aside>
 
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden h-screen">
-                <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 shadow-sm z-20">
-                    <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden text-gray-500 hover:text-gray-800"><MenuIcon className="h-6 w-6"/></button>
-                    <div className="flex items-center gap-4 ml-auto"><a href="/" target="_blank" className="text-sm font-bold text-masa-blue flex items-center gap-1 hover:underline bg-blue-50 px-3 py-1.5 rounded-full">Visit Site <ArrowRightIcon className="h-4 w-4"/></a></div>
+                <header className="bg-white border-b border-gray-100 h-20 flex items-center justify-between px-8 shadow-sm z-40">
+                    <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden text-gray-500 hover:text-gray-900"><MenuIcon className="h-6 w-6"/></button>
+                    <div className="flex items-center gap-6 ml-auto">
+                        <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-100">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">Live Server</span>
+                        </div>
+                        <a href="/" target="_blank" className="text-[10px] font-black text-white uppercase tracking-widest bg-gray-900 px-6 py-3 rounded-2xl hover:bg-masa-orange transition-all duration-300 shadow-lg shadow-gray-900/10">Visit Website</a>
+                    </div>
                 </header>
-                <main className="flex-1 overflow-y-auto p-4 md:p-8">{renderView()}</main>
+                <main className="flex-1 overflow-y-auto p-6 md:p-12 bg-gray-50/50">{renderView()}</main>
             </div>
         </div>
     );

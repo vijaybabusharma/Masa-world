@@ -1,6 +1,6 @@
 
 import { eventsData, postsData, coursesData } from './data';
-import { Post, GlobalSettings, PageMetadata, MasaEvent, Course, MenuItem, NavItem, SliderItem, PillarItem, Testimonial, GalleryItem, FounderMessageContent, ImpactStatsOverride, DeliveryAreaItem, ProcessStep, ButtonSettings } from '../types';
+import { Post, GlobalSettings, PageMetadata, MasaEvent, Course, MenuItem, NavItem, SliderItem, PillarItem, Testimonial, GalleryItem, FounderMessageContent, ImpactStatsOverride, DeliveryAreaItem, ProcessStep, ButtonSettings, Redirect, TrashItem, Revision, Comment, PageContent } from '../types';
 
 // Keys for LocalStorage
 const KEYS = {
@@ -9,7 +9,8 @@ const KEYS = {
     COURSES: 'masa_content_courses',
     GALLERY: 'masa_content_gallery',
     SETTINGS: 'masa_global_settings',
-    PAGES: 'masa_content_pages'
+    PAGES: 'masa_content_pages',
+    PAGE_CONTENT: 'masa_page_content_'
 };
 
 
@@ -23,7 +24,7 @@ const defaultHeaderMenu: MenuItem[] = [
             { id: 'nav-about-sub', label: 'Our Story', page: 'about' },
             { id: 'nav-mission', label: 'Mission & Vision', page: 'mission-vision' },
             { id: 'nav-values', label: 'Core Values', page: 'core-values' },
-            { id: 'nav-founder', label: 'Founder\'s Message', page: 'founder-message' },
+            { id: 'nav-founder', label: 'Founder’s Message', page: 'founder-message' },
             { id: 'nav-governance', label: 'Governance', page: 'governance' },
         ]
     },
@@ -62,7 +63,7 @@ const defaultFooterLinks: { about: NavItem[], work: NavItem[], involved: NavItem
         { id: 'footer-about', label: 'About MASA', page: 'about' },
         { id: 'footer-mission', label: 'Mission & Vision', page: 'mission-vision' },
         { id: 'footer-values', label: 'Core Values', page: 'core-values' },
-        { id: 'footer-founder', label: 'Founder\'s Message', page: 'founder-message' },
+        { id: 'footer-founder', label: 'Founder’s Message', page: 'founder-message' },
         { id: 'footer-governance', label: 'Governance', page: 'governance' },
         { id: 'footer-impact', label: 'Global Impact', page: 'global-impact' },
         { id: 'footer-contact', label: 'Contact Us', page: 'contact' },
@@ -104,67 +105,54 @@ const defaultFooterLinks: { about: NavItem[], work: NavItem[], involved: NavItem
 
 const defaultSliderItems: SliderItem[] = [
     { 
-        id: 'slide-empower', 
-        headline: "Empowering Youth. Building Nations.", 
-        subtext: "We forge future leaders through sports, education, and culture.", 
-        image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=1800&q=80", 
-        cta: { label: "Get Involved", page: "get-involved" } 
+        id: 'slide-vision', 
+        headline: "Masa World Foundation: Global Vision, Local Action", 
+        subtext: "Connecting global resources with local communities to drive sustainable social impact through disciplined action.", 
+        description: "Our foundation acts as a bridge between global philanthropy and local needs.",
+        image: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=1800&q=80", 
+        mobileImage: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=800&q=80",
+        cta: { label: "Get Involved", page: "get-involved" },
+        enabled: true
     },
     { 
-        id: 'slide-events', 
-        headline: "Global Stages, Local Impact.", 
-        subtext: "From national competitions to international exchange programs, we create platforms for youth to shine.", 
-        image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1800&q=80", 
-        cta: { label: "View Events", page: "events" } 
+        id: 'slide-youth', 
+        headline: "Empowering the Next Generation of Leaders", 
+        subtext: "Nurturing youth through discipline, sports, and leadership programs to build a resilient and responsible future.", 
+        description: "We believe in the power of youth to transform society.",
+        image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=80", 
+        mobileImage: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+        cta: { label: "Youth Programs", page: "courses" },
+        enabled: true
     },
     { 
-        id: 'slide-trainings', 
-        headline: "Forging Leaders of Tomorrow.", 
-        subtext: "Discipline-focused training and skill development that builds character and competence.", 
-        image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1800&q=80", 
-        cta: { label: "Join Training", page: "trainings" } 
+        id: 'slide-impact', 
+        headline: "Building Resilient and Responsible Communities", 
+        subtext: "Our grassroots initiatives focus on health, education, and social unity to create lasting positive change.", 
+        description: "Impact that lasts beyond the program duration.",
+        image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80", 
+        mobileImage: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
+        cta: { label: "Our Initiatives", page: "initiatives" },
+        enabled: true
     },
     { 
-        id: 'slide-awards', 
-        headline: "Honoring Real-Life Heroes.", 
-        subtext: "Recognizing the dedication and excellence of those who go above and beyond for society.", 
-        image: "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?auto=format&fit=crop&w=1800&q=80", 
-        cta: { label: "See Awardees", page: "awards" } 
+        id: 'slide-trust', 
+        headline: "Transparency and Trust in Every Action", 
+        subtext: "We ensure ethical fund usage and provide regular impact reports to our global community of supporters.", 
+        description: "Your trust is our most valuable asset.",
+        image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1800&q=80", 
+        mobileImage: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80",
+        cta: { label: "Donate Now", page: "donate" },
+        enabled: true
     },
     { 
-        id: 'slide-records', 
-        headline: "Breaking Boundaries.", 
-        subtext: "Documenting extraordinary human achievements and milestones that inspire us all.", 
-        image: "https://images.unsplash.com/photo-1552674605-5d226f5abdff?auto=format&fit=crop&w=1800&q=80", 
-        cta: { label: "View Records", page: "records" } 
-    },
-    { 
-        id: 'slide-conferences', 
-        headline: "Conversations That Shape the Future.", 
-        subtext: "Bringing together thought leaders to drive meaningful social progress.", 
-        image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1800&q=80", 
-        cta: { label: "Our Conferences", page: "conferences" } 
-    },
-    {
-        id: 'slide-sports',
-        headline: "Champions in the Making.",
-        subtext: "Nurturing talent, discipline, and teamwork through world-class sports programs.",
-        image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1800&q=80",
-        cta: { label: "Explore Sports", page: "sports" }
-    },
-    {
-        id: 'slide-culture',
-        headline: "Celebrating Our Roots.",
-        subtext: "Preserving heritage and fostering unity through vibrant cultural exchange.",
-        image: "https://images.unsplash.com/photo-1533551030926-9bc2cb24c823?auto=format&fit=crop&w=1800&q=80",
-        cta: { label: "View Culture", page: "culture" }
-    },
-    {
-        id: 'slide-volunteer',
-        headline: "Be the Change You Wish to See.",
-        subtext: "Join thousands of volunteers making a tangible difference in communities every day.",
-        image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1800&q=80",
-        cta: { label: "Volunteer Now", page: "volunteer" }
+        id: 'slide-volunteer', 
+        headline: "Join Our Global Network of Change-Makers", 
+        subtext: "Become a volunteer or member today and contribute your skills to meaningful social transformation.", 
+        description: "Together, we can achieve more.",
+        image: "https://images.unsplash.com/photo-1559027615-cd26735550b4?auto=format&fit=crop&w=1800&q=80", 
+        mobileImage: "https://images.unsplash.com/photo-1559027615-cd26735550b4?auto=format&fit=crop&w=800&q=80",
+        cta: { label: "Volunteer Now", page: "volunteer" },
+        enabled: true
     }
 ];
 
@@ -279,7 +267,7 @@ const defaultButtonSettings: ButtonSettings = {
     zones: {
         'header_donate': { id: 'header_donate', label: 'Donate', actionType: 'link', target: 'donate', visible: true, style: 'primary' },
         'hero_cta': { id: 'hero_cta', label: 'Get Involved', actionType: 'link', target: 'get-involved', visible: true, style: 'primary' },
-        'final_cta': { id: 'final_cta', label: 'Become a Member Today', actionType: 'link', target: 'membership', visible: true, style: 'primary' },
+        'final_cta': { id: 'final_cta', label: 'Become a Member', actionType: 'link', target: 'membership', visible: true, style: 'primary' },
     },
     floatingButton: { id: 'floating_donate', label: 'Donate Now', actionType: 'payment', target: 'pl-general', visible: false, position: 'bottom-right', style: 'primary' }
 };
@@ -296,16 +284,16 @@ const defaultSettings: GlobalSettings = {
         founderMessageContent: defaultFounderMessageContent,
         impactStats: defaultImpactStats,
         sections: {
-            impactSnapshot: { visible: true },
-            whatWeDo: { visible: true, title: "What We Do", subtitle: "Our holistic development ecosystem." },
-            incredibleSection: { visible: true, title: "Let's Create Incredible!", subtitle: "We organize, manage, and host impactful activities across sports, education, and culture." },
-            founderMessage: { visible: true },
-            communityVoices: { visible: true, title: "Voices from Our Community", subtitle: "Real stories from the people we serve and work with." },
-            trust: { visible: true, title: "The Cycle of Trust", subtitle: "Transparency is built into every step of our process." },
-            upcomingEvents: { visible: true, title: "Upcoming Events", subtitle: "Join our upcoming events and be part of the change." },
-            careers: { visible: true, title: "Careers & Internships", subtitle: "Join our team to drive social impact." },
-            getInvolved: { visible: true, title: "Get Involved", subtitle: "Join our mission to create a lasting impact." },
-            finalCta: { visible: true },
+            impactSnapshot: { visible: true, textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' },
+            whatWeDo: { visible: true, title: "What We Do", subtitle: "Our holistic development ecosystem.", textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' },
+            incredibleSection: { visible: true, title: "Let's Create Incredible!", subtitle: "We organize, manage, and host impactful activities across sports, education, and culture.", textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' },
+            founderMessage: { visible: true, textAlign: 'left', paddingTop: '4rem', paddingBottom: '4rem' },
+            communityVoices: { visible: true, title: "Voices from Our Community", subtitle: "Real stories from the people we serve and work with.", textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' },
+            trust: { visible: true, title: "The Cycle of Trust", subtitle: "Transparency is built into every step of our process.", textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' },
+            upcomingEvents: { visible: true, title: "Upcoming Events", subtitle: "Join our upcoming events and be part of the change.", textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' },
+            careers: { visible: true, title: "Careers & Internships", subtitle: "Join our team to drive social impact.", textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' },
+            getInvolved: { visible: true, title: "Get Involved", subtitle: "Join our mission to create a lasting impact.", textAlign: 'center', paddingTop: '4rem', paddingBottom: '4rem' },
+            finalCta: { visible: true, textAlign: 'center', paddingTop: '6rem', paddingBottom: '6rem' },
         },
     },
     navigation: {
@@ -322,8 +310,30 @@ const defaultSettings: GlobalSettings = {
         { id: 'li', platform: 'linkedin', url: 'https://www.linkedin.com/company/masaworld-foundation', enabled: true },
         { id: 'yt', platform: 'youtube', url: 'https://www.youtube.com/masaworldfoundation', enabled: true }
     ],
+    seo: {
+        ogImage: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=782,fit=crop/AMq4Dg7v0wH5yKM1/founder-B9OrhqqUN6Kq3Qir.jpeg',
+        ogTitle: 'MASA World Foundation',
+        ogDescription: 'Empowering Youth Through Sports, Education & Culture.',
+        twitterCard: 'summary_large_image',
+        sitemapEnabled: true,
+        robotsTxt: 'User-agent: *\nAllow: /',
+    },
     scripts: { googleAnalyticsId: '', enableAnalytics: false, facebookPixelId: '', enablePixel: false, googleAdsenseCode: '', enableAdsense: false, googleSearchConsole: '', enableGoogleSearchConsole: false, customHead: '', enableCustomHead: false, customBodyStart: '', enableCustomBodyStart: false, customBodyEnd: '', enableCustomBodyEnd: false },
-    appearance: { customCss: '', enableCustomCss: false },
+    appearance: { 
+        customCss: '', 
+        enableCustomCss: false,
+        typography: {
+            headingDesktop: '4.5rem',
+            headingMobile: '2.5rem',
+            paragraph: '1.125rem',
+            button: '1rem'
+        },
+        buttons: {
+            padding: '1rem 2rem',
+            borderRadius: '9999px',
+            alignment: 'center'
+        }
+    },
     payments: { currency: 'INR', razorpayEnabled: true, razorpayKey: '', stripeEnabled: false, stripeKey: '', paypalEnabled: false, paypalClientId: '', manualPaymentEnabled: true, manualPaymentInstructions: 'Contact for details.', donationSuccessMessage: 'Thank you!', donationFailureMessage: 'Payment failed.' },
     features: { blogEnabled: true, eventsEnabled: true, coursesEnabled: true, whatsAppIntegrationEnabled: false, whatsAppNumber: '' },
     buttons: defaultButtonSettings,
@@ -396,7 +406,42 @@ export const ContentManager = {
     getSettings: (): GlobalSettings => {
         if (typeof window === 'undefined') return defaultSettings;
         const data = localStorage.getItem(KEYS.SETTINGS);
-        return data ? JSON.parse(data) : defaultSettings;
+        if (!data) return defaultSettings;
+        try {
+            const parsed = JSON.parse(data);
+            // Deep merge to ensure new properties exist even if loading old settings
+            return {
+                ...defaultSettings,
+                ...parsed,
+                appearance: {
+                    ...defaultSettings.appearance,
+                    ...(parsed.appearance || {}),
+                    typography: {
+                        ...defaultSettings.appearance?.typography,
+                        ...(parsed.appearance?.typography || {})
+                    },
+                    buttons: {
+                        ...defaultSettings.appearance?.buttons,
+                        ...(parsed.appearance?.buttons || {})
+                    }
+                },
+                general: {
+                    ...defaultSettings.general,
+                    ...(parsed.general || {})
+                },
+                scripts: {
+                    ...defaultSettings.scripts,
+                    ...(parsed.scripts || {})
+                },
+                homepage: {
+                    ...defaultSettings.homepage,
+                    ...(parsed.homepage || {})
+                }
+            };
+        } catch (e) {
+            console.error("Failed to parse settings", e);
+            return defaultSettings;
+        }
     },
     saveSettings: async (settings: GlobalSettings) => {
         if (typeof window === 'undefined') return;
@@ -415,7 +460,11 @@ export const ContentManager = {
     getPages: (): PageMetadata[] => {
         if (typeof window === 'undefined') return defaultPages;
         const data = localStorage.getItem(KEYS.PAGES);
-        if (!data) return defaultPages;
+        if (!data) {
+            // Initialize with defaults if empty
+            localStorage.setItem(KEYS.PAGES, JSON.stringify(defaultPages));
+            return defaultPages;
+        }
         try {
             const parsed = JSON.parse(data);
             return Array.isArray(parsed) ? parsed : defaultPages;
@@ -428,6 +477,10 @@ export const ContentManager = {
         page.lastModified = new Date().toISOString();
         if (index >= 0) pages[index] = page;
         else pages.push(page);
+        
+        // Sort by order if available
+        pages.sort((a, b) => ((a as any).order || 0) - ((b as any).order || 0));
+        
         localStorage.setItem(KEYS.PAGES, JSON.stringify(pages));
         window.dispatchEvent(new Event('masa-settings-updated'));
         try {
@@ -437,6 +490,106 @@ export const ContentManager = {
                 body: JSON.stringify(pages)
             });
         } catch (err) { console.error('Failed to save pages to server', err); }
+    },
+    
+    getPageContent: (id: string): PageContent | null => {
+        if (typeof window === 'undefined') return null;
+        const data = localStorage.getItem(`${KEYS.PAGE_CONTENT}${id}`);
+        if (!data) return null;
+        try {
+            return JSON.parse(data);
+        } catch { return null; }
+    },
+    
+    savePageContent: async (content: PageContent) => {
+        if (typeof window === 'undefined') return;
+        content.lastModified = new Date().toISOString();
+        localStorage.setItem(`${KEYS.PAGE_CONTENT}${content.id}`, JSON.stringify(content));
+        
+        // Also update metadata
+        const meta: PageMetadata = {
+            id: content.id as any,
+            title: content.title,
+            description: content.metaDescription,
+            lastModified: content.lastModified
+        };
+        // Add extra fields to meta for the list view
+        (meta as any).status = content.status;
+        (meta as any).slug = content.slug;
+        (meta as any).order = content.order;
+        (meta as any).parentId = content.parentId;
+        
+        await ContentManager.savePage(meta);
+    },
+    
+    deletePage: async (id: string) => {
+        if (typeof window === 'undefined') return;
+        const pages = ContentManager.getPages();
+        const pageToDelete = pages.find(p => p.id === id);
+        if (pageToDelete) {
+            await ContentManager.moveToTrash(id, 'page', pageToDelete);
+        }
+        const updatedPages = pages.filter(p => p.id !== id);
+        localStorage.setItem(KEYS.PAGES, JSON.stringify(updatedPages));
+        window.dispatchEvent(new Event('masa-settings-updated'));
+        try {
+            await fetch('/api/content/pages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedPages)
+            });
+        } catch (err) { console.error('Failed to delete page on server', err); }
+    },
+
+    searchContent: (query: string) => {
+        const q = query.toLowerCase().trim();
+        if (!q) return [];
+
+        const results: any[] = [];
+
+        // Search Pages
+        const pages = ContentManager.getPages();
+        pages.forEach(p => {
+            if (p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)) {
+                results.push({
+                    type: 'page',
+                    id: p.id,
+                    title: p.title,
+                    description: p.description,
+                    page: p.id
+                });
+            }
+        });
+
+        // Search Events
+        const events = ContentManager.getEvents();
+        events.forEach(e => {
+            if (e.title.toLowerCase().includes(q) || e.description.toLowerCase().includes(q) || e.location.toLowerCase().includes(q)) {
+                results.push({
+                    type: 'event',
+                    id: e.id,
+                    title: e.title,
+                    description: e.description,
+                    page: 'events'
+                });
+            }
+        });
+
+        // Search Blogs
+        const posts = ContentManager.getPosts();
+        posts.forEach(p => {
+            if (p.title.toLowerCase().includes(q) || p.summary.toLowerCase().includes(q) || p.content.toLowerCase().includes(q)) {
+                results.push({
+                    type: 'blog',
+                    id: p.id,
+                    title: p.title,
+                    description: p.summary,
+                    page: 'blog'
+                });
+            }
+        });
+
+        return results;
     },
 
     // --- EVENTS ---
@@ -467,14 +620,19 @@ export const ContentManager = {
     },
     deleteEvent: async (id: string) => {
         if (typeof window === 'undefined') return;
-        const events = ContentManager.getEvents().filter(e => e.id !== id);
-        localStorage.setItem(KEYS.EVENTS, JSON.stringify(events));
+        const events = ContentManager.getEvents();
+        const eventToDelete = events.find(e => e.id === id);
+        if (eventToDelete) {
+            await ContentManager.moveToTrash(id, 'event', eventToDelete);
+        }
+        const updatedEvents = events.filter(e => e.id !== id);
+        localStorage.setItem(KEYS.EVENTS, JSON.stringify(updatedEvents));
         window.dispatchEvent(new Event('masa-settings-updated'));
         try {
             await fetch('/api/content/events', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(events)
+                body: JSON.stringify(updatedEvents)
             });
         } catch (err) { console.error('Failed to delete event on server', err); }
     },
@@ -508,14 +666,19 @@ export const ContentManager = {
     },
     deletePost: async (id: number) => {
         if (typeof window === 'undefined') return;
-        const posts = ContentManager.getPosts().filter(p => p.id !== id);
-        localStorage.setItem(KEYS.BLOGS, JSON.stringify(posts));
+        const posts = ContentManager.getPosts();
+        const postToDelete = posts.find(p => p.id === id);
+        if (postToDelete) {
+            await ContentManager.moveToTrash(id, 'post', postToDelete);
+        }
+        const updatedPosts = posts.filter(p => p.id !== id);
+        localStorage.setItem(KEYS.BLOGS, JSON.stringify(updatedPosts));
         window.dispatchEvent(new Event('masa-settings-updated'));
         try {
             await fetch('/api/content/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(posts)
+                body: JSON.stringify(updatedPosts)
             });
         } catch (err) { console.error('Failed to delete post on server', err); }
     },
@@ -548,14 +711,19 @@ export const ContentManager = {
     },
     deleteCourse: async (id: number) => {
         if (typeof window === 'undefined') return;
-        const courses = ContentManager.getCourses().filter(c => c.id !== id);
-        localStorage.setItem(KEYS.COURSES, JSON.stringify(courses));
+        const courses = ContentManager.getCourses();
+        const courseToDelete = courses.find(c => c.id === id);
+        if (courseToDelete) {
+            await ContentManager.moveToTrash(id, 'event', courseToDelete); // Using event type for simplicity in trash
+        }
+        const updatedCourses = courses.filter(c => c.id !== id);
+        localStorage.setItem(KEYS.COURSES, JSON.stringify(updatedCourses));
         window.dispatchEvent(new Event('masa-settings-updated'));
         try {
             await fetch('/api/content/courses', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(courses)
+                body: JSON.stringify(updatedCourses)
             });
         } catch (err) { console.error('Failed to delete course on server', err); }
     },
@@ -588,15 +756,104 @@ export const ContentManager = {
     },
     deleteGalleryItem: async (id: number | string) => {
         if (typeof window === 'undefined') return;
-        const items = ContentManager.getGalleryItems().filter(i => i.id !== id);
-        localStorage.setItem(KEYS.GALLERY, JSON.stringify(items));
+        const items = ContentManager.getGalleryItems();
+        const itemToDelete = items.find(i => i.id === id);
+        if (itemToDelete) {
+            await ContentManager.moveToTrash(id, 'event', itemToDelete);
+        }
+        const updatedItems = items.filter(i => i.id !== id);
+        localStorage.setItem(KEYS.GALLERY, JSON.stringify(updatedItems));
         window.dispatchEvent(new Event('masa-settings-updated'));
         try {
             await fetch('/api/content/gallery', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(items)
+                body: JSON.stringify(updatedItems)
             });
         } catch (err) { console.error('Failed to delete gallery item on server', err); }
     },
+
+    // --- CMS ADVANCED ---
+    moveToTrash: async (originalId: string | number, type: string, data: any) => {
+        try {
+            await fetch('/api/trash/move', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ originalId, type, data })
+            });
+        } catch (err) { console.error('Failed to move to trash', err); }
+    },
+
+    getTrash: async (): Promise<TrashItem[]> => {
+        try {
+            const res = await fetch('/api/trash');
+            return res.json();
+        } catch { return []; }
+    },
+
+    restoreFromTrash: async (id: string) => {
+        try {
+            await fetch(`/api/trash/restore/${id}`, { method: 'POST' });
+            await ContentManager.syncWithServer();
+        } catch (err) { console.error('Failed to restore from trash', err); }
+    },
+
+    permanentDelete: async (id: string) => {
+        try {
+            await fetch(`/api/trash/${id}`, { method: 'DELETE' });
+        } catch (err) { console.error('Failed to permanently delete', err); }
+    },
+
+    getRevisions: async (type: 'post' | 'page', id: string | number): Promise<Revision[]> => {
+        try {
+            const res = await fetch(`/api/revisions/${type}/${id}`);
+            return res.json();
+        } catch { return []; }
+    },
+
+    getComments: async (): Promise<Comment[]> => {
+        try {
+            const res = await fetch('/api/comments');
+            return res.json();
+        } catch { return []; }
+    },
+
+    updateCommentStatus: async (id: string, status: Comment['status']) => {
+        try {
+            await fetch(`/api/comments/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+        } catch (err) { console.error('Failed to update comment status', err); }
+    },
+
+    deleteComment: async (id: string) => {
+        try {
+            await fetch(`/api/comments/${id}`, { method: 'DELETE' });
+        } catch (err) { console.error('Failed to delete comment', err); }
+    },
+
+    getRedirects: async (): Promise<Redirect[]> => {
+        try {
+            const res = await fetch('/api/redirects');
+            return res.json();
+        } catch { return []; }
+    },
+
+    saveRedirect: async (redirect: Partial<Redirect>) => {
+        try {
+            await fetch('/api/redirects', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(redirect)
+            });
+        } catch (err) { console.error('Failed to save redirect', err); }
+    },
+
+    deleteRedirect: async (id: string) => {
+        try {
+            await fetch(`/api/redirects/${id}`, { method: 'DELETE' });
+        } catch (err) { console.error('Failed to delete redirect', err); }
+    }
 };

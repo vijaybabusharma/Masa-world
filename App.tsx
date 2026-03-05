@@ -59,15 +59,52 @@ import GlobalScriptManager from './components/GlobalScriptManager';
 import CredibilityBanner from './components/CredibilityBanner';
 import PreviewBanner from './components/PreviewBanner';
 import NgoHelpDeskPage from './pages/NgoHelpDeskPage';
+import DynamicPage from './components/DynamicPage';
 import { ContentManager } from './utils/contentManager';
 import { HeartIcon } from './components/icons/FeatureIcons';
 import { handleSmartButtonClick } from './utils/buttonHelper';
+import { PageContent } from './types';
 
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [floatingBtn, setFloatingBtn] = useState<SmartButton | null>(null);
   const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
+  const [dynamicPageContent, setDynamicPageContent] = useState<PageContent | null>(null);
+
+  useEffect(() => {
+    // Check for preview mode
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPreview = urlParams.get('preview') === 'true';
+    const previewId = urlParams.get('previewId');
+
+    if (isPreview && previewId) {
+        const previewData = sessionStorage.getItem(`preview_page_${previewId}`);
+        if (previewData) {
+            try {
+                const content = JSON.parse(previewData);
+                setDynamicPageContent(content);
+                return;
+            } catch (e) {
+                console.error("Failed to parse preview data", e);
+            }
+        }
+    }
+
+    // Check if current page is dynamic
+    const pages = ContentManager.getPages();
+    const dynamicPage = pages.find(p => (p as any).slug === currentPage || p.id === currentPage);
+    if (dynamicPage) {
+        const content = ContentManager.getPageContent(dynamicPage.id);
+        if (content) {
+            setDynamicPageContent(content);
+        } else {
+            setDynamicPageContent(null);
+        }
+    } else {
+        setDynamicPageContent(null);
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     const loadSettings = () => {
@@ -112,6 +149,18 @@ const App: React.FC = () => {
   }, [currentPage]);
 
   const renderPage = () => {
+    if (currentPage === 'home') {
+        const pages = ContentManager.getPages();
+        const customHomepage = pages.find(p => (p as any).isHomepage === true);
+        if (customHomepage) {
+            const content = ContentManager.getPageContent(customHomepage.id);
+            if (content) {
+                return <DynamicPage content={content} navigateTo={navigateTo} />;
+            }
+        }
+        return <HomePage navigateTo={navigateTo} />;
+    }
+
     switch (currentPage) {
       case 'home': return <HomePage navigateTo={navigateTo} />;
       case 'about': return <AboutPage navigateTo={navigateTo} />;
@@ -174,7 +223,11 @@ const App: React.FC = () => {
       case 'comment-policy': return <CommentPolicyPage navigateTo={navigateTo} />;
       case 'ethical-use-policy': return <EthicalUsePolicyPage navigateTo={navigateTo} />;
 
-      default: return <HomePage navigateTo={navigateTo} />;
+      default: 
+        if (dynamicPageContent) {
+            return <DynamicPage content={dynamicPageContent} navigateTo={navigateTo} />;
+        }
+        return <HomePage navigateTo={navigateTo} />;
     }
   };
 

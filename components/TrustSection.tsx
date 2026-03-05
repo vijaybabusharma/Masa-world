@@ -41,26 +41,26 @@ const TrustSection: React.FC<NavigationProps> = ({ navigateTo }) => {
     return (
         <section className="bg-white py-24">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <span className="text-sm font-bold uppercase tracking-widest text-gray-500">OUR ACCOUNTABILITY</span>
-                    <h2 className="text-3xl font-bold text-masa-charcoal mt-2">The Cycle of Trust</h2>
-                    <p className="mt-4 text-lg text-gray-600">
+                <div className="text-center max-w-3xl mx-auto mb-20">
+                    <span className="text-xs font-black uppercase tracking-[0.3em] text-masa-orange opacity-80">OUR ACCOUNTABILITY</span>
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-masa-charcoal mt-4 leading-tight">The Cycle of Trust</h2>
+                    <p className="mt-6 text-lg md:text-xl text-gray-500 font-medium opacity-90">
                         Transparency isn’t just a promise; it’s built into every step of our process.
                     </p>
                 </div>
 
                 <div className="relative">
-                    <div className="absolute top-12 left-0 w-full h-0.5 bg-gray-200 hidden md:block"></div>
+                    <div className="absolute top-12 left-0 w-full h-0.5 bg-gray-100 hidden md:block"></div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative">
                         {steps.map((step, index) => {
                              const stepColor = colors[step.color as keyof typeof colors];
                              return (
-                                <div key={index} className="flex flex-col items-center text-center">
-                                    <div className={`w-24 h-24 rounded-full flex items-center justify-center bg-white border-4 ${stepColor.border} shadow-lg mb-6 z-10`}>
-                                        {step.icon ? <step.icon className={`h-10 w-10 ${step.color === 'green' ? 'text-green-500' : 'text-masa-charcoal'}`} /> : <span className="text-4xl font-bold text-masa-charcoal">{step.number}</span>}
+                                <div key={index} className="flex flex-col items-center text-center group">
+                                    <div className={`w-24 h-24 rounded-[2rem] flex items-center justify-center bg-white border-4 ${stepColor.border} shadow-xl mb-8 z-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}>
+                                        {step.icon ? <step.icon className={`h-10 w-10 ${step.color === 'green' ? 'text-green-500' : 'text-masa-charcoal'}`} /> : <span className="text-4xl font-black text-masa-charcoal">{step.number}</span>}
                                     </div>
-                                    <h3 className="text-xl font-bold text-masa-charcoal">{step.title}</h3>
-                                    <p className="text-gray-600 mt-2 text-sm max-w-xs">{step.description}</p>
+                                    <h3 className="text-2xl font-extrabold text-masa-charcoal tracking-tight group-hover:text-masa-orange transition-colors duration-300">{step.title}</h3>
+                                    <p className="text-gray-500 mt-4 text-sm max-w-xs leading-relaxed font-medium">{step.description}</p>
                                 </div>
                              )
                         })}

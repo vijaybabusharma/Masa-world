@@ -15,7 +15,7 @@ const PageHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subt
 const FounderMessagePage: React.FC<NavigationProps> = ({ navigateTo }) => {
     return (
         <div className="bg-white">
-            <PageHeader title="Message from the Founder" subtitle="Our Vision for a Stronger, More Inclusive Future" />
+            <PageHeader title="Founder’s Message" subtitle="Our Vision for a Stronger, More Inclusive Future" />
             
             <section className="py-24">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">

@@ -13,10 +13,19 @@ interface MediaFile {
     uploadedAt: string;
     uploadedBy: string;
     date: string;
+    folder?: string;
+}
+
+interface Folder {
+    id: string;
+    name: string;
+    parentId?: string;
 }
 
 const MediaManagerModule: React.FC = () => {
     const [files, setFiles] = useState<MediaFile[]>([]);
+    const [folders, setFolders] = useState<Folder[]>([]);
+    const [currentFolderId, setCurrentFolderId] = useState<string | undefined>(undefined);
     const [user, setUser] = useState<any>(null);
     const [uploading, setUploading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -100,23 +109,77 @@ const MediaManagerModule: React.FC = () => {
         return 'document';
     };
 
+    const handleCreateFolder = () => {
+        const name = prompt('Enter folder name:');
+        if (name) {
+            const newFolder: Folder = {
+                id: `folder-${Date.now()}`,
+                name,
+                parentId: currentFolderId
+            };
+            setFolders(prev => [...prev, newFolder]);
+            // In a real app, we'd save this to the server
+        }
+    };
+
+    const handleMoveToFolder = (fileId: string, folderId?: string) => {
+        setFiles(prev => prev.map(f => f.id === fileId ? { ...f, folder: folderId } : f));
+        // In a real app, we'd update this on the server
+    };
+
+    const filteredFolders = useMemo(() => {
+        return folders.filter(f => f.parentId === currentFolderId);
+    }, [folders, currentFolderId]);
+
     const filteredFiles = useMemo(() => {
         return files.filter(file => {
             const matchesSearch = file.name.toLowerCase().includes(searchQuery.toLowerCase());
             const type = getFileType(file.name);
             const matchesType = selectedType === 'all' || type === selectedType;
-            return matchesSearch && matchesType;
+            const matchesFolder = file.folder === currentFolderId;
+            return matchesSearch && matchesType && matchesFolder;
         });
-    }, [files, searchQuery, selectedType]);
+    }, [files, searchQuery, selectedType, currentFolderId]);
+
+    const currentPath = useMemo(() => {
+        const path: Folder[] = [];
+        let current = folders.find(f => f.id === currentFolderId);
+        while (current) {
+            path.unshift(current);
+            current = folders.find(f => f.id === current.parentId);
+        }
+        return path;
+    }, [folders, currentFolderId]);
 
     return (
         <div className="animate-fade-in-up">
             <div className="flex justify-between items-center mb-6">
                 <ModuleHeader title="Media Library" />
-                <label className="bg-masa-blue text-white px-6 py-2 rounded-lg font-bold cursor-pointer hover:bg-opacity-90 transition-all shadow-md">
-                    {uploading ? 'Uploading...' : 'Upload Media'}
-                    <input type="file" className="hidden" onChange={handleUpload} disabled={uploading} />
-                </label>
+                <div className="flex gap-2">
+                    <button onClick={handleCreateFolder} className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-200 transition-all flex items-center gap-2">
+                        <FolderIcon className="h-5 w-5" /> New Folder
+                    </button>
+                    <label className="bg-masa-blue text-white px-6 py-2 rounded-lg font-bold cursor-pointer hover:bg-opacity-90 transition-all shadow-md">
+                        {uploading ? 'Uploading...' : 'Upload Media'}
+                        <input type="file" className="hidden" onChange={handleUpload} disabled={uploading} />
+                    </label>
+                </div>
+            </div>
+
+            {/* Breadcrumbs */}
+            <div className="flex items-center gap-2 mb-4 text-sm font-medium text-gray-500">
+                <button onClick={() => setCurrentFolderId(undefined)} className="hover:text-masa-blue">Root</button>
+                {currentPath.map((folder, index) => (
+                    <React.Fragment key={folder.id}>
+                        <span>/</span>
+                        <button 
+                            onClick={() => setCurrentFolderId(folder.id)} 
+                            className={`hover:text-masa-blue ${index === currentPath.length - 1 ? 'text-masa-orange font-bold' : ''}`}
+                        >
+                            {folder.name}
+                        </button>
+                    </React.Fragment>
+                ))}
             </div>
 
             <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-col sm:flex-row gap-4">
@@ -153,6 +216,19 @@ const MediaManagerModule: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {/* Render Folders */}
+                {filteredFolders.map(folder => (
+                    <div 
+                        key={folder.id} 
+                        onClick={() => setCurrentFolderId(folder.id)}
+                        className="group relative bg-white rounded-xl border p-4 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col items-center justify-center gap-2"
+                    >
+                        <FolderIcon className="h-12 w-12 text-masa-orange" />
+                        <p className="text-xs font-bold text-gray-800 truncate w-full text-center">{folder.name}</p>
+                    </div>
+                ))}
+
+                {/* Render Files */}
                 {filteredFiles.map(file => {
                     const type = getFileType(file.name);
                     return (
@@ -170,7 +246,17 @@ const MediaManagerModule: React.FC = () => {
                                 <p className="text-xs font-bold text-gray-800 truncate" title={file.name}>{file.name}</p>
                                 <p className="text-[10px] text-gray-500 mt-1">{formatSize(Number(file.size) || 0)} • {new Date(file.date).toLocaleDateString()}</p>
                             </div>
-                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                                <button 
+                                    onClick={() => {
+                                        const folderId = prompt('Enter Folder ID to move to (or leave empty for Root):');
+                                        handleMoveToFolder(file.id, folderId || undefined);
+                                    }}
+                                    className="bg-masa-blue text-white p-1.5 rounded-lg shadow-lg hover:bg-blue-600 transition-colors"
+                                    title="Move to Folder"
+                                >
+                                    <FolderIcon className="h-4 w-4" />
+                                </button>
                                 <button 
                                     onClick={() => handleDelete(file.id)}
                                     className="bg-red-500 text-white p-1.5 rounded-lg shadow-lg hover:bg-red-600 transition-colors"

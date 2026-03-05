@@ -52,6 +52,10 @@ const initContentFiles = () => {
         { name: 'content_posts.json', data: [] },
         { name: 'content_courses.json', data: [] },
         { name: 'content_gallery.json', data: [] },
+        { name: 'content_redirects.json', data: [] },
+        { name: 'content_trash.json', data: [] },
+        { name: 'content_revisions.json', data: [] },
+        { name: 'content_comments.json', data: [] },
         { name: 'submissions.json', data: [] },
         { name: 'donations.json', data: [] },
         { name: 'activity_logs.json', data: [] }
@@ -396,6 +400,40 @@ const saveContent = (type: string, data: any) => {
     fs.writeFileSync(file, JSON.stringify(data, null, 2));
 };
 
+// Revisions helper
+const REVISIONS_FILE = path.join(DATA_DIR, 'content_revisions.json');
+const saveRevision = (contentId: string | number, contentType: 'post' | 'page', data: any, author: string) => {
+    const revisions = readJsonFile(REVISIONS_FILE, []);
+    const newRevision = {
+        id: `rev-${Date.now()}`,
+        contentId,
+        contentType,
+        data,
+        timestamp: new Date().toISOString(),
+        author
+    };
+    revisions.unshift(newRevision);
+    // Keep only last 20 revisions per content item
+    const filtered = revisions.filter((r: any) => r.contentId === contentId && r.contentType === contentType).slice(0, 20);
+    const others = revisions.filter((r: any) => !(r.contentId === contentId && r.contentType === contentType));
+    fs.writeFileSync(REVISIONS_FILE, JSON.stringify([...filtered, ...others], null, 2));
+};
+
+// Trash helper
+const TRASH_FILE = path.join(DATA_DIR, 'content_trash.json');
+const moveToTrash = (originalId: string | number, type: string, data: any, deletedBy: string) => {
+    const trash = readJsonFile(TRASH_FILE, []);
+    trash.unshift({
+        id: `trash-${Date.now()}`,
+        originalId,
+        type,
+        data,
+        deletedAt: new Date().toISOString(),
+        deletedBy
+    });
+    fs.writeFileSync(TRASH_FILE, JSON.stringify(trash, null, 2));
+};
+
 // Generic Get
 app.get('/api/content/:type', (req, res) => {
     const { type } = req.params;
@@ -404,12 +442,133 @@ app.get('/api/content/:type', (req, res) => {
 });
 
 // Generic Save (Full overwrite for settings/lists)
-app.post('/api/content/:type', authenticateToken, requireAdmin, (req, res) => {
+app.post('/api/content/:type', authenticateToken, requireAdmin, (req: any, res) => {
     const { type } = req.params;
     const data = req.body;
+    
+    // Create revision if it's a single post or page being saved
+    if (type === 'posts' && !Array.isArray(data)) {
+        saveRevision(data.id, 'post', data, req.user.name);
+    } else if (type === 'pages' && !Array.isArray(data)) {
+        saveRevision(data.id, 'page', data, req.user.name);
+    }
+
     saveContent(type, data);
-    logAction((req as any).user.id, (req as any).user.name, 'Update Content', type);
+    logAction(req.user.id, req.user.name, 'Update Content', type);
     res.json({ message: 'Content saved successfully' });
+});
+
+// --- Redirects ---
+app.get('/api/redirects', authenticateToken, requireAdmin, (req, res) => {
+    res.json(readContent('redirects'));
+});
+
+app.post('/api/redirects', authenticateToken, requireAdmin, (req: any, res) => {
+    const redirects = readContent('redirects');
+    const newRedirect = { id: `red-${Date.now()}`, ...req.body, active: true };
+    redirects.unshift(newRedirect);
+    saveContent('redirects', redirects);
+    logAction(req.user.id, req.user.name, 'Create Redirect', req.body.oldUrl);
+    res.json(newRedirect);
+});
+
+app.delete('/api/redirects/:id', authenticateToken, requireAdmin, (req: any, res) => {
+    const { id } = req.params;
+    let redirects = readContent('redirects');
+    redirects = redirects.filter((r: any) => r.id !== id);
+    saveContent('redirects', redirects);
+    logAction(req.user.id, req.user.name, 'Delete Redirect', id);
+    res.json({ message: 'Redirect deleted' });
+});
+
+// --- Trash ---
+app.get('/api/trash', authenticateToken, requireAdmin, (req, res) => {
+    res.json(readJsonFile(TRASH_FILE, []));
+});
+
+app.post('/api/trash/move', authenticateToken, requireAdmin, (req: any, res) => {
+    const { originalId, type, data } = req.body;
+    moveToTrash(originalId, type, data, req.user.name);
+    res.json({ message: 'Moved to trash' });
+});
+
+app.post('/api/trash/restore/:id', authenticateToken, requireAdmin, (req: any, res) => {
+    const { id } = req.params;
+    let trash = readJsonFile(TRASH_FILE, []);
+    const item = trash.find((t: any) => t.id === id);
+    if (!item) return res.status(404).json({ message: 'Item not found in trash' });
+
+    // Restore to original content file
+    const contentFile = item.type === 'post' ? 'posts' : item.type === 'page' ? 'pages' : item.type === 'event' ? 'events' : 'gallery';
+    const content = readContent(contentFile);
+    content.push(item.data);
+    saveContent(contentFile, content);
+
+    // Remove from trash
+    trash = trash.filter((t: any) => t.id !== id);
+    fs.writeFileSync(TRASH_FILE, JSON.stringify(trash, null, 2));
+
+    logAction(req.user.id, req.user.name, 'Restore from Trash', item.originalId);
+    res.json({ message: 'Item restored' });
+});
+
+app.delete('/api/trash/:id', authenticateToken, requireAdmin, (req: any, res) => {
+    const { id } = req.params;
+    let trash = readJsonFile(TRASH_FILE, []);
+    trash = trash.filter((t: any) => t.id !== id);
+    fs.writeFileSync(TRASH_FILE, JSON.stringify(trash, null, 2));
+    logAction(req.user.id, req.user.name, 'Permanently Delete', id);
+    res.json({ message: 'Item permanently deleted' });
+});
+
+// --- Revisions ---
+app.get('/api/revisions/:type/:id', authenticateToken, requireAdmin, (req, res) => {
+    const { type, id } = req.params;
+    const revisions = readJsonFile(REVISIONS_FILE, []);
+    const filtered = revisions.filter((r: any) => r.contentType === type && String(r.contentId) === String(id));
+    res.json(filtered);
+});
+
+// --- Comments ---
+app.get('/api/comments', authenticateToken, requireAdmin, (req, res) => {
+    res.json(readContent('comments'));
+});
+
+app.post('/api/comments', (req, res) => {
+    const comments = readContent('comments');
+    const newComment = {
+        id: `com-${Date.now()}`,
+        ...req.body,
+        timestamp: new Date().toISOString(),
+        status: 'Pending'
+    };
+    comments.unshift(newComment);
+    saveContent('comments', comments);
+    res.json(newComment);
+});
+
+app.put('/api/comments/:id', authenticateToken, requireAdmin, (req: any, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    const comments = readContent('comments');
+    const index = comments.findIndex((c: any) => c.id === id);
+    if (index !== -1) {
+        comments[index].status = status;
+        saveContent('comments', comments);
+        logAction(req.user.id, req.user.name, 'Update Comment Status', id);
+        res.json(comments[index]);
+    } else {
+        res.status(404).json({ message: 'Comment not found' });
+    }
+});
+
+app.delete('/api/comments/:id', authenticateToken, requireAdmin, (req: any, res) => {
+    const { id } = req.params;
+    let comments = readContent('comments');
+    comments = comments.filter((c: any) => c.id !== id);
+    saveContent('comments', comments);
+    logAction(req.user.id, req.user.name, 'Delete Comment', id);
+    res.json({ message: 'Comment deleted' });
 });
 
 // --- Media Upload ---
@@ -459,12 +618,36 @@ app.get('/api/forms/submissions', authenticateToken, requireAdmin, (req, res) =>
     res.json(submissions);
 });
 
+app.put('/api/forms/submissions/:id', authenticateToken, requireAdmin, (req: any, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    let submissions = readJsonFile(SUBMISSIONS_FILE, []);
+    const index = submissions.findIndex((s: any) => s.id === id);
+    if (index !== -1) {
+        submissions[index].status = status;
+        fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2));
+        logAction(req.user.id, req.user.name, 'Update Submission Status', id);
+        res.json(submissions[index]);
+    } else {
+        res.status(404).json({ message: 'Submission not found' });
+    }
+});
+
+app.delete('/api/forms/submissions/:id', authenticateToken, requireAdmin, (req: any, res) => {
+    const { id } = req.params;
+    let submissions = readJsonFile(SUBMISSIONS_FILE, []);
+    submissions = submissions.filter((s: any) => s.id !== id);
+    fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2));
+    logAction(req.user.id, req.user.name, 'Delete Submission', id);
+    res.json({ message: 'Submission deleted' });
+});
+
 app.post('/api/forms/submit', (req, res) => {
     const submission = {
         id: `sub-${Date.now()}`,
         ...req.body,
-        date: new Date().toISOString(),
-        read: false
+        timestamp: new Date().toISOString(),
+        status: 'New'
     };
     
     let submissions = readJsonFile(SUBMISSIONS_FILE, []);

@@ -1,10 +1,11 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Outfit", sans-serif;
   --color-masa-orange: #F97316;
   --color-masa-blue: #1E3A8A;
   --color-masa-charcoal: #1F2937;
@@ -12,17 +13,17 @@
 
 @layer base {
   :root {
-    /* Fluid Type Scale using clamp() - adjusted for better readability */
+    /* Refined Fluid Type Scale for "Wow" Factor */
     --font-size-xs: clamp(0.75rem, 0.17vw + 0.71rem, 0.875rem);
     --font-size-sm: clamp(0.875rem, 0.17vw + 0.84rem, 1rem);
-    --font-size-base: clamp(1rem, 0.17vw + 0.96rem, 1.125rem); /* Slightly smaller base for mobile */
+    --font-size-base: clamp(1rem, 0.17vw + 0.96rem, 1.125rem);
     --font-size-lg: clamp(1.125rem, 0.17vw + 1.09rem, 1.25rem);
     --font-size-xl: clamp(1.25rem, 0.34vw + 1.18rem, 1.5rem);
     --font-size-2xl: clamp(1.5rem, 0.52vw + 1.39rem, 1.875rem);
     --font-size-3xl: clamp(1.875rem, 0.7vw + 1.73rem, 2.25rem);
     --font-size-4xl: clamp(2.25rem, 1.05vw + 2.04rem, 3rem);
-    --font-size-5xl: clamp(2.5rem, 1.75vw + 2.15rem, 3.75rem); /* Adjusted for better scaling */
-    --font-size-6xl: clamp(3rem, 2.62vw + 2.48rem, 4.5rem); /* Adjusted for better scaling */
+    --font-size-5xl: clamp(2.75rem, 2.5vw + 2.15rem, 4.5rem);
+    --font-size-6xl: clamp(3.5rem, 4.5vw + 2.48rem, 6.5rem);
   }
 
   html {
@@ -33,39 +34,35 @@
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: #1F2937;
-    background-color: #F9FAFB;
+    background-color: #FFFFFF;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     font-size: var(--font-size-base);
-    line-height: 1.7;
+    line-height: 1.6;
     letter-spacing: -0.01em;
     text-rendering: optimizeLegibility;
   }
   
-  /* Headings: Tighter line-height and letter-spacing for impact */
+  /* Headings: Using Outfit for a modern, premium feel */
   h1, h2, h3, h4, h5, h6 {
-    letter-spacing: -0.025em;
-    line-height: 1.2;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
     font-weight: 800;
     text-wrap: balance;
   }
   
-  h1, .text-4xl, .text-5xl, .text-6xl { font-weight: 800; }
-  h2, .text-3xl { font-weight: 800; }
-  h3, .text-2xl { font-weight: 700; }
-  h4, .text-xl { font-weight: 700; }
-
-  /* Responsive Font Sizes for Headings */
-  h1 { font-size: var(--font-size-5xl); }
-  h2 { font-size: var(--font-size-4xl); }
-  h3 { font-size: var(--font-size-3xl); }
-  h4 { font-size: var(--font-size-2xl); }
-  p { line-height: 1.75; }
+  h1 { font-size: var(--font-size-6xl); font-weight: 900; }
+  h2 { font-size: var(--font-size-4xl); font-weight: 800; }
+  h3 { font-size: var(--font-size-3xl); font-weight: 700; }
+  h4 { font-size: var(--font-size-2xl); font-weight: 700; }
   
-  /* Update Tailwind's utility classes to use our fluid scale */
+  p { line-height: 1.7; color: #4B5563; }
+  
+  /* Update Tailwind's utility classes */
   .text-xs { font-size: var(--font-size-xs); }
   .text-sm { font-size: var(--font-size-sm); }
   .text-base { font-size: var(--font-size-base); }
@@ -76,23 +73,51 @@
   .text-4xl { font-size: var(--font-size-4xl); }
   .text-5xl { font-size: var(--font-size-5xl); }
   .text-6xl { font-size: var(--font-size-6xl); }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(to right, #F97316, #EA580C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .footer-glow {
+    background: radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.15), transparent 70%);
+  }
+}
 
   /* Improved Prose styles for readability */
   .prose {
     font-size: var(--font-size-base);
     line-height: 1.75;
-    max-width: 75ch; /* More readable line length */
+    max-width: 75ch;
   }
   .prose :where(p):not(:where([class~="not-prose"] *)) {
     margin-top: 1.25em;
     margin-bottom: 1.25em;
   }
   .prose :where(h2):not(:where([class~="not-prose"] *)) {
+    font-family: 'Outfit', sans-serif;
     font-size: var(--font-size-3xl);
     margin-top: 1.8em;
     margin-bottom: 1em;
   }
   .prose :where(h3):not(:where([class~="not-prose"] *)) {
+    font-family: 'Outfit', sans-serif;
     font-size: var(--font-size-2xl);
     margin-top: 1.5em;
     margin-bottom: 0.75em;
@@ -100,24 +125,14 @@
   .prose :where(img, video):not(:where([class~="not-prose"] *)) {
     max-width: 100%;
     height: auto;
-    border-radius: 0.75rem; /* rounded-xl */
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
   }
   
   .prose-lg {
     font-size: var(--font-size-lg);
     line-height: 1.8;
   }
-  .prose-lg :where(p):not(:where([class~="not-prose"] *)) {
-    margin-top: 1.5em;
-    margin-bottom: 1.5em;
-  }
-  .prose-lg :where(h2):not(:where([class~="not-prose"] *)) {
-    font-size: var(--font-size-4xl);
-  }
-  .prose-lg :where(h3):not(:where([class~="not-prose"] *)) {
-    font-size: var(--font-size-3xl);
-  }
-}
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {

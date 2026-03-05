@@ -44,7 +44,7 @@ const FounderMessageSection: React.FC<FounderMessageSectionProps> = ({ bgColor =
                         </div>
                         
                         <h2 className="text-3xl lg:text-4xl font-extrabold text-masa-charcoal mb-6 leading-tight">
-                            A Message from the Founder
+                            Founder’s Message
                         </h2>
                         
                         <blockquote className="text-xl text-gray-800 leading-relaxed font-serif italic border-l-4 border-masa-orange pl-6 mb-6 text-justify">

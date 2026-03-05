@@ -31,11 +31,66 @@ const FormsManagerModule: React.FC = () => {
         }
     };
 
+    const handleStatusChange = async (id: number, status: Submission['status']) => {
+        try {
+            const res = await fetch(`/api/forms/submissions/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+            if (res.ok) {
+                loadSubmissions();
+            }
+        } catch (err) {
+            console.error('Failed to update status', err);
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        if (window.confirm('Delete this submission?')) {
+            try {
+                const res = await fetch(`/api/forms/submissions/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    loadSubmissions();
+                }
+            } catch (err) {
+                console.error('Failed to delete submission', err);
+            }
+        }
+    };
+
+    const handleExportCSV = () => {
+        if (submissions.length === 0) return;
+        
+        const headers = ['ID', 'Date', 'Type', 'Status', ...Object.keys(submissions[0].data)];
+        const rows = submissions.map(sub => [
+            sub.id,
+            new Date(sub.timestamp).toLocaleString(),
+            sub.type,
+            sub.status,
+            ...Object.values(sub.data).map(v => `"${String(v).replace(/"/g, '""')}"`)
+        ]);
+        
+        const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `submissions_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div className="animate-fade-in-up">
             <div className="flex justify-between items-center mb-6">
                 <ModuleHeader title="Forms & Submissions" />
                 <div className="flex gap-2">
+                    <button onClick={handleExportCSV} className="bg-green-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-green-700 transition-colors">
+                        <ArrowDownIcon className="h-4 w-4" /> Export CSV
+                    </button>
                     <button onClick={() => setView('submissions')} className={`px-4 py-2 rounded-lg font-bold ${view === 'submissions' ? 'bg-masa-blue text-white' : 'bg-gray-100 text-gray-600'}`}>Inbox</button>
                     <button onClick={() => setView('settings')} className={`px-4 py-2 rounded-lg font-bold ${view === 'settings' ? 'bg-masa-blue text-white' : 'bg-gray-100 text-gray-600'}`}>Settings</button>
                 </div>
@@ -63,9 +118,19 @@ const FormsManagerModule: React.FC = () => {
                                             <div key={k}><span className="font-bold">{k}:</span> {String(v)}</div>
                                         )).slice(0, 3)}
                                     </td>
-                                    <td className="p-4"><span className={`px-2 py-1 rounded text-xs font-bold ${sub.status === 'New' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>{sub.status}</span></td>
+                                    <td className="p-4">
+                                        <select 
+                                            value={sub.status} 
+                                            onChange={(e) => handleStatusChange(sub.id, e.target.value as any)}
+                                            className={`px-2 py-1 rounded text-xs font-bold outline-none border ${sub.status === 'New' ? 'bg-green-100 text-green-700 border-green-200' : sub.status === 'Read' ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-gray-100 text-gray-600 border-gray-200'}`}
+                                        >
+                                            <option value="New">New</option>
+                                            <option value="Read">Read</option>
+                                            <option value="Replied">Replied</option>
+                                        </select>
+                                    </td>
                                     <td className="p-4 text-right">
-                                        <button className="text-red-500 hover:bg-red-50 p-2 rounded"><TrashIcon className="h-4 w-4" /></button>
+                                        <button onClick={() => handleDelete(sub.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><TrashIcon className="h-4 w-4" /></button>
                                     </td>
                                 </tr>
                             ))}

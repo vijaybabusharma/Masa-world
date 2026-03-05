@@ -67,19 +67,19 @@ const ActivityLogModule: React.FC = () => {
                                         <td className="p-4">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-[10px] font-bold">
-                                                    {log.userName.charAt(0)}
+                                                    {log.userName ? log.userName.charAt(0) : '?'}
                                                 </div>
-                                                <span className="font-medium text-gray-800">{log.userName}</span>
+                                                <span className="font-medium text-gray-800">{log.userName || 'Unknown User'}</span>
                                             </div>
                                         </td>
                                         <td className="p-4">
                                             <span className={`px-2 py-0.5 rounded text-xs font-bold ${
-                                                log.action.includes('Delete') ? 'bg-red-100 text-red-700' :
-                                                log.action.includes('Create') ? 'bg-green-100 text-green-700' :
-                                                log.action.includes('Update') ? 'bg-blue-100 text-blue-700' :
+                                                (log.action || '').includes('Delete') ? 'bg-red-100 text-red-700' :
+                                                (log.action || '').includes('Create') ? 'bg-green-100 text-green-700' :
+                                                (log.action || '').includes('Update') ? 'bg-blue-100 text-blue-700' :
                                                 'bg-gray-100 text-gray-700'
                                             }`}>
-                                                {log.action}
+                                                {log.action || 'Unknown Action'}
                                             </span>
                                         </td>
                                         <td className="p-4 text-gray-600 font-medium">{log.target}</td>

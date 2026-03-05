@@ -1,5 +1,5 @@
 
-export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices' | 'ngo-help-desk';
+export type Page = 'home' | 'about' | 'initiatives' | 'gallery' | 'blog' | 'get-involved' | 'volunteer' | 'contact' | 'donate' | 'events' | 'trainings' | 'awards' | 'records' | 'conferences' | 'founder-message' | 'media-reports' | 'membership' | 'sports' | 'education' | 'culture' | 'courses' | 'thank-you-volunteer' | 'thank-you-donate' | 'thank-you-membership' | 'thank-you-career' | 'thank-you-contact' | 'thank-you-event' | 'admin-dashboard' | 'admin-login' | 'careers' | 'mission-vision' | 'core-values' | 'governance' | 'global-impact' | 'dashboard' | 'login' | 'disclaimer' | 'terms-and-conditions' | 'privacy-policy' | 'copyright-policy' | 'editorial-policy' | 'fact-check-policy' | 'comment-policy' | 'ethical-use-policy' | 'impact-stories' | 'media-highlights' | 'programs-overview' | 'community-voices' | 'ngo-help-desk' | string;
 
 export interface NavigationProps {
   navigateTo: (page: Page, anchor?: string) => void;
@@ -38,6 +38,26 @@ export interface Post {
     views?: number;
     featured?: boolean;
     publishDate?: string; // ISO string for scheduling
+    revisionHistory?: Revision[];
+}
+
+export interface Revision {
+    id: string;
+    contentId: string | number;
+    contentType: 'post' | 'page';
+    data: any;
+    timestamp: string;
+    author: string;
+}
+
+export interface Comment {
+    id: string;
+    postId: number;
+    authorName: string;
+    authorEmail: string;
+    content: string;
+    timestamp: string;
+    status: 'Pending' | 'Approved' | 'Spam' | 'Trash';
 }
 
 export interface Course {
@@ -127,7 +147,17 @@ export interface PageContent {
     metaDescription: string;
     sections: PageSection[];
     lastModified: string;
-    status: 'Draft' | 'Published';
+    status: 'Draft' | 'Published' | 'Scheduled';
+    parentId?: string;
+    visibility: 'Public' | 'Private' | 'Password';
+    password?: string;
+    publishDate?: string;
+    order: number;
+    isHomepage?: boolean;
+    featuredImage?: string;
+    headerImage?: string;
+    seoKeywords?: string;
+    revisionHistory?: Revision[];
 }
 
 export interface PageMetadata {
@@ -182,16 +212,27 @@ export interface SliderItem {
     id: string;
     headline: string;
     subtext: string;
+    description?: string;
     image: string;
-    cta: { label: string; page: Page };
+    mobileImage?: string;
+    cta: { label: string; page: Page; url?: string };
+    enabled: boolean;
 }
 
-export interface HomepageSection {
+export interface SectionCustomization {
     visible: boolean;
     title?: string;
     subtitle?: string;
-    // other section-specific properties
+    backgroundImage?: string;
+    backgroundColor?: string;
+    paddingTop?: string;
+    paddingBottom?: string;
+    buttonEnabled?: boolean;
+    imageReplace?: string;
+    textAlign?: 'left' | 'center' | 'right';
 }
+
+export type HomepageSection = SectionCustomization;
 
 export interface FounderMessageContent {
     image: string;
@@ -276,7 +317,13 @@ export interface ButtonSettings {
 export interface GlobalSettings {
     general: {
         siteName: string;
+        siteLogo?: string;
+        siteFavicon?: string;
         contactEmail: string;
+        contactPhone?: string;
+        address?: string;
+        footerText?: string;
+        copyrightText?: string;
         enableRegistrations: boolean;
         maintenanceMode: boolean;
     };
@@ -290,6 +337,18 @@ export interface GlobalSettings {
         footerPolicyLinks: NavItem[];
     };
     social: SocialLink[];
+    seo: {
+        ogImage?: string;
+        ogTitle?: string;
+        ogDescription?: string;
+        twitterCard?: 'summary' | 'summary_large_image';
+        twitterSite?: string;
+        twitterCreator?: string;
+        robotsTxt?: string;
+        sitemapEnabled: boolean;
+        schemaMarkup?: string;
+        canonicalUrl?: string;
+    };
     scripts: {
         googleAnalyticsId: string;
         enableAnalytics: boolean;
@@ -309,6 +368,17 @@ export interface GlobalSettings {
     appearance: {
         customCss: string;
         enableCustomCss: boolean;
+        typography: {
+            headingDesktop: string;
+            headingMobile: string;
+            paragraph: string;
+            button: string;
+        };
+        buttons: {
+            padding: string;
+            borderRadius: string;
+            alignment: 'left' | 'center' | 'right';
+        };
     };
     payments: {
         currency: 'INR' | 'USD';
@@ -331,4 +401,26 @@ export interface GlobalSettings {
         whatsAppNumber: string;
     };
     buttons: ButtonSettings;
+}
+
+export interface Redirect {
+    id: string;
+    oldUrl: string;
+    newUrl: string;
+    type: 301 | 302;
+    active: boolean;
+}
+
+export interface TrashItem {
+    id: string;
+    originalId: string | number;
+    type: 'post' | 'page' | 'media' | 'event';
+    data: any;
+    deletedAt: string;
+    deletedBy: string;
+}
+
+export interface Menu {
+    id: 'header' | 'footer';
+    items: MenuItem[];
 }

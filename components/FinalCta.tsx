@@ -30,7 +30,7 @@ const FinalCta: React.FC<NavigationProps> = ({ navigateTo }) => {
                     onClick={() => navigateTo('membership')} 
                     className="mt-10 bg-masa-orange text-white px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg shadow-orange-500/30 hover:bg-orange-500 hover:shadow-xl hover:shadow-orange-500/40 transform hover:-translate-y-1.5 focus:outline-none focus:ring-4 focus:ring-orange-500/50"
                 >
-                    Become a Member Today
+                    Become a Member
                 </button>
             </div>
         </section>

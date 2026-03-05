@@ -58,18 +58,20 @@ const ImpactSnapshot: React.FC = () => {
     ];
 
     return (
-        <div className="bg-gray-50">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20">
-                <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                    <div className="grid grid-cols-2 md:grid-cols-4 py-4 md:py-6 px-2 md:px-4 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+        <div className="bg-transparent">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20">
+                <div className="bg-white/80 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.1)] border border-white/20 overflow-hidden">
+                    <div className="grid grid-cols-2 md:grid-cols-4 py-8 md:py-12 px-4 md:px-8 divide-y md:divide-y-0 md:divide-x divide-gray-100">
                         {metrics.map((metric, index) => (
-                            <div key={index} className="flex justify-center items-center gap-3 md:gap-4 p-4">
-                                <metric.icon className={`h-7 w-7 md:h-8 md:w-8 flex-shrink-0 ${metric.color}`} />
-                                <div className="text-left">
-                                    <p className={`text-2xl sm:text-3xl lg:text-4xl font-black ${metric.color} tracking-tight`}>
+                            <div key={index} className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-6 p-6 transition-transform hover:scale-105 duration-300">
+                                <div className={`p-4 rounded-2xl bg-gray-50/50 ${metric.color} bg-opacity-10`}>
+                                    <metric.icon className="h-8 w-8 md:h-10 md:w-10 flex-shrink-0" />
+                                </div>
+                                <div className="text-center md:text-left">
+                                    <p className={`text-3xl sm:text-4xl lg:text-5xl font-black ${metric.color} tracking-tighter leading-none mb-1`}>
                                         {metric.value}
                                     </p>
-                                    <p className="text-xs sm:text-sm font-semibold text-gray-600 leading-tight">
+                                    <p className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-gray-400 leading-tight">
                                         {metric.label}
                                     </p>
                                 </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { GlobalSettings, SliderItem, DeliveryAreaItem, Testimonial, NavItem } from '../../types';
 import { ContentManager } from '../../utils/contentManager';
 import { ModuleHeader, InputField, TextareaField, SelectField, ToggleSwitch } from './AdminComponents';
-import { EyeIcon, TrashIcon, PlusIcon } from '../icons/FeatureIcons';
+import { EyeIcon, TrashIcon, PlusIcon, GlobeAltIcon, ArrowUpIcon, ArrowDownIcon } from '../icons/FeatureIcons';
 
 const SettingsModule: React.FC = () => {
     const [settings, setSettings] = useState<GlobalSettings>(ContentManager.getSettings());
@@ -47,7 +47,9 @@ const SettingsModule: React.FC = () => {
         { id: 'social', label: 'Social Media' },
         { id: 'homepage', label: 'Homepage' },
         { id: 'navigation', label: 'Navigation' },
+        { id: 'seo', label: 'SEO' },
         { id: 'scripts', label: 'Scripts & Analytics' },
+        { id: 'appearance', label: 'Appearance' },
     ];
 
     return (
@@ -75,10 +77,24 @@ const SettingsModule: React.FC = () => {
             {activeTab === 'general' && (
                 <div className="space-y-6 max-w-4xl">
                     <div className="bg-white p-6 rounded-lg border border-gray-200">
-                        <h3 className="text-lg font-bold text-gray-800 mb-4">Basic Information</h3>
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Branding</h3>
                         <div className="grid md:grid-cols-2 gap-6">
-                            <InputField label="Site Name" name="general.siteName" value={settings.general.siteName} onChange={handleNestedChange} />
-                            <InputField label="Contact Email" name="general.contactEmail" value={settings.general.contactEmail} onChange={handleNestedChange} />
+                            <InputField label="Site Logo URL" name="general.siteLogo" value={settings.general.siteLogo} onChange={handleNestedChange} />
+                            <InputField label="Site Favicon URL" name="general.siteFavicon" value={settings.general.siteFavicon} onChange={handleNestedChange} />
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Contact Information</h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <InputField label="Contact Phone" name="general.contactPhone" value={settings.general.contactPhone} onChange={handleNestedChange} />
+                            <InputField label="Address" name="general.address" value={settings.general.address} onChange={handleNestedChange} />
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Footer Content</h3>
+                        <div className="space-y-4">
+                            <TextareaField label="Footer Text" name="general.footerText" value={settings.general.footerText} onChange={handleNestedChange} rows={3} />
+                            <InputField label="Copyright Text" name="general.copyrightText" value={settings.general.copyrightText} onChange={handleNestedChange} />
                         </div>
                     </div>
                     <div className="bg-white p-6 rounded-lg border border-gray-200">
@@ -152,15 +168,44 @@ const SettingsModule: React.FC = () => {
                         <div className="space-y-6">
                             {settings.homepage.slider.slides.map((slide, index) => (
                                 <div key={slide.id} className="p-4 bg-gray-50 rounded-lg border relative group">
-                                    <button 
-                                        onClick={() => {
-                                            const newSlides = settings.homepage.slider.slides.filter((_, i) => i !== index);
-                                            setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
-                                        }}
-                                        className="absolute top-2 right-2 text-red-500 hover:text-red-700 p-1"
-                                    >
-                                        <TrashIcon className="h-4 w-4"/>
-                                    </button>
+                                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button 
+                                            onClick={() => {
+                                                if (index > 0) {
+                                                    const newSlides = [...settings.homepage.slider.slides];
+                                                    [newSlides[index], newSlides[index-1]] = [newSlides[index-1], newSlides[index]];
+                                                    setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
+                                                }
+                                            }}
+                                            className="p-1.5 bg-white border rounded shadow-sm hover:bg-gray-50 text-gray-600"
+                                            title="Move Up"
+                                        >
+                                            <ArrowUpIcon className="h-4 w-4"/>
+                                        </button>
+                                        <button 
+                                            onClick={() => {
+                                                if (index < settings.homepage.slider.slides.length - 1) {
+                                                    const newSlides = [...settings.homepage.slider.slides];
+                                                    [newSlides[index], newSlides[index+1]] = [newSlides[index+1], newSlides[index]];
+                                                    setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
+                                                }
+                                            }}
+                                            className="p-1.5 bg-white border rounded shadow-sm hover:bg-gray-50 text-gray-600"
+                                            title="Move Down"
+                                        >
+                                            <ArrowDownIcon className="h-4 w-4"/>
+                                        </button>
+                                        <button 
+                                            onClick={() => {
+                                                const newSlides = settings.homepage.slider.slides.filter((_, i) => i !== index);
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
+                                            }}
+                                            className="p-1.5 bg-white border rounded shadow-sm hover:bg-red-50 text-red-500"
+                                            title="Delete Slide"
+                                        >
+                                            <TrashIcon className="h-4 w-4"/>
+                                        </button>
+                                    </div>
                                     <div className="grid md:grid-cols-2 gap-4 mb-4">
                                         <InputField 
                                             label="Headline" 
@@ -172,7 +217,7 @@ const SettingsModule: React.FC = () => {
                                             }} 
                                         />
                                         <InputField 
-                                            label="Image URL" 
+                                            label="Background Image URL" 
                                             value={slide.image} 
                                             onChange={(e) => {
                                                 const newSlides = [...settings.homepage.slider.slides];
@@ -181,17 +226,51 @@ const SettingsModule: React.FC = () => {
                                             }} 
                                         />
                                     </div>
-                                    <TextareaField 
-                                        label="Subtext" 
-                                        value={slide.subtext} 
-                                        onChange={(e) => {
-                                            const newSlides = [...settings.homepage.slider.slides];
-                                            newSlides[index].subtext = e.target.value;
-                                            setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
-                                        }} 
-                                        rows={2}
-                                    />
-                                    <div className="grid grid-cols-2 gap-4 mt-4">
+                                    <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                        <InputField 
+                                            label="Mobile Image URL" 
+                                            value={slide.mobileImage || ''} 
+                                            onChange={(e) => {
+                                                const newSlides = [...settings.homepage.slider.slides];
+                                                newSlides[index].mobileImage = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
+                                            }} 
+                                        />
+                                        <div className="flex items-center gap-4 mt-6">
+                                            <label className="text-xs font-bold text-gray-500 uppercase">Enabled</label>
+                                            <ToggleSwitch 
+                                                checked={slide.enabled} 
+                                                onChange={(val) => {
+                                                    const newSlides = [...settings.homepage.slider.slides];
+                                                    newSlides[index].enabled = val;
+                                                    setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
+                                                }} 
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                        <TextareaField 
+                                            label="Subheading" 
+                                            value={slide.subtext} 
+                                            onChange={(e) => {
+                                                const newSlides = [...settings.homepage.slider.slides];
+                                                newSlides[index].subtext = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
+                                            }} 
+                                            rows={2}
+                                        />
+                                        <TextareaField 
+                                            label="Description" 
+                                            value={slide.description || ''} 
+                                            onChange={(e) => {
+                                                const newSlides = [...settings.homepage.slider.slides];
+                                                newSlides[index].description = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
+                                            }} 
+                                            rows={2}
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-4 mt-4">
                                         <InputField 
                                             label="CTA Label" 
                                             value={slide.cta.label} 
@@ -202,7 +281,7 @@ const SettingsModule: React.FC = () => {
                                             }} 
                                         />
                                         <SelectField 
-                                            label="Link To" 
+                                            label="Link To Page" 
                                             value={slide.cta.page} 
                                             onChange={(e) => {
                                                 const newSlides = [...settings.homepage.slider.slides];
@@ -214,7 +293,17 @@ const SettingsModule: React.FC = () => {
                                             <option value="programs-overview">Programs</option>
                                             <option value="about">About</option>
                                             <option value="contact">Contact</option>
+                                            <option value="donate">Donate</option>
                                         </SelectField>
+                                        <InputField 
+                                            label="Custom URL (Optional)" 
+                                            value={slide.cta.url || ''} 
+                                            onChange={(e) => {
+                                                const newSlides = [...settings.homepage.slider.slides];
+                                                newSlides[index].cta.url = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: newSlides } } });
+                                            }} 
+                                        />
                                     </div>
                                 </div>
                             ))}
@@ -225,7 +314,8 @@ const SettingsModule: React.FC = () => {
                                         headline: 'New Headline',
                                         subtext: 'New Subtext',
                                         image: 'https://via.placeholder.com/1920x1080',
-                                        cta: { label: 'Learn More', page: 'about' }
+                                        cta: { label: 'Learn More', page: 'about' },
+                                        enabled: true
                                     };
                                     setSettings({ ...settings, homepage: { ...settings.homepage, slider: { ...settings.homepage.slider, slides: [...settings.homepage.slider.slides, newSlide] } } });
                                 }}
@@ -543,31 +633,111 @@ const SettingsModule: React.FC = () => {
                         <h3 className="text-lg font-bold text-gray-800 mb-4">Homepage Sections</h3>
                         <div className="space-y-4">
                             {Object.entries(settings.homepage.sections).map(([key, section]) => (
-                                <div key={key} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
-                                    <div>
-                                        <label className="font-bold capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</label>
+                                <div key={key} className="p-4 bg-gray-50 rounded-lg border space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <label className="font-bold capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</label>
+                                            <ToggleSwitch 
+                                                checked={(section as any).visible} 
+                                                onChange={(val) => {
+                                                    const newSections = { ...settings.homepage.sections };
+                                                    (newSections as any)[key].visible = val;
+                                                    setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                                }} 
+                                            />
+                                        </div>
+                                        <div className="flex gap-4">
+                                            <SelectField label="Text Align" value={(section as any).textAlign || 'center'} onChange={(e) => {
+                                                const newSections = { ...settings.homepage.sections };
+                                                (newSections as any)[key].textAlign = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                            }}>
+                                                <option value="left">Left</option>
+                                                <option value="center">Center</option>
+                                                <option value="right">Right</option>
+                                            </SelectField>
+                                            <InputField label="Padding Top" value={(section as any).paddingTop || '4rem'} onChange={(e) => {
+                                                const newSections = { ...settings.homepage.sections };
+                                                (newSections as any)[key].paddingTop = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                            }} />
+                                            <InputField label="Padding Bottom" value={(section as any).paddingBottom || '4rem'} onChange={(e) => {
+                                                const newSections = { ...settings.homepage.sections };
+                                                (newSections as any)[key].paddingBottom = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                            }} />
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="grid md:grid-cols-2 gap-4">
                                         {(section as any).title !== undefined && (
-                                            <input 
-                                                type="text" 
+                                            <InputField 
+                                                label="Section Title"
                                                 value={(section as any).title} 
                                                 onChange={(e) => {
                                                     const newSections = { ...settings.homepage.sections };
                                                     (newSections as any)[key].title = e.target.value;
                                                     setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
                                                 }}
-                                                className="block mt-1 text-xs w-64 px-2 py-1 border rounded"
-                                                placeholder="Section Title"
+                                            />
+                                        )}
+                                        {(section as any).subtitle !== undefined && (
+                                            <InputField 
+                                                label="Section Subtitle"
+                                                value={(section as any).subtitle} 
+                                                onChange={(e) => {
+                                                    const newSections = { ...settings.homepage.sections };
+                                                    (newSections as any)[key].subtitle = e.target.value;
+                                                    setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                                }}
                                             />
                                         )}
                                     </div>
-                                    <ToggleSwitch 
-                                        checked={(section as any).visible} 
-                                        onChange={(val) => {
-                                            const newSections = { ...settings.homepage.sections };
-                                            (newSections as any)[key].visible = val;
-                                            setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
-                                        }} 
-                                    />
+
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <InputField 
+                                            label="Background Image URL"
+                                            value={(section as any).backgroundImage || ''} 
+                                            onChange={(e) => {
+                                                const newSections = { ...settings.homepage.sections };
+                                                (newSections as any)[key].backgroundImage = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                            }}
+                                        />
+                                        <InputField 
+                                            label="Background Color"
+                                            value={(section as any).backgroundColor || ''} 
+                                            onChange={(e) => {
+                                                const newSections = { ...settings.homepage.sections };
+                                                (newSections as any)[key].backgroundColor = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                            }}
+                                            placeholder="e.g. #f3f4f6 or transparent"
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center gap-6">
+                                        <div className="flex items-center gap-2">
+                                            <label className="text-xs font-bold text-gray-500 uppercase">Enable Button</label>
+                                            <ToggleSwitch 
+                                                checked={(section as any).buttonEnabled !== false} 
+                                                onChange={(val) => {
+                                                    const newSections = { ...settings.homepage.sections };
+                                                    (newSections as any)[key].buttonEnabled = val;
+                                                    setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                                }} 
+                                            />
+                                        </div>
+                                        <InputField 
+                                            label="Replace Section Image URL"
+                                            value={(section as any).imageReplace || ''} 
+                                            onChange={(e) => {
+                                                const newSections = { ...settings.homepage.sections };
+                                                (newSections as any)[key].imageReplace = e.target.value;
+                                                setSettings({ ...settings, homepage: { ...settings.homepage, sections: newSections } });
+                                            }}
+                                        />
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -691,6 +861,52 @@ const SettingsModule: React.FC = () => {
                 </div>
             )}
 
+            {activeTab === 'seo' && (
+                <div className="space-y-8 max-w-4xl">
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <GlobeAltIcon className="h-5 w-5 text-masa-blue"/> Global SEO & Social Sharing
+                        </h3>
+                        <div className="space-y-6">
+                            <InputField label="OG Title" name="seo.ogTitle" value={settings.seo?.ogTitle} onChange={handleNestedChange} helpText="Default title for social media shares." />
+                            <TextareaField label="OG Description" name="seo.ogDescription" value={settings.seo?.ogDescription} onChange={handleNestedChange} rows={3} helpText="Default description for social media shares." />
+                            <InputField label="OG Image URL" name="seo.ogImage" value={settings.seo?.ogImage} onChange={handleNestedChange} helpText="Default image for social media shares (1200x630 recommended)." />
+                            
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <SelectField label="Twitter Card Type" name="seo.twitterCard" value={settings.seo?.twitterCard} onChange={handleNestedChange}>
+                                    <option value="summary">Summary</option>
+                                    <option value="summary_large_image">Summary with Large Image</option>
+                                </SelectField>
+                                <InputField label="Twitter Site Handle" name="seo.twitterSite" value={settings.seo?.twitterSite} onChange={handleNestedChange} placeholder="@username" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Search Engine Control</h3>
+                        <div className="space-y-6">
+                            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
+                                <div>
+                                    <label className="font-bold">XML Sitemap</label>
+                                    <p className="text-xs text-gray-500">Automatically generate sitemap.xml for search engines.</p>
+                                </div>
+                                <ToggleSwitch checked={settings.seo?.sitemapEnabled} onChange={val => handleSettingsChange('seo', 'sitemapEnabled', val)} />
+                            </div>
+                            
+                            <div className="p-4 bg-gray-50 rounded-lg border">
+                                <label className="font-bold block mb-2">Robots.txt Editor</label>
+                                <TextareaField label="" name="seo.robotsTxt" value={settings.seo?.robotsTxt} onChange={handleNestedChange} rows={5} />
+                            </div>
+
+                            <div className="p-4 bg-gray-50 rounded-lg border">
+                                <label className="font-bold block mb-2">Global Schema Markup (JSON-LD)</label>
+                                <TextareaField label="" name="seo.schemaMarkup" value={settings.seo?.schemaMarkup} onChange={handleNestedChange} rows={8} placeholder='{ "@context": "https://schema.org", "@type": "Organization", ... }' />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {activeTab === 'scripts' && (
                 <div className="space-y-8">
                     <div className="bg-white p-6 rounded-lg border border-gray-200">
@@ -758,6 +974,89 @@ const SettingsModule: React.FC = () => {
                 </div>
             )}
             {activeTab !== 'scripts' && activeTab !== 'general' && activeTab !== 'social' && activeTab !== 'homepage' && activeTab !== 'navigation' && <div>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} settings will be managed here.</div>}
+            {activeTab === 'appearance' && (
+                <div className="space-y-8 max-w-4xl">
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Typography Control</h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <InputField 
+                                label="Heading Font Size (Desktop)" 
+                                value={settings.appearance.typography.headingDesktop} 
+                                onChange={(e) => setSettings({ ...settings, appearance: { ...settings.appearance, typography: { ...settings.appearance.typography, headingDesktop: e.target.value } } })} 
+                                placeholder="e.g. 4.5rem"
+                            />
+                            <InputField 
+                                label="Heading Font Size (Mobile)" 
+                                value={settings.appearance.typography.headingMobile} 
+                                onChange={(e) => setSettings({ ...settings, appearance: { ...settings.appearance, typography: { ...settings.appearance.typography, headingMobile: e.target.value } } })} 
+                                placeholder="e.g. 2.5rem"
+                            />
+                            <InputField 
+                                label="Paragraph Font Size" 
+                                value={settings.appearance.typography.paragraph} 
+                                onChange={(e) => setSettings({ ...settings, appearance: { ...settings.appearance, typography: { ...settings.appearance.typography, paragraph: e.target.value } } })} 
+                                placeholder="e.g. 1.125rem"
+                            />
+                            <InputField 
+                                label="Button Font Size" 
+                                value={settings.appearance.typography.button} 
+                                onChange={(e) => setSettings({ ...settings, appearance: { ...settings.appearance, typography: { ...settings.appearance.typography, button: e.target.value } } })} 
+                                placeholder="e.g. 1rem"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Global Button Styling</h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <InputField 
+                                label="Button Padding" 
+                                value={settings.appearance.buttons.padding} 
+                                onChange={(e) => setSettings({ ...settings, appearance: { ...settings.appearance, buttons: { ...settings.appearance.buttons, padding: e.target.value } } })} 
+                                placeholder="e.g. 1rem 2rem"
+                            />
+                            <InputField 
+                                label="Button Border Radius" 
+                                value={settings.appearance.buttons.borderRadius} 
+                                onChange={(e) => setSettings({ ...settings, appearance: { ...settings.appearance, buttons: { ...settings.appearance.buttons, borderRadius: e.target.value } } })} 
+                                placeholder="e.g. 9999px or 0.5rem"
+                            />
+                            <SelectField 
+                                label="Default Button Alignment" 
+                                value={settings.appearance.buttons.alignment} 
+                                onChange={(e) => setSettings({ ...settings, appearance: { ...settings.appearance, buttons: { ...settings.appearance.buttons, alignment: e.target.value as any } } })}
+                            >
+                                <option value="left">Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </SelectField>
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-6 rounded-lg border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">Custom CSS</h3>
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
+                                <div>
+                                    <label className="font-bold">Enable Custom CSS</label>
+                                    <p className="text-xs text-gray-500">Apply custom styles to the entire website.</p>
+                                </div>
+                                <ToggleSwitch checked={settings.appearance.enableCustomCss} onChange={val => handleSettingsChange('appearance', 'enableCustomCss', val)} />
+                            </div>
+                            {settings.appearance.enableCustomCss && (
+                                <TextareaField 
+                                    label="CSS Code" 
+                                    name="appearance.customCss" 
+                                    value={settings.appearance.customCss} 
+                                    onChange={handleNestedChange} 
+                                    rows={10} 
+                                    placeholder="/* Add your custom CSS here */"
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
