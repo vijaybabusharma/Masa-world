@@ -6,8 +6,8 @@ export const defaultSettings = {
             slides: [
                 { 
                     id: 'slide-vision', 
-                    headline: "Masa World Foundation: Global Vision, Local Action", 
-                    subtext: "Connecting global resources with local communities to drive sustainable social impact through disciplined action.", 
+                    headline: "Global Vision, Local Impact.", 
+                    subtext: "Bridging the gap between global resources and local communities to drive sustainable change.", 
                     description: "Our foundation acts as a bridge between global philanthropy and local needs.",
                     image: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=1800&q=80", 
                     mobileImage: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=800&q=80",
@@ -16,8 +16,8 @@ export const defaultSettings = {
                 },
                 { 
                     id: 'slide-youth', 
-                    headline: "Empowering the Next Generation of Leaders", 
-                    subtext: "Nurturing youth through discipline, sports, and leadership programs to build a resilient and responsible future.", 
+                    headline: "Igniting Potential in Every Child.", 
+                    subtext: "Empowering the next generation through sports, discipline, and leadership.", 
                     description: "We believe in the power of youth to transform society.",
                     image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=80", 
                     mobileImage: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
@@ -26,8 +26,8 @@ export const defaultSettings = {
                 },
                 { 
                     id: 'slide-impact', 
-                    headline: "Building Resilient and Responsible Communities", 
-                    subtext: "Our grassroots initiatives focus on health, education, and social unity to create lasting positive change.", 
+                    headline: "Stronger Communities, Brighter Futures.", 
+                    subtext: "Creating lasting change through health, education, and social unity.", 
                     description: "Impact that lasts beyond the program duration.",
                     image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80", 
                     mobileImage: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
@@ -36,8 +36,8 @@ export const defaultSettings = {
                 },
                 { 
                     id: 'slide-trust', 
-                    headline: "Transparency and Trust in Every Action", 
-                    subtext: "We ensure ethical fund usage and provide regular impact reports to our global community of supporters.", 
+                    headline: "Your Trust Drives Our Mission.", 
+                    subtext: "Committed to transparency, ethics, and impactful action.", 
                     description: "Your trust is our most valuable asset.",
                     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1800&q=80", 
                     mobileImage: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80",
@@ -46,8 +46,8 @@ export const defaultSettings = {
                 },
                 { 
                     id: 'slide-volunteer', 
-                    headline: "Join Our Global Network of Change-Makers", 
-                    subtext: "Become a volunteer or member and contribute your skills to meaningful social transformation.", 
+                    headline: "Be the Change. Join the Movement.", 
+                    subtext: "Volunteer your skills and passion for meaningful social transformation.", 
                     description: "Together, we can achieve more.",
                     image: "https://images.unsplash.com/photo-1559027615-cd26735550b4?auto=format&fit=crop&w=1800&q=80", 
                     mobileImage: "https://images.unsplash.com/photo-1559027615-cd26735550b4?auto=format&fit=crop&w=800&q=80",

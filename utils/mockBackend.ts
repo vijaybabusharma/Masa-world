@@ -49,47 +49,31 @@ export const logAnalyticsEvent = (eventName: string, params: any) => {
 
 // Generic submission handler
 export const submitForm = async (type: 'volunteer' | 'donation' | 'membership' | 'partnership' | 'nomination' | 'contact' | 'career' | 'gallery' | 'enrollment', data: any): Promise<any> => {
-    try {
-        const response = await fetch('/api/forms/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...data, formType: type })
-        });
-        
-        if (!response.ok) throw new Error('Submission failed');
-        
-        const result = await response.json();
-        logAnalyticsEvent('form_submission', { type: type });
-        return result;
-    } catch (error) {
-        console.error("Submission Error", error);
-        return null;
-    }
+    console.log(`[MOCK SUBMISSION] Type: ${type}`, data);
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    logAnalyticsEvent('form_submission', { type: type });
+    return { message: 'Submission successful (Mock)', id: `mock-${Date.now()}` };
 };
 
 // Admin Data Fetchers
 export const getSubmissions = async (type: string) => {
-    try {
-        const response = await fetch('/api/forms/submissions');
-        if (!response.ok) throw new Error('Failed to fetch submissions');
-        const allSubmissions = await response.json();
-        return allSubmissions.filter((s: any) => s.formType === type);
-    } catch (error) {
-        console.error("Fetch Error", error);
-        return [];
-    }
+    console.log(`[MOCK FETCH] Getting submissions for ${type}`);
+    return [];
 };
 
 export const getStats = async () => {
-    try {
-        const response = await fetch('/api/stats');
-        if (!response.ok) throw new Error('Failed to fetch stats');
-        return await response.json();
-    } catch (error) {
-        console.error("Stats Error", error);
-        return {
-            volunteers: 0, donations: 0, members: 0, queries: 0, 
-            careers: 0, gallery: 0, enrollments: 0, pledges: 0, countries: 0
-        };
-    }
+    // Return mock stats for static build
+    return {
+        volunteers: 1250, 
+        donations: 450, 
+        members: 320, 
+        queries: 85, 
+        careers: 12, 
+        gallery: 45, 
+        enrollments: 890, 
+        pledges: 150, 
+        countries: 12
+    };
 };

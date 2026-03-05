@@ -67,10 +67,27 @@ import { PageContent } from './types';
 
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [currentPage, setCurrentPage] = useState<Page>(() => {
+      if (typeof window !== 'undefined') {
+          const path = window.location.pathname.replace(/^\/|\/$/g, '');
+          if (path && path !== 'index.html') {
+              return path as Page;
+          }
+      }
+      return 'home';
+  });
   const [floatingBtn, setFloatingBtn] = useState<SmartButton | null>(null);
   const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
   const [dynamicPageContent, setDynamicPageContent] = useState<PageContent | null>(null);
+
+  useEffect(() => {
+      const handlePopState = () => {
+          const path = window.location.pathname.replace(/^\/|\/$/g, '');
+          setCurrentPage((path as Page) || 'home');
+      };
+      window.addEventListener('popstate', handlePopState);
+      return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     // Check for preview mode
@@ -124,6 +141,13 @@ const App: React.FC = () => {
   };
 
   const navigateTo = useCallback((page: Page, anchor?: string) => {
+    // Update URL
+    if (page === 'home') {
+        window.history.pushState({}, '', '/');
+    } else {
+        window.history.pushState({}, '', `/${page}`);
+    }
+
     const doScroll = () => {
       if (anchor) {
         const element = document.getElementById(anchor);
