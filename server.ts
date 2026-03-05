@@ -1,5 +1,5 @@
 import express from 'express';
-import { createServer as createViteServer } from 'vite';
+// import { createServer as createViteServer } from 'vite'; // Dynamic import used instead
 import path from 'path';
 import fs from 'fs';
 import bcrypt from 'bcryptjs';
@@ -687,11 +687,16 @@ app.get('/api/stats', (req, res) => {
 
 async function startServer() {
     if (process.env.NODE_ENV !== 'production') {
-        const vite = await createViteServer({
-            server: { middlewareMode: true },
-            appType: 'spa',
-        });
-        app.use(vite.middlewares);
+        try {
+            const { createServer: createViteServer } = await import('vite');
+            const vite = await createViteServer({
+                server: { middlewareMode: true },
+                appType: 'spa',
+            });
+            app.use(vite.middlewares);
+        } catch (e) {
+            console.error('Failed to load Vite middleware:', e);
+        }
     } else {
         // Serve static files in production
         app.use(express.static(path.join(process.cwd(), 'dist')));
