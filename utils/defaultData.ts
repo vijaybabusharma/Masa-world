@@ -86,8 +86,10 @@ export const defaultSettings = {
         headerMenu: [
             { id: 'nav-home', label: 'Home', page: 'home' },
             { id: 'nav-about', label: 'About Us', page: 'about' },
+            { id: 'nav-work', label: 'Our Work', page: 'programs-overview' },
             { id: 'nav-initiatives', label: 'Initiatives', page: 'initiatives' },
             { id: 'nav-gallery', label: 'Gallery', page: 'gallery' },
+            { id: 'nav-involved', label: 'Get Involved', page: 'get-involved' },
             { id: 'nav-blog', label: 'Blog', page: 'blog' },
             { id: 'nav-donate', label: 'Donate', page: 'donate' },
         ],

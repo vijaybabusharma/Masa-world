@@ -2,6 +2,7 @@
 import React from 'react';
 import { FOUNDER_IMAGE_URL } from '../utils/data';
 import { NavigationProps } from '../types';
+import { getAssetUrl } from '../utils/assetHelper';
 
 const PageHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
     <div className="bg-masa-charcoal py-24 text-white text-center">
@@ -91,7 +92,7 @@ const FounderMessagePage: React.FC<NavigationProps> = ({ navigateTo }) => {
 
                             {/* Signature Block */}
                             <div className="mt-16 pt-8 border-t border-gray-200">
-                                <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png" alt="MASA World Foundation" className="h-10 mb-6 opacity-90" onError={(e) => { e.currentTarget.src = '/logo.svg'; }} />
+                                <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png" alt="MASA World Foundation" className="h-10 mb-6 opacity-90" onError={(e) => { e.currentTarget.src = getAssetUrl('logo.svg'); }} />
                                 <p className="text-xl font-bold text-masa-charcoal font-serif italic">
                                     — Vijay Babu Sharma
                                 </p>

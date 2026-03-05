@@ -31,6 +31,7 @@ import RedirectModule from '@/components/admin/RedirectModule';
 import TrashModule from '@/components/admin/TrashModule';
 import CommentModerationModule from '@/components/admin/CommentModerationModule';
 import { SidebarItem, ToggleSwitch, InputField, TextareaField, SelectField, ModuleHeader } from '@/components/admin/AdminComponents';
+import { getAssetUrl } from '../utils/assetHelper';
 
 // --- Dashboard Modules ---
 const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => void }> = ({ user, setActiveView }) => {
@@ -281,7 +282,7 @@ const AdminDashboardPage: React.FC = () => {
                             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             <span className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">Live Server</span>
                         </div>
-                        <a href="/" target="_blank" className="text-[10px] font-black text-white uppercase tracking-widest bg-gray-900 px-6 py-3 rounded-2xl hover:bg-masa-orange transition-all duration-300 shadow-lg shadow-gray-900/10">Visit Website</a>
+                        <a href={getAssetUrl('')} target="_blank" className="text-[10px] font-black text-white uppercase tracking-widest bg-gray-900 px-6 py-3 rounded-2xl hover:bg-masa-orange transition-all duration-300 shadow-lg shadow-gray-900/10">Visit Website</a>
                     </div>
                 </header>
                 <main className="flex-1 overflow-y-auto p-6 md:p-12 bg-gray-50/50">{renderView()}</main>

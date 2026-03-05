@@ -5,6 +5,7 @@ import { FacebookIcon, TwitterIcon, InstagramIcon, LinkedInIcon, YouTubeIcon, Wh
 import { EnvelopeIcon, MapPinIcon, ArrowRightIcon, PhoneIcon } from './icons/FeatureIcons';
 import { ContentManager } from '../utils/contentManager';
 import { handleSmartButtonClick } from '../utils/buttonHelper';
+import { getAssetUrl } from '../utils/assetHelper';
 
 const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
@@ -17,6 +18,8 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
   });
   const [finalCta, setFinalCta] = useState<SmartButton | null>(null);
   const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
+  const [logo, setLogo] = useState<string>('');
+  const [siteName, setSiteName] = useState<string>('Masa World');
 
   useEffect(() => {
       const loadSettings = () => {
@@ -29,6 +32,8 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
               resources: settings.navigation.footerResourceLinks || [],
               policies: settings.navigation.footerPolicyLinks || [],
           });
+          setLogo(settings.general.siteLogo || '');
+          setSiteName(settings.general.siteName || 'Masa World');
           if (settings.buttons && settings.buttons.zones) {
               setFinalCta(settings.buttons.zones['final_cta']);
               setPaymentLinks(settings.buttons.paymentLinks);
@@ -121,8 +126,8 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
               >
                 <div className="bg-white p-2 rounded-xl shadow-2xl transition-transform group-hover:rotate-6">
                   <img 
-                    src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png" 
-                    alt="MASA Logo" 
+                    src={getAssetUrl(logo || "https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=375,fit=crop/AMq4Dg7v0wH5yKM1/masa-logo-3d-png-m2W40Q8zKOtLb3Xj.png")} 
+                    alt={siteName || "MASA Logo"} 
                     className="h-8 w-auto"
                     referrerPolicy="no-referrer"
                   />

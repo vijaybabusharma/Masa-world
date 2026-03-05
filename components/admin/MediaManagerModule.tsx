@@ -3,6 +3,7 @@ import { UserRole } from '../../types';
 import { AuthService } from '../../utils/authService';
 import { ModuleHeader, InputField } from './AdminComponents';
 import { TrashIcon, PhotoIcon, VideoCameraIcon, DocumentIcon, SearchIcon, FolderIcon } from '../icons/FeatureIcons';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 interface MediaFile {
     id: string;
@@ -235,7 +236,7 @@ const MediaManagerModule: React.FC = () => {
                         <div key={file.id} className="group relative bg-white rounded-xl border overflow-hidden shadow-sm hover:shadow-md transition-all">
                             <div className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
                                 {type === 'image' ? (
-                                    <img src={file.url} alt={file.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    <img src={getAssetUrl(file.url)} alt={file.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 ) : type === 'video' ? (
                                     <VideoCameraIcon className="h-12 w-12 text-gray-400" />
                                 ) : (
