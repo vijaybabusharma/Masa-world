@@ -13,14 +13,16 @@ export const ToggleSwitch: React.FC<{ checked: boolean; onChange: (checked: bool
 export const SidebarItem: React.FC<{ id: string; label: string; icon: any; isActive: boolean; onClick: () => void }> = ({ id, label, icon: Icon, isActive, onClick }) => (
     <button
         onClick={onClick}
-        className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold transition-all duration-300 rounded-xl mb-1 ${
+        className={`w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold transition-all duration-300 rounded-xl mb-1.5 group relative overflow-hidden ${
             isActive 
-                ? 'bg-masa-orange text-white shadow-[0_4px_20px_rgba(249,115,22,0.3)] translate-x-1' 
-                : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                ? 'bg-gradient-to-r from-masa-orange to-orange-600 text-white shadow-lg shadow-orange-500/30 translate-x-1' 
+                : 'text-gray-400 hover:bg-white/5 hover:text-white hover:translate-x-1'
         }`}
     >
-        <Icon className={`h-5 w-5 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
-        {label}
+        {isActive && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>}
+        <Icon className={`h-5 w-5 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110 text-gray-500 group-hover:text-masa-orange'}`} />
+        <span className="relative z-10 tracking-wide">{label}</span>
+        {isActive && <div className="absolute right-3 w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>}
     </button>
 );
 
@@ -65,17 +67,19 @@ export const SelectField: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>
 );
 
 export const ModuleHeader: React.FC<{ title: string, onAction?: () => void, actionLabel?: string }> = ({ title, onAction, actionLabel }) => (
-    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-            <h1 className="text-3xl font-black tracking-tight text-gray-900 uppercase">{title}</h1>
-            <div className="h-1 w-12 bg-masa-orange mt-2 rounded-full"></div>
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 animate-fade-in-up">
+        <div className="relative">
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-gray-600 uppercase leading-none">{title}</h1>
+            <div className="h-1.5 w-16 bg-gradient-to-r from-masa-orange to-masa-blue mt-3 rounded-full"></div>
         </div>
         {onAction && actionLabel && (
             <button 
                 onClick={onAction} 
-                className="bg-masa-orange text-white px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-masa-orange/20 hover:bg-orange-600 hover:-translate-y-0.5 transition-all active:scale-95"
+                className="group relative bg-masa-orange text-white px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-orange-500/20 hover:shadow-orange-500/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
-                <PlusIcon className="h-4 w-4"/> {actionLabel}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                <PlusIcon className="h-4 w-4 transition-transform group-hover:rotate-90"/> 
+                <span className="relative z-10">{actionLabel}</span>
             </button>
         )}
     </div>

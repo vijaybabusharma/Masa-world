@@ -10,8 +10,9 @@
       "slides": [
         {
           "id": "slide-vision",
-          "headline": "Masa World Foundation: Global Vision, Local Action",
-          "subtext": "Connecting global resources with local communities to drive sustainable social impact through disciplined action.",
+          "headline": "Global Community • Local Connections •",
+          "subtext": "Empowering Youth • Building Nations •",
+          "description": "Connecting global resources with local communities to create sustainable social change through sports, education, and culture.",
           "image": "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=1800&q=80",
           "cta": {
             "label": "Get Involved",
@@ -21,7 +22,7 @@
         {
           "id": "slide-youth",
           "headline": "Empowering the Next Generation of Leaders",
-          "subtext": "Nurturing youth through discipline, sports, and leadership programs to build a resilient and responsible future.",
+          "subtext": "Nurturing youth through discipline, sports, and leadership to build a resilient and responsible future.",
           "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=80",
           "cta": {
             "label": "Youth Programs",
@@ -31,7 +32,7 @@
         {
           "id": "slide-impact",
           "headline": "Building Resilient and Responsible Communities",
-          "subtext": "Our grassroots initiatives focus on health, education, and social unity to create lasting positive change.",
+          "subtext": "Grassroots initiatives focused on health, education, and social unity to create lasting positive change.",
           "image": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80",
           "cta": {
             "label": "Our Initiatives",
@@ -41,7 +42,7 @@
         {
           "id": "slide-trust",
           "headline": "Transparency and Trust in Every Action",
-          "subtext": "We ensure ethical fund usage and provide regular impact reports to our global community of supporters.",
+          "subtext": "Ensuring ethical fund management and providing regular impact reports to our global community.",
           "image": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1800&q=80",
           "cta": {
             "label": "Donate Now",

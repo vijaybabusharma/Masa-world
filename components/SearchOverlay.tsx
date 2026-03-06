@@ -28,9 +28,9 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, navigate
     }, [isOpen]);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
+        const timer = setTimeout(async () => {
             if (query.length >= 2) {
-                setResults(ContentManager.searchContent(query));
+                setResults(await ContentManager.searchContent(query));
             } else {
                 setResults([]);
             }

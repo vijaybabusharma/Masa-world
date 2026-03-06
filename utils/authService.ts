@@ -86,12 +86,18 @@ export const AuthService = {
             body: JSON.stringify({ email, password, remember })
         });
 
-        if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.message || 'Invalid credentials');
+        const text = await res.text();
+        let data;
+        try {
+            data = text ? JSON.parse(text) : {};
+        } catch (e) {
+            throw new Error('Invalid server response');
         }
 
-        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.message || 'Invalid credentials');
+        }
+
         return data.user;
     },
 

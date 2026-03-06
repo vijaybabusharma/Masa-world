@@ -83,18 +83,18 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
       {/* Top Section: High Impact CTA */}
       {finalCta && finalCta.visible && (
         <div className="relative border-b border-white/5">
-          <div className="container mx-auto px-6 py-20 md:py-28">
+          <div className="container mx-auto px-6 py-16 md:py-20">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
               <div className="max-w-3xl text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-masa-orange/10 border border-masa-orange/20 text-masa-orange text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-masa-orange/10 border border-masa-orange/20 text-masa-orange text-xs font-bold uppercase tracking-widest mb-6">
                   <span className="w-1.5 h-1.5 rounded-full bg-masa-orange animate-pulse"></span>
                   Join the Movement
                 </div>
-                <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 leading-[0.9] uppercase">
+                <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-tight uppercase">
                   Ready to make a <br />
                   <span className="text-masa-orange italic serif">difference?</span>
                 </h2>
-                <p className="text-lg text-gray-400 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                <p className="text-lg text-gray-400 font-normal max-w-xl mx-auto lg:mx-0 leading-relaxed">
                   Join our global community of changemakers and help us build a better future for youth worldwide.
                 </p>
               </div>
@@ -104,7 +104,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
                   className="group relative h-24 w-24 md:h-32 md:w-32 bg-masa-orange text-white rounded-full flex items-center justify-center transition-all hover:scale-110 hover:shadow-[0_0_50px_rgba(249,115,22,0.4)] active:scale-95"
                 >
                   <div className="absolute inset-0 rounded-full border border-white/20 animate-ping opacity-20"></div>
-                  <span className="relative z-10 text-xs font-black uppercase tracking-widest text-center leading-tight">
+                  <span className="relative z-10 text-xs font-bold uppercase tracking-widest text-center leading-tight">
                     {finalCta.label.split(' ').join('\n')}
                   </span>
                 </button>
@@ -114,8 +114,8 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
         </div>
       )}
 
-      <div className="container relative mx-auto px-6 pt-20 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16 lg:gap-8">
+      <div className="container relative mx-auto px-6 pt-16 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           
           {/* Column 1: Brand & Social */}
           <div className="lg:col-span-4 space-y-10">
@@ -132,17 +132,17 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <h3 className="text-2xl font-black tracking-tighter uppercase">
+                <h3 className="text-2xl font-bold tracking-tight uppercase">
                   Masa<span className="text-masa-orange">World</span>
                 </h3>
               </button>
-              <p className="text-gray-400 text-sm leading-relaxed max-w-sm font-medium">
+              <p className="text-gray-400 text-sm leading-relaxed max-w-sm font-normal">
                 Empowering youth and building stronger nations through sports, education, and culture. A global movement for positive change.
               </p>
             </div>
 
             <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Follow the Impact</h4>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-6">Follow the Impact</h4>
               <div className="flex flex-wrap gap-3">
                 {socialLinks.filter(l => l.enabled && ['facebook', 'instagram', 'linkedin', 'youtube', 'twitter'].includes(l.platform)).map(link => (
                   <a 
@@ -162,9 +162,9 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
           </div>
 
           {/* Column 2: Platform Links */}
-          <div className="lg:col-span-2 space-y-8">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-masa-orange">Platform</h4>
-            <ul className="space-y-4">
+          <div className="lg:col-span-2 space-y-6">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-masa-orange mb-6">Platform</h4>
+            <ul className="space-y-0.5 sm:space-y-1">
               {[
                 { label: 'About MASA', page: 'about' },
                 { label: 'Mission & Vision', page: 'mission-vision' },
@@ -176,7 +176,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <li key={idx}>
                   <button 
                     onClick={() => navigateTo(link.page as any)} 
-                    className="text-gray-400 hover:text-white transition-colors duration-300 text-sm font-bold flex items-center group"
+                    className="text-gray-400 hover:text-white transition-colors duration-300 text-sm font-medium flex items-center group"
                   >
                     <span className="h-1 w-0 bg-masa-orange mr-0 group-hover:w-3 group-hover:mr-2 transition-all duration-300"></span>
                     {link.label}
@@ -187,9 +187,9 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
           </div>
 
           {/* Column 3: Community Links */}
-          <div className="lg:col-span-2 space-y-8">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-masa-orange">Community</h4>
-            <ul className="space-y-4">
+          <div className="lg:col-span-2 space-y-6">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-masa-orange mb-6">Community</h4>
+            <ul className="space-y-0.5 sm:space-y-1">
               {[
                 { label: 'Volunteer', page: 'volunteer' },
                 { label: 'Membership', page: 'membership' },
@@ -201,7 +201,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
                 <li key={idx}>
                   <button 
                     onClick={() => navigateTo(link.page as any)} 
-                    className="text-gray-400 hover:text-white transition-colors duration-300 text-sm font-bold flex items-center group"
+                    className="text-gray-400 hover:text-white transition-colors duration-300 text-sm font-medium flex items-center group"
                   >
                     <span className="h-1 w-0 bg-masa-orange mr-0 group-hover:w-3 group-hover:mr-2 transition-all duration-300"></span>
                     {link.label}
@@ -212,17 +212,17 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
           </div>
 
           {/* Column 4: Contact & Location */}
-          <div className="lg:col-span-4 space-y-10">
-            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 space-y-8">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-masa-orange">Get in Touch</h4>
+          <div className="lg:col-span-4 space-y-6">
+            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 space-y-6">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-masa-orange mb-6">Get in Touch</h4>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-masa-orange/10 flex items-center justify-center flex-shrink-0">
                     <MapPinIcon className="h-5 w-5 text-masa-orange" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-1">Location</p>
-                    <p className="text-sm text-gray-300 font-bold">
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">Location</p>
+                    <p className="text-sm text-gray-300 font-medium">
                       MASA World Foundation HQ<br />
                       New Delhi, India
                     </p>
@@ -233,8 +233,8 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
                     <EnvelopeIcon className="h-5 w-5 text-masa-orange" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-1">Email</p>
-                    <a href="mailto:contact@masaworld.org" className="text-sm text-gray-300 font-bold hover:text-masa-orange transition-colors">
+                    <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">Email</p>
+                    <a href="mailto:contact@masaworld.org" className="text-sm text-gray-300 font-medium hover:text-masa-orange transition-colors">
                       contact@masaworld.org
                     </a>
                   </div>
@@ -245,7 +245,7 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-6">
+        <div className="mt-12 pt-6 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-6">
           <p className="text-gray-500 text-sm font-medium">
             &copy; {new Date().getFullYear()} Masa World Foundation
           </p>

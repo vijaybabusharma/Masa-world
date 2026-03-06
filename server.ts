@@ -91,23 +91,37 @@ const readJsonFile = (filePath: string, defaultValue: any = []) => {
 const getUsers = () => readJsonFile(USERS_FILE, []);
 const saveUsers = (users: any[]) => fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 
-// Initialize default admin if no users exist
-const initDefaultAdmin = async () => {
+// Initialize default admin if no users exist or force update specific admin
+const initDefaultAdmin = () => {
     const users = getUsers();
-    if (users.length === 0) {
-        const hashedPassword = await bcrypt.hash('Masa@world@vijay123', 10);
+    const targetEmail = process.env.ADMIN_EMAIL || 'vijaybabusharma0@gmail.com';
+    const targetPassword = process.env.ADMIN_PASSWORD || 'Masa@world@vijay123';
+    
+    const existingAdminIndex = users.findIndex((u: any) => u.email === targetEmail);
+    const hashedPassword = bcrypt.hashSync(targetPassword, 10);
+
+    if (existingAdminIndex !== -1) {
+        // Update existing admin
+        users[existingAdminIndex].passwordHash = hashedPassword;
+        users[existingAdminIndex].role = 'Super Admin'; // Ensure role is Super Admin
+        users[existingAdminIndex].active = true;
+        saveUsers(users);
+        console.log('Admin credentials updated.');
+    } else {
+        // Create new admin
         const adminUser = {
             id: 'u1',
             name: 'Super Admin',
-            email: 'vijaybabusharma0@gmail.com',
+            email: targetEmail,
             role: 'Super Admin',
             passwordHash: hashedPassword,
             avatar: 'https://ui-avatars.com/api/?name=Super+Admin&background=1E3A8A&color=fff',
             active: true,
             createdAt: new Date().toISOString()
         };
-        saveUsers([adminUser]);
-        console.log('Default admin user created.');
+        users.push(adminUser);
+        saveUsers(users);
+        console.log('Default admin user created.', adminUser);
     }
 };
 
@@ -194,33 +208,65 @@ app.post('/api/donations', requireFinance, (req, res) => {
 // --- Auth Routes ---
 
 app.post('/api/auth/login', async (req, res) => {
-    const { email, password, remember } = req.body;
-    const users = getUsers();
-    const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
+    try {
+        const { email, password, remember } = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required.' });
+        }
 
-    if (!user || user.status === 'Disabled') {
-        return res.status(401).json({ message: 'Invalid credentials or account disabled.' });
+        const users = getUsers();
+        const adminEmail = process.env.ADMIN_EMAIL || 'vijaybabusharma0@gmail.com';
+        const adminPassword = process.env.ADMIN_PASSWORD || 'Masa@world@vijay123';
+
+        if (email.toLowerCase() === adminEmail.toLowerCase() && password === adminPassword) {
+            // Admin login successful
+            const user = {
+                id: 'u1',
+                name: 'Super Admin',
+                email: adminEmail,
+                role: 'Super Admin',
+                status: 'Active'
+            };
+            const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: remember ? '30d' : '24h' });
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                maxAge: remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000
+            });
+            return res.json({ user });
+        }
+
+        const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
+
+        if (!user || user.status === 'Disabled') {
+            return res.status(401).json({ message: 'Invalid credentials or account disabled.' });
+        }
+
+        const validPassword = await bcrypt.compare(password, user.passwordHash);
+        if (!validPassword) {
+            return res.status(401).json({ message: 'Invalid credentials.' });
+        }
+
+        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: remember ? '30d' : '24h' });
+        
+        user.lastLogin = new Date().toISOString();
+        saveUsers(users);
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true, // Required for SameSite=None
+            sameSite: 'none', // Required for cross-origin iframe
+            maxAge: remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000
+        });
+
+        const { passwordHash, ...safeUser } = user;
+        res.json({ user: safeUser });
+    } catch (error: any) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Internal server error during login.', error: error.message });
     }
-
-    const validPassword = await bcrypt.compare(password, user.passwordHash);
-    if (!validPassword) {
-        return res.status(401).json({ message: 'Invalid credentials.' });
-    }
-
-    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: remember ? '30d' : '24h' });
-    
-    user.lastLogin = new Date().toISOString();
-    saveUsers(users);
-
-    res.cookie('token', token, {
-        httpOnly: true,
-        secure: true, // Required for SameSite=None
-        sameSite: 'none', // Required for cross-origin iframe
-        maxAge: remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000
-    });
-
-    const { passwordHash, ...safeUser } = user;
-    res.json({ user: safeUser });
 });
 
 app.post('/api/auth/logout', (req, res) => {
@@ -273,43 +319,46 @@ app.post('/api/auth/change-password', async (req: any, res) => {
 app.post('/api/auth/forgot-password', async (req, res) => {
     const { email } = req.body;
     const users = getUsers();
-    const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
+    const userIndex = users.findIndex((u: any) => u.email.toLowerCase() === email.toLowerCase());
 
-    if (user) {
-        const resetToken = jwt.sign({ id: user.id, type: 'reset' }, JWT_SECRET, { expiresIn: '1h' });
-        const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
+    if (userIndex !== -1) {
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpires = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // 15 minutes
         
+        users[userIndex].otp = otp;
+        users[userIndex].otpExpires = otpExpires;
+        saveUsers(users);
+
         sendEmailNotification(
-            user.email,
-            'Password Reset Request - MASA World',
-            `Hello ${user.name},\n\nYou requested a password reset. Click the link below to reset it:\n${resetLink}\n\nIf you didn't request this, please ignore this email.`
+            users[userIndex].email,
+            'Password Reset OTP - MASA World',
+            `Hello ${users[userIndex].name},\n\nYou requested a password reset. Your OTP is: ${otp}\n\nThis OTP will expire in 15 minutes.`
         );
     }
 
-    // Always return success to prevent email enumeration
-    res.json({ message: 'If an account exists with that email, a reset link has been sent.' });
+    res.json({ message: 'If an account exists with that email, an OTP has been sent.' });
 });
 
-app.post('/api/auth/reset-password', async (req, res) => {
-    const { token, newPassword } = req.body;
-    try {
-        const decoded: any = jwt.verify(token, JWT_SECRET);
-        if (decoded.type !== 'reset') throw new Error('Invalid token type');
+app.post('/api/auth/verify-otp', async (req, res) => {
+    const { email, otp, newPassword } = req.body;
+    const users = getUsers();
+    const userIndex = users.findIndex((u: any) => u.email.toLowerCase() === email.toLowerCase());
 
-        const users = getUsers();
-        const userIndex = users.findIndex((u: any) => u.id === decoded.id);
+    if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
 
-        if (userIndex === -1) return res.status(404).json({ message: 'User not found' });
-
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        users[userIndex].passwordHash = hashedPassword;
-        saveUsers(users);
-
-        logAction(users[userIndex].id, users[userIndex].name, 'Reset Password', 'Self');
-        res.json({ message: 'Password reset successfully' });
-    } catch (err) {
-        res.status(400).json({ message: 'Invalid or expired reset token' });
+    const user = users[userIndex];
+    if (user.otp !== otp || new Date(user.otpExpires) < new Date()) {
+        return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    users[userIndex].passwordHash = hashedPassword;
+    delete users[userIndex].otp;
+    delete users[userIndex].otpExpires;
+    saveUsers(users);
+
+    logAction(user.id, user.name, 'Reset Password', 'Self');
+    res.json({ message: 'Password reset successfully' });
 });
 
 // --- User Management Routes (Admin Only) ---

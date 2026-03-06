@@ -11,13 +11,17 @@ const PageEditorModule: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setPages(ContentManager.getPages());
+        const fetchPages = async () => {
+            const data = await ContentManager.getPages();
+            setPages(data);
+        };
+        fetchPages();
     }, []);
 
     const handleEdit = async (pageMeta: PageMetadata) => {
         setLoading(true);
         try {
-            const content = ContentManager.getPageContent(pageMeta.id);
+            const content = await ContentManager.getPageContent(pageMeta.id);
             if (content) {
                 setCurrentPage(content);
             } else {
@@ -60,7 +64,7 @@ const PageEditorModule: React.FC = () => {
     };
 
     const handleDuplicate = async (pageMeta: PageMetadata) => {
-        const content = ContentManager.getPageContent(pageMeta.id);
+        const content = await ContentManager.getPageContent(pageMeta.id);
         const newId = `page-${Date.now()}`;
         const newPage: PageContent = content ? {
             ...content,
@@ -82,13 +86,13 @@ const PageEditorModule: React.FC = () => {
         };
         
         await ContentManager.savePageContent(newPage);
-        setPages(ContentManager.getPages());
+        setPages(await ContentManager.getPages());
     };
 
     const handleDelete = async (id: string) => {
         if (confirm('Move this page to trash?')) {
             await ContentManager.deletePage(id);
-            setPages(ContentManager.getPages());
+            setPages(await ContentManager.getPages());
         }
     };
 
@@ -97,7 +101,7 @@ const PageEditorModule: React.FC = () => {
             setLoading(true);
             try {
                 await ContentManager.savePageContent(currentPage);
-                setPages(ContentManager.getPages());
+                setPages(await ContentManager.getPages());
                 setView('list');
                 setCurrentPage(null);
             } catch (err) {
@@ -227,19 +231,19 @@ const PageEditorModule: React.FC = () => {
                                     <label className="font-bold text-sm text-blue-900">Set as Homepage</label>
                                     <p className="text-[10px] text-blue-700">This page will be the site's landing page.</p>
                                 </div>
-                                <ToggleSwitch checked={currentPage.isHomepage} onChange={val => {
+                                <ToggleSwitch checked={currentPage.isHomepage} onChange={async val => {
                                     if (val) {
                                         // Unset other homepages
-                                        const pages = ContentManager.getPages();
-                                        pages.forEach(p => {
+                                        const pages = await ContentManager.getPages();
+                                        await Promise.all(pages.map(async p => {
                                             if ((p as any).isHomepage) {
-                                                const content = ContentManager.getPageContent(p.id);
+                                                const content = await ContentManager.getPageContent(p.id);
                                                 if (content) {
                                                     content.isHomepage = false;
-                                                    ContentManager.savePageContent(content);
+                                                    await ContentManager.savePageContent(content);
                                                 }
                                             }
-                                        });
+                                        }));
                                     }
                                     setCurrentPage({ ...currentPage, isHomepage: val });
                                 }} />
@@ -316,7 +320,7 @@ const PageEditorModule: React.FC = () => {
                             </div>
                             <div className="flex gap-2">
                                 <button 
-                                    onClick={() => {
+                                    onClick={async () => {
                                         const index = pages.findIndex(p => p.id === page.id);
                                         if (index > 0) {
                                             const newPages = [...pages];
@@ -324,7 +328,7 @@ const PageEditorModule: React.FC = () => {
                                             // Update order property for both
                                             newPages[index].order = index;
                                             newPages[index-1].order = index - 1;
-                                            newPages.forEach(async p => await ContentManager.savePage(p));
+                                            await Promise.all(newPages.map(p => ContentManager.savePage(p)));
                                             setPages(newPages);
                                         }
                                     }}
@@ -334,7 +338,7 @@ const PageEditorModule: React.FC = () => {
                                     <ArrowUpIcon className="h-5 w-5" />
                                 </button>
                                 <button 
-                                    onClick={() => {
+                                    onClick={async () => {
                                         const index = pages.findIndex(p => p.id === page.id);
                                         if (index < pages.length - 1) {
                                             const newPages = [...pages];
@@ -342,7 +346,7 @@ const PageEditorModule: React.FC = () => {
                                             // Update order property for both
                                             newPages[index].order = index;
                                             newPages[index+1].order = index + 1;
-                                            newPages.forEach(async p => await ContentManager.savePage(p));
+                                            await Promise.all(newPages.map(p => ContentManager.savePage(p)));
                                             setPages(newPages);
                                         }
                                     }}

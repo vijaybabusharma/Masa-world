@@ -49,7 +49,6 @@ const defaultHeaderMenu: MenuItem[] = [
             { id: 'nav-careers', label: 'Careers & Internships', page: 'careers' },
             { id: 'nav-media-highlights', label: 'Media Highlights', page: 'media-highlights' },
             { id: 'nav-reports', label: 'Annual Reports', page: 'media-reports' },
-            { id: 'nav-courses', label: 'Courses & Trainings', page: 'courses' },
             { id: 'nav-events', label: 'Events', page: 'events' },
             { id: 'nav-awards', label: 'Awards', page: 'awards' },
             { id: 'nav-records', label: 'Records', page: 'records' },
@@ -86,7 +85,6 @@ const defaultFooterLinks: { about: NavItem[], work: NavItem[], involved: NavItem
     resources: [
         { id: 'footer-blog', label: 'Blog', page: 'blog' },
         { id: 'footer-events', label: 'Events', page: 'events' },
-        { id: 'footer-courses', label: 'Courses & Trainings', page: 'courses' },
         { id: 'footer-gallery', label: 'Gallery', page: 'gallery' },
         { id: 'footer-media-highlights', label: 'Media Highlights', page: 'media-highlights' },
         { id: 'footer-reports', label: 'Annual Reports', page: 'media-reports' },
@@ -106,9 +104,9 @@ const defaultFooterLinks: { about: NavItem[], work: NavItem[], involved: NavItem
 const defaultSliderItems: SliderItem[] = [
     { 
         id: 'slide-vision', 
-        headline: "Masa World Foundation: Global Vision, Local Action", 
-        subtext: "Connecting global resources with local communities to drive sustainable social impact through disciplined action.", 
-        description: "Our foundation acts as a bridge between global philanthropy and local needs.",
+        headline: "Global Community • Local Connections •", 
+        subtext: "Empowering Youth • Building Nations •", 
+        description: "Connecting global resources with local communities to create sustainable social change through sports, education, and culture.",
         image: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=1800&q=80", 
         mobileImage: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=800&q=80",
         cta: { label: "Get Involved", page: "get-involved" },
@@ -117,8 +115,8 @@ const defaultSliderItems: SliderItem[] = [
     { 
         id: 'slide-youth', 
         headline: "Empowering the Next Generation of Leaders", 
-        subtext: "Nurturing youth through discipline, sports, and leadership programs to build a resilient and responsible future.", 
-        description: "We believe in the power of youth to transform society.",
+        subtext: "Nurturing youth through discipline, sports, and leadership to build a resilient and responsible future.", 
+        description: "Empowering young minds to become the leaders of tomorrow.",
         image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=80", 
         mobileImage: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
         cta: { label: "Youth Programs", page: "courses" },
@@ -127,8 +125,8 @@ const defaultSliderItems: SliderItem[] = [
     { 
         id: 'slide-impact', 
         headline: "Building Resilient and Responsible Communities", 
-        subtext: "Our grassroots initiatives focus on health, education, and social unity to create lasting positive change.", 
-        description: "Impact that lasts beyond the program duration.",
+        subtext: "Grassroots initiatives focused on health, education, and social unity to create lasting positive change.", 
+        description: "Creating sustainable impact through community-driven grassroots initiatives.",
         image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1800&q=80", 
         mobileImage: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
         cta: { label: "Our Initiatives", page: "initiatives" },
@@ -137,8 +135,8 @@ const defaultSliderItems: SliderItem[] = [
     { 
         id: 'slide-trust', 
         headline: "Transparency and Trust in Every Action", 
-        subtext: "We ensure ethical fund usage and provide regular impact reports to our global community of supporters.", 
-        description: "Your trust is our most valuable asset.",
+        subtext: "Ensuring ethical fund management and providing regular impact reports to our global community.", 
+        description: "Committed to transparency, accountability, and ethical stewardship of all resources.",
         image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1800&q=80", 
         mobileImage: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80",
         cta: { label: "Donate Now", page: "donate" },
@@ -148,7 +146,7 @@ const defaultSliderItems: SliderItem[] = [
         id: 'slide-volunteer', 
         headline: "Join Our Global Network of Change-Makers", 
         subtext: "Become a volunteer or member today and contribute your skills to meaningful social transformation.", 
-        description: "Together, we can achieve more.",
+        description: "Join our global network and help us drive meaningful social transformation.",
         image: "https://images.unsplash.com/photo-1559027615-cd26735550b4?auto=format&fit=crop&w=1800&q=80", 
         mobileImage: "https://images.unsplash.com/photo-1559027615-cd26735550b4?auto=format&fit=crop&w=800&q=80",
         cta: { label: "Volunteer Now", page: "volunteer" },
@@ -438,86 +436,54 @@ export const ContentManager = {
     },
 
     // --- PAGES ---
-    getPages: (): PageMetadata[] => {
-        if (typeof window === 'undefined') return defaultPages;
-        const data = localStorage.getItem(KEYS.PAGES);
-        if (!data) {
-            // Initialize with defaults if empty
-            localStorage.setItem(KEYS.PAGES, JSON.stringify(defaultPages));
-            return defaultPages;
-        }
+    getPages: async (): Promise<PageMetadata[]> => {
         try {
-            const parsed = JSON.parse(data);
-            return Array.isArray(parsed) ? parsed : defaultPages;
-        } catch { return defaultPages; }
+            const res = await fetch('/api/content/pages');
+            const data = await res.json();
+            return Array.isArray(data) ? data : [];
+        } catch { return []; }
     },
     savePage: async (page: PageMetadata) => {
-        if (typeof window === 'undefined') return;
-        const pages = ContentManager.getPages();
-        const index = pages.findIndex(p => p.id === page.id);
-        page.lastModified = new Date().toISOString();
-        if (index >= 0) pages[index] = page;
-        else pages.push(page);
-        
-        // Sort by order if available
-        pages.sort((a, b) => ((a as any).order || 0) - ((b as any).order || 0));
-        
-        localStorage.setItem(KEYS.PAGES, JSON.stringify(pages));
-        window.dispatchEvent(new Event('masa-settings-updated'));
-        // Static build: No server save
+        try {
+            await fetch('/api/content/pages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(page)
+            });
+        } catch (err) { console.error('Failed to save page', err); }
     },
     
-    getPageContent: (id: string): PageContent | null => {
-        if (typeof window === 'undefined') return null;
-        const data = localStorage.getItem(`${KEYS.PAGE_CONTENT}${id}`);
-        if (!data) return null;
+    getPageContent: async (id: string): Promise<PageContent | null> => {
         try {
-            return JSON.parse(data);
+            const res = await fetch(`/api/content/pages/${id}`);
+            return await res.json();
         } catch { return null; }
     },
     
     savePageContent: async (content: PageContent) => {
-        if (typeof window === 'undefined') return;
-        content.lastModified = new Date().toISOString();
-        localStorage.setItem(`${KEYS.PAGE_CONTENT}${content.id}`, JSON.stringify(content));
-        
-        // Also update metadata
-        const meta: PageMetadata = {
-            id: content.id as any,
-            title: content.title,
-            description: content.metaDescription,
-            lastModified: content.lastModified
-        };
-        // Add extra fields to meta for the list view
-        (meta as any).status = content.status;
-        (meta as any).slug = content.slug;
-        (meta as any).order = content.order;
-        (meta as any).parentId = content.parentId;
-        
-        await ContentManager.savePage(meta);
+        try {
+            await fetch('/api/content/pages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(content)
+            });
+        } catch (err) { console.error('Failed to save page content', err); }
     },
     
     deletePage: async (id: string) => {
-        if (typeof window === 'undefined') return;
-        const pages = ContentManager.getPages();
-        const pageToDelete = pages.find(p => p.id === id);
-        if (pageToDelete) {
-            await ContentManager.moveToTrash(id, 'page', pageToDelete);
-        }
-        const updatedPages = pages.filter(p => p.id !== id);
-        localStorage.setItem(KEYS.PAGES, JSON.stringify(updatedPages));
-        window.dispatchEvent(new Event('masa-settings-updated'));
-        // Static build: No server delete
+        try {
+            await fetch(`/api/content/pages/${id}`, { method: 'DELETE' });
+        } catch (err) { console.error('Failed to delete page', err); }
     },
 
-    searchContent: (query: string) => {
+    searchContent: async (query: string) => {
         const q = query.toLowerCase().trim();
         if (!q) return [];
 
         const results: any[] = [];
 
         // Search Pages
-        const pages = ContentManager.getPages();
+        const pages = await ContentManager.getPages();
         pages.forEach(p => {
             if (p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q)) {
                 results.push({

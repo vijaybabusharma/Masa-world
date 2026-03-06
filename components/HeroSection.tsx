@@ -59,16 +59,16 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                     <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
                 </div>
             ))}
-            <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 text-white font-bold tracking-widest uppercase text-sm opacity-80 mix-blend-overlay">
+            <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10 text-white font-semibold tracking-widest uppercase text-sm drop-shadow-lg">
                 Masa World Foundation
             </div>
             <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 z-10 h-full flex items-center">
-                <div className="max-w-5xl text-left pt-20">
+                <div className="max-w-5xl text-left pt-12">
                     <div key={current} className="space-y-8">
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter drop-shadow-2xl leading-[0.9] text-balance animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight drop-shadow-2xl leading-[1.1] text-balance animate-fade-in-up" style={{ animationDelay: '0ms' }}>
                             {slides[current].headline}
                         </h1>
-                        <p className="text-xl md:text-2xl text-gray-100 max-w-3xl drop-shadow-lg font-medium leading-relaxed opacity-90 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                        <p className="text-xl md:text-2xl text-gray-100 max-w-3xl drop-shadow-lg font-normal leading-relaxed opacity-90 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                             {slides[current].subtext}
                         </p>
                         {slides[current].description && (
@@ -81,7 +81,7 @@ const HeroSection: React.FC<NavigationProps> = ({ navigateTo }) => {
                             {heroCta && heroCta.visible ? (
                                 <button 
                                     onClick={() => onSmartBtnClick(heroCta)} 
-                                    className="bg-masa-orange text-white px-10 py-5 rounded-full text-lg md:text-xl font-bold hover:bg-orange-600 transition-all shadow-2xl hover:shadow-orange-500/40 transform hover:-translate-y-1 active:scale-95 flex items-center gap-3 group"
+                                    className="bg-masa-orange text-white px-10 py-5 rounded-full text-lg md:text-xl font-semibold hover:bg-orange-600 transition-all shadow-2xl hover:shadow-orange-500/40 transform hover:-translate-y-1 active:scale-95 flex items-center gap-3 group"
                                 >
                                     <span>{heroCta.label}</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 group-hover:translate-x-1 transition-transform">

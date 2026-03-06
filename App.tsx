@@ -13,7 +13,6 @@ import ContactPage from './pages/ContactPage';
 import GalleryPage from './pages/GalleryPage';
 import BlogPage from './pages/BlogPage';
 import EventsPage from './pages/EventsPage';
-import TrainingsPage from './pages/TrainingsPage';
 import AwardsPage from './pages/AwardsPage';
 import RecordsPage from './pages/RecordsPage';
 import ConferencesPage from './pages/ConferencesPage';
@@ -23,7 +22,6 @@ import MembershipPage from './pages/MembershipPage';
 import SportsPage from './pages/SportsPage';
 import EducationPage from './pages/EducationPage';
 import CulturePage from './pages/CulturePage';
-import CoursesPage from './pages/CoursesPage';
 import ThankYouPage from './pages/ThankYouPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import CareersPage from './pages/CareersPage';
@@ -31,7 +29,7 @@ import MissionVisionPage from './pages/MissionVisionPage';
 import CoreValuesPage from './pages/CoreValuesPage';
 import GovernancePage from './pages/GovernancePage';
 import GlobalImpactPage from './pages/GlobalImpactPage';
-import { Page, SmartButton, PaymentLink } from './types';
+import { Page, SmartButton, PaymentLink, PageMetadata } from './types';
 import { logAnalyticsEvent } from './utils/mockBackend';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
@@ -76,9 +74,27 @@ const App: React.FC = () => {
       }
       return 'home';
   });
+  const [pages, setPages] = useState<PageMetadata[]>([]);
   const [floatingBtn, setFloatingBtn] = useState<SmartButton | null>(null);
   const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>([]);
   const [dynamicPageContent, setDynamicPageContent] = useState<PageContent | null>(null);
+  const [homepageContent, setHomepageContent] = useState<PageContent | null>(null);
+
+  useEffect(() => {
+      const fetchPages = async () => {
+          const data = await ContentManager.getPages();
+          const pagesArray = Array.isArray(data) ? data : [];
+          setPages(pagesArray);
+          
+          // Pre-fetch homepage content
+          const customHomepage = pagesArray.find(p => (p as any).isHomepage === true);
+          if (customHomepage) {
+              const content = await ContentManager.getPageContent(customHomepage.id);
+              if (content) setHomepageContent(content);
+          }
+      };
+      fetchPages();
+  }, []);
 
   useEffect(() => {
       const handlePopState = () => {
@@ -90,38 +106,41 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Check for preview mode
-    const urlParams = new URLSearchParams(window.location.search);
-    const isPreview = urlParams.get('preview') === 'true';
-    const previewId = urlParams.get('previewId');
+    const fetchDynamicPage = async () => {
+        // Check for preview mode
+        const urlParams = new URLSearchParams(window.location.search);
+        const isPreview = urlParams.get('preview') === 'true';
+        const previewId = urlParams.get('previewId');
 
-    if (isPreview && previewId) {
-        const previewData = sessionStorage.getItem(`preview_page_${previewId}`);
-        if (previewData) {
-            try {
-                const content = JSON.parse(previewData);
-                setDynamicPageContent(content);
-                return;
-            } catch (e) {
-                console.error("Failed to parse preview data", e);
+        if (isPreview && previewId) {
+            const previewData = sessionStorage.getItem(`preview_page_${previewId}`);
+            if (previewData) {
+                try {
+                    const content = JSON.parse(previewData);
+                    setDynamicPageContent(content);
+                    return;
+                } catch (e) {
+                    console.error("Failed to parse preview data", e);
+                }
             }
         }
-    }
 
-    // Check if current page is dynamic
-    const pages = ContentManager.getPages();
-    const dynamicPage = pages.find(p => (p as any).slug === currentPage || p.id === currentPage);
-    if (dynamicPage) {
-        const content = ContentManager.getPageContent(dynamicPage.id);
-        if (content) {
-            setDynamicPageContent(content);
+        // Check if current page is dynamic
+        const pagesArray = Array.isArray(pages) ? pages : [];
+        const dynamicPage = pagesArray.find(p => (p as any).slug === currentPage || p.id === currentPage);
+        if (dynamicPage) {
+            const content = await ContentManager.getPageContent(dynamicPage.id);
+            if (content) {
+                setDynamicPageContent(content);
+            } else {
+                setDynamicPageContent(null);
+            }
         } else {
             setDynamicPageContent(null);
         }
-    } else {
-        setDynamicPageContent(null);
-    }
-  }, [currentPage]);
+    };
+    fetchDynamicPage();
+  }, [currentPage, pages]);
 
   useEffect(() => {
     const loadSettings = () => {
@@ -174,13 +193,8 @@ const App: React.FC = () => {
 
   const renderPage = () => {
     if (currentPage === 'home') {
-        const pages = ContentManager.getPages();
-        const customHomepage = pages.find(p => (p as any).isHomepage === true);
-        if (customHomepage) {
-            const content = ContentManager.getPageContent(customHomepage.id);
-            if (content) {
-                return <DynamicPage content={content} navigateTo={navigateTo} />;
-            }
+        if (homepageContent) {
+            return <DynamicPage content={homepageContent} navigateTo={navigateTo} />;
         }
         return <HomePage navigateTo={navigateTo} />;
     }
@@ -198,7 +212,6 @@ const App: React.FC = () => {
       case 'donate': return <DonatePage navigateTo={navigateTo} />;
       case 'contact': return <ContactPage navigateTo={navigateTo} />;
       case 'events': return <EventsPage navigateTo={navigateTo} />;
-      case 'trainings': return <TrainingsPage navigateTo={navigateTo} />;
       case 'awards': return <AwardsPage navigateTo={navigateTo} />;
       case 'records': return <RecordsPage navigateTo={navigateTo} />;
       case 'conferences': return <ConferencesPage navigateTo={navigateTo} />;
@@ -206,7 +219,6 @@ const App: React.FC = () => {
       case 'sports': return <SportsPage navigateTo={navigateTo} />;
       case 'education': return <EducationPage navigateTo={navigateTo} />;
       case 'culture': return <CulturePage navigateTo={navigateTo} />;
-      case 'courses': return <CoursesPage navigateTo={navigateTo} />;
       case 'careers': return <CareersPage navigateTo={navigateTo} />;
       case 'mission-vision': return <MissionVisionPage navigateTo={navigateTo} />;
       case 'core-values': return <CoreValuesPage navigateTo={navigateTo} />;

@@ -16,7 +16,6 @@ import FinalCta from '../components/FinalCta';
 import PartnershipModal from '../components/PartnershipModal';
 import GalleryHighlights from '../components/GalleryHighlights';
 import CoreFocusSection from '../components/CoreFocusSection';
-import CoursesTrainingsSection from '../components/CoursesTrainingsSection';
 import { ContentManager } from '../utils/contentManager';
 
 const SectionWrapper: React.FC<{ 
@@ -82,8 +81,6 @@ const HomePage: React.FC<NavigationProps> = ({ navigateTo }) => {
             </SectionWrapper>
 
             <CoreFocusSection navigateTo={navigateTo} />
-
-            <CoursesTrainingsSection navigateTo={navigateTo} />
 
             <SectionWrapper section={sections.incredibleSection}>
                 <IncredibleSection 

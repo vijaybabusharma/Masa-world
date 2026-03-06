@@ -95,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                   <div key={item.id} className="relative group">
                     <button
                       onClick={() => handleNavClick(item.page)}
-                      className={`px-4 py-2 rounded-md text-[13px] font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-1 ${linkClasses}`}
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 flex items-center gap-1 ${linkClasses}`}
                     >
                       {item.label}
                       <ChevronDownIcon className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
@@ -105,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                         <button
                           key={subItem.id}
                           onClick={() => handleNavClick(subItem.page)}
-                          className="block w-full text-left px-6 py-3 text-xs font-bold text-gray-600 hover:bg-orange-50 hover:text-masa-orange transition-all duration-200 uppercase tracking-wider"
+                          className="block w-full text-left px-6 py-3 text-xs font-medium text-gray-600 hover:bg-orange-50 hover:text-masa-orange transition-all duration-200"
                         >
                           {subItem.label}
                         </button>
@@ -116,7 +116,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                   <button
                     key={item.id}
                     onClick={() => handleNavClick(item.page)}
-                    className={`px-4 py-2 rounded-md text-[13px] font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-1 ${linkClasses}`}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 flex items-center gap-1 ${linkClasses}`}
                   >
                     {item.label}
                   </button>
@@ -127,7 +127,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
             {donateBtn && donateBtn.visible && (
                 <button 
                     onClick={() => onSmartBtnClick(donateBtn)} 
-                    className={`px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center gap-2 active:scale-95 bg-masa-orange text-white hover:bg-orange-600 shadow-lg hover:shadow-orange-500/40 transform hover:-translate-y-0.5`}
+                    className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 flex items-center gap-2 active:scale-95 bg-masa-orange text-white hover:bg-orange-600 shadow-md hover:shadow-orange-500/30 transform hover:-translate-y-0.5`}
                 >
                     <HeartIcon className="h-4 w-4" />
                     <span>{donateBtn.label}</span>
@@ -172,12 +172,12 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                 <div key={item.id} className="border-b border-gray-50 pb-4">
                   <button
                     onClick={() => toggleMobileSubMenu(item.label)}
-                    className={`w-full text-left py-4 rounded-xl text-lg font-black uppercase tracking-widest flex justify-between items-center transition-all ${
+                    className={`w-full text-left py-4 rounded-xl text-base font-semibold transition-all ${
                       currentPage === item.page || isPageInDropdown(item, currentPage) ? 'text-masa-orange' : 'text-masa-charcoal'
                     }`}
                   >
                     <span>{item.label}</span>
-                    <ChevronDownIcon className={`h-6 w-6 transition-transform duration-300 ${openMobileSubMenu === item.label ? 'rotate-180' : ''}`} />
+                    <ChevronDownIcon className={`h-5 w-5 transition-transform duration-300 ${openMobileSubMenu === item.label ? 'rotate-180' : ''}`} />
                   </button>
                   {openMobileSubMenu === item.label && (
                     <div className="mt-2 space-y-2 pl-4 border-l-2 border-orange-100">
@@ -185,7 +185,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                         <button
                           key={subItem.id}
                           onClick={() => handleNavClick(subItem.page)}
-                          className="block w-full text-left py-4 text-sm font-bold text-gray-500 hover:text-masa-orange transition-colors uppercase tracking-wider"
+                          className="block w-full text-left py-3 text-sm font-medium text-gray-500 hover:text-masa-orange transition-colors"
                         >
                           {subItem.label}
                         </button>
@@ -197,7 +197,7 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.page)}
-                  className={`block w-full text-left py-4 rounded-xl text-lg font-black uppercase tracking-widest border-b border-gray-50 last:border-0 transition-all ${
+                  className={`block w-full text-left py-4 rounded-xl text-base font-semibold border-b border-gray-50 last:border-0 transition-all ${
                     currentPage === item.page ? 'text-masa-orange' : 'text-masa-charcoal'
                   }`}
                 >
@@ -211,9 +211,9 @@ const Header: React.FC<HeaderProps> = ({ navigateTo, currentPage }) => {
                 <div className="pt-8">
                     <button 
                         onClick={() => onSmartBtnClick(donateBtn)} 
-                        className="w-full bg-masa-orange text-white px-8 py-5 rounded-2xl text-lg font-black uppercase tracking-[0.2em] hover:bg-orange-600 shadow-xl shadow-orange-500/20 transition-all duration-300 flex items-center justify-center gap-3 active:scale-95"
+                        className="w-full bg-masa-orange text-white px-8 py-4 rounded-2xl text-base font-semibold hover:bg-orange-600 shadow-lg shadow-orange-500/20 transition-all duration-300 flex items-center justify-center gap-3 active:scale-95"
                     >
-                        <HeartIcon className="h-6 w-6" />
+                        <HeartIcon className="h-5 w-5" />
                         <span>{donateBtn.label}</span>
                     </button>
                 </div>

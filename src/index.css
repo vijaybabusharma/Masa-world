@@ -49,16 +49,16 @@
   /* Headings: Using Outfit for a modern, premium feel */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', sans-serif;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    font-weight: 600;
     text-wrap: balance;
   }
   
-  h1 { font-size: var(--font-size-6xl); font-weight: 900; }
-  h2 { font-size: var(--font-size-4xl); font-weight: 800; }
-  h3 { font-size: var(--font-size-3xl); font-weight: 700; }
-  h4 { font-size: var(--font-size-2xl); font-weight: 700; }
+  h1 { font-size: var(--font-size-6xl); font-weight: 600; }
+  h2 { font-size: var(--font-size-4xl); font-weight: 500; }
+  h3 { font-size: var(--font-size-3xl); font-weight: 500; }
+  h4 { font-size: var(--font-size-2xl); font-weight: 400; }
   
   p { line-height: 1.7; color: #4B5563; }
   
