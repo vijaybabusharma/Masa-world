@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { AdminUser, AuthState, GlobalSettings, PageMetadata, Post, UserRole, MenuItem, SliderItem, Page, NavItem, MasaEvent, Course, Submission, GalleryItem, DeliveryAreaItem, Testimonial, ProcessStep } from '../types';
+import { AdminUser, AuthState, PageMetadata, UserRole, Page } from '../types';
 import { ContentManager } from '../utils/contentManager';
 import { AuthService } from '../utils/authService';
-import { getSubmissions, getStats } from '../utils/mockBackend';
-import { RichTextEditor } from '../components/RichTextEditor';
+import { getStats } from '../utils/mockBackend';
 import { 
     UsersIcon, HeartIcon, BriefcaseIcon, AcademicCapIcon, CameraIcon, NewspaperIcon, 
     CalendarDaysIcon, LockClosedIcon, ArrowRightIcon, CheckIcon, GlobeIcon, CreditCardIcon, 
-    DocumentTextIcon, PresentationChartBarIcon, SearchIcon, EnvelopeIcon, BellIcon, 
-    ShieldCheckIcon, ClockIcon, EyeIcon, SparklesIcon, PlusIcon, TrashIcon,
-    DocumentCheckIcon, ChatBubbleLeftIcon
+    DocumentTextIcon, PresentationChartBarIcon, EnvelopeIcon, 
+    ShieldCheckIcon, ClockIcon, EyeIcon, SparklesIcon, TrashIcon,
+    ChatBubbleLeftIcon
 } from '../components/icons/FeatureIcons';
-import { MenuIcon, ChevronDownIcon, ChevronUpIcon, XIcon } from '../components/icons/UiIcons';
+import { MenuIcon, XIcon } from '../components/icons/UiIcons';
 import PageEditorModule from '@/components/admin/PageEditorModule';
 import FormsManagerModule from '@/components/admin/FormsManagerModule';
 import MediaManagerModule from '@/components/admin/MediaManagerModule';
@@ -31,22 +30,42 @@ import NavigationModule from '@/components/admin/NavigationModule';
 import RedirectModule from '@/components/admin/RedirectModule';
 import TrashModule from '@/components/admin/TrashModule';
 import CommentModerationModule from '@/components/admin/CommentModerationModule';
-import { SidebarItem, ToggleSwitch, InputField, TextareaField, SelectField, ModuleHeader } from '@/components/admin/AdminComponents';
+import { SidebarItem, InputField, ModuleHeader } from '@/components/admin/AdminComponents';
 import { getAssetUrl } from '../utils/assetHelper';
 
 // --- Dashboard Modules ---
 const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => void }> = ({ user, setActiveView }) => {
     const [stats, setStats] = useState<any>(null);
+    const [recentLogs, setRecentLogs] = useState<any[]>([]);
+
+    const greeting = useMemo(() => {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Good morning';
+        if (hour < 18) return 'Good afternoon';
+        return 'Good evening';
+    }, []);
 
     useEffect(() => {
         const fetchStats = async () => {
             const data = await getStats();
             setStats(data);
         };
+        const fetchLogs = async () => {
+            try {
+                const res = await fetch('/api/logs');
+                if (res.ok) {
+                    const data = await res.json();
+                    setRecentLogs(Array.isArray(data) ? data.slice(0, 5) : []);
+                }
+            } catch (err) {
+                console.error('Failed to fetch logs', err);
+            }
+        };
         fetchStats();
+        fetchLogs();
     }, []);
 
-    if (!stats) return <div>Loading stats...</div>;
+    if (!stats) return <div>Loading dashboard...</div>;
 
     const statCards = [
         { label: 'Volunteers', value: stats.volunteers, icon: UsersIcon, color: 'from-blue-500 to-blue-600', shadow: 'shadow-blue-500/20' },
@@ -57,22 +76,34 @@ const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => v
         { label: 'Enrollments', value: stats.enrollments, icon: AcademicCapIcon, color: 'from-indigo-500 to-indigo-600', shadow: 'shadow-indigo-500/20' },
     ];
 
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const actions = [
+        { label: 'Events', icon: CalendarDaysIcon, view: 'events', color: 'text-blue-500', bg: 'bg-blue-50' },
+        { label: 'Blog', icon: NewspaperIcon, view: 'blogs', color: 'text-purple-500', bg: 'bg-purple-50' },
+        { label: 'Inquiries', icon: EnvelopeIcon, view: 'forms', color: 'text-emerald-500', bg: 'bg-emerald-50' },
+        { label: 'Settings', icon: LockClosedIcon, view: 'settings', color: 'text-orange-500', bg: 'bg-orange-50' },
+    ];
+
+    const filteredActions = actions.filter(action => action.label.toLowerCase().includes(searchQuery.toLowerCase()));
+
     return (
         <div className="animate-fade-in-up space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 leading-none mb-2">
-                        Welcome, <span className="text-masa-orange">{user.name}</span>
+                        {greeting}, <span className="text-masa-orange">{user.name}</span>
                     </h1>
                     <p className="text-gray-500 font-medium text-base">Here is what's happening on your website today.</p>
                 </div>
                 <div className="flex items-center gap-4 bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100">
-                    <div className="text-right">
+                    <div className="flex items-center gap-2 mr-4">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">System Online</span>
+                    </div>
+                    <div className="text-right border-l border-gray-100 pl-4">
                         <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Access Level</p>
                         <p className="text-sm font-bold text-gray-900">{user.role}</p>
-                    </div>
-                    <div className="w-12 h-12 bg-masa-orange/10 rounded-xl flex items-center justify-center">
-                        <ShieldCheckIcon className="h-6 w-6 text-masa-orange" />
                     </div>
                 </div>
             </div>
@@ -100,17 +131,12 @@ const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => v
                             <h3 className="text-xl font-bold text-gray-900 tracking-tight">Quick Actions</h3>
                             <p className="text-gray-400 text-xs font-semibold uppercase tracking-wider mt-1">Manage your content efficiently</p>
                         </div>
-                        <div className="h-10 w-10 bg-gray-50 rounded-full flex items-center justify-center">
-                            <SparklesIcon className="h-5 w-5 text-masa-orange animate-pulse" />
+                        <div className="w-48">
+                            <InputField label="Search Actions" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search..." />
                         </div>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        {[
-                            { label: 'Events', icon: CalendarDaysIcon, view: 'events', color: 'text-blue-500', bg: 'bg-blue-50' },
-                            { label: 'Blog', icon: NewspaperIcon, view: 'blogs', color: 'text-purple-500', bg: 'bg-purple-50' },
-                            { label: 'Inquiries', icon: EnvelopeIcon, view: 'forms', color: 'text-emerald-500', bg: 'bg-emerald-50' },
-                            { label: 'Settings', icon: LockClosedIcon, view: 'settings', color: 'text-orange-500', bg: 'bg-orange-50' },
-                        ].map((action, idx) => (
+                        {filteredActions.map((action, idx) => (
                             <button 
                                 key={idx}
                                 onClick={() => setActiveView(action.view)} 
@@ -124,41 +150,27 @@ const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => v
                         ))}
                     </div>
                 </div>
-                <div className="bg-gray-900 text-white p-8 rounded-2xl shadow-lg relative overflow-hidden group">
-                    <div className="absolute -top-16 -right-16 w-48 h-48 bg-masa-orange/20 rounded-full blur-[60px] group-hover:bg-masa-orange/30 transition-colors duration-500"></div>
-                    
-                    <div className="relative z-10 space-y-6 h-full flex flex-col justify-between">
-                        <div>
-                            <div className="flex items-center gap-2 mb-2">
-                                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                                <span className="text-emerald-400 text-[10px] font-semibold uppercase tracking-wider">System Online</span>
-                            </div>
-                            <h3 className="text-2xl font-bold tracking-tight">System Health</h3>
-                        </div>
-                        
-                        <div className="space-y-3">
-                            <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
-                                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Website</span>
-                                <span className="text-emerald-400 font-semibold text-xs uppercase tracking-wider flex items-center gap-2">
-                                    <CheckIcon className="h-4 w-4" /> Operational
-                                </span>
-                            </div>
-                            <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
-                                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Database</span>
-                                <span className="text-emerald-400 font-semibold text-xs uppercase tracking-wider flex items-center gap-2">
-                                    <CheckIcon className="h-4 w-4" /> Connected
-                                </span>
-                            </div>
-                            <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
-                                <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Version</span>
-                                <span className="text-white font-semibold text-xs uppercase tracking-wider bg-white/10 px-2 py-1 rounded-lg">v1.2.0</span>
-                            </div>
-                        </div>
-                        
-                        <button className="w-full py-3 bg-white/10 hover:bg-white/20 rounded-xl text-[10px] font-semibold uppercase tracking-wider transition-all border border-white/5 hover:border-white/20 shadow-md">
-                            View Full System Logs
-                        </button>
+                
+                <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 className="text-xl font-bold text-gray-900 tracking-tight mb-6">Recent Activity</h3>
+                    <div className="space-y-4">
+                        {recentLogs.length === 0 ? (
+                            <p className="text-gray-400 text-sm italic">No recent activity.</p>
+                        ) : (
+                            recentLogs.map((log: any) => (
+                                <div key={log.id} className="flex items-start gap-3 text-sm">
+                                    <div className="w-2 h-2 rounded-full bg-masa-blue mt-1.5"></div>
+                                    <div>
+                                        <p className="font-bold text-gray-800">{log.action}</p>
+                                        <p className="text-gray-500 text-xs">{log.userName} • {new Date(log.timestamp).toLocaleTimeString()}</p>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
+                    <button onClick={() => setActiveView('logs')} className="w-full mt-6 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl text-[10px] font-bold text-gray-600 uppercase tracking-wider transition-all border border-gray-100">
+                        View All Logs
+                    </button>
                 </div>
             </div>
         </div>
@@ -313,6 +325,7 @@ const AdminDashboardPage: React.FC = () => {
 const AdminLogin: React.FC<{ onLogin: (user: AdminUser) => void }> = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [remember, setRemember] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -403,7 +416,12 @@ const AdminLogin: React.FC<{ onLogin: (user: AdminUser) => void }> = ({ onLogin 
                     </div>
                     <div>
                         <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Password</label>
-                        <input type="password" required className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-masa-orange focus:border-transparent outline-none transition-all font-medium text-gray-900" value={password} onChange={e=>{setPassword(e.target.value); setError('');}} />
+                        <div className="relative">
+                            <input type={showPassword ? "text" : "password"} required className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-masa-orange focus:border-transparent outline-none transition-all font-medium text-gray-900" value={password} onChange={e=>{setPassword(e.target.value); setError('');}} />
+                            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-masa-orange">
+                                {showPassword ? <EyeIcon className="h-5 w-5" /> : <LockClosedIcon className="h-5 w-5" />}
+                            </button>
+                        </div>
                     </div>
                     
                     <div className="flex items-center justify-between pt-2">

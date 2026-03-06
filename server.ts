@@ -13,6 +13,12 @@ import { defaultSettings, defaultPages } from './utils/defaultData';
 
 dotenv.config();
 
+console.log('Environment variables loaded:', {
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD ? '***' : 'undefined',
+    JWT_SECRET: process.env.JWT_SECRET ? '***' : 'undefined'
+});
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'masa-super-secret-key-change-in-prod';
@@ -216,28 +222,6 @@ app.post('/api/auth/login', async (req, res) => {
         }
 
         const users = getUsers();
-        const adminEmail = process.env.ADMIN_EMAIL || 'vijaybabusharma0@gmail.com';
-        const adminPassword = process.env.ADMIN_PASSWORD || 'Masa@world@vijay123';
-
-        if (email.toLowerCase() === adminEmail.toLowerCase() && password === adminPassword) {
-            // Admin login successful
-            const user = {
-                id: 'u1',
-                name: 'Super Admin',
-                email: adminEmail,
-                role: 'Super Admin',
-                status: 'Active'
-            };
-            const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: remember ? '30d' : '24h' });
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                maxAge: remember ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000
-            });
-            return res.json({ user });
-        }
-
         const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
 
         if (!user || user.status === 'Disabled') {
