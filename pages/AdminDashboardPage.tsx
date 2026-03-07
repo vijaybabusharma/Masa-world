@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { AdminUser, AuthState, PageMetadata, UserRole, Page } from '../types';
+import { AdminUser, AuthState, PageMetadata, UserRole, Page, GlobalSettings } from '../types';
 import { ContentManager } from '../utils/contentManager';
 import { AuthService } from '../utils/authService';
 import { getStats } from '../utils/mockBackend';
@@ -198,6 +198,7 @@ const DashboardHome: React.FC<{ user: AdminUser, setActiveView: (v: string) => v
 // --- MAIN PAGE COMPONENT ---
 const AdminDashboardPage: React.FC = () => {
     const [auth, setAuth] = useState<AuthState>({ isAuthenticated: false, user: null });
+    const [settings, setSettings] = useState<GlobalSettings>(ContentManager.getSettings());
     const [activeView, setActiveView] = useState('dashboard');
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -209,9 +210,16 @@ const AdminDashboardPage: React.FC = () => {
             setLoading(false);
         };
         checkAuth();
+        
+        const handleSettingsUpdate = () => setSettings(ContentManager.getSettings());
+        window.addEventListener('masa-settings-updated', handleSettingsUpdate);
+        return () => window.removeEventListener('masa-settings-updated', handleSettingsUpdate);
     }, []);
 
-    const handleLogin = (user: AdminUser) => setAuth({ isAuthenticated: true, user });
+    const handleLogin = (user: AdminUser) => {
+        setAuth({ isAuthenticated: true, user });
+        setActiveView('dashboard');
+    };
     const handleLogout = async () => { 
         await AuthService.logout(); 
         setAuth({ isAuthenticated: false, user: null }); 
@@ -220,7 +228,7 @@ const AdminDashboardPage: React.FC = () => {
         setActiveView(view);
         if (window.innerWidth < 1024) setSidebarOpen(false);
     };
-    const hasPermission = (allowedRoles: UserRole[]) => auth.user && allowedRoles.includes(auth.user.role);
+    const hasPermission = (viewId: string) => auth.user && settings.rolePermissions[auth.user.role]?.includes(viewId);
 
     if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-100"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-masa-blue"></div></div>;
     if (!auth.isAuthenticated) return <AdminLogin onLogin={handleLogin} />;
@@ -228,24 +236,24 @@ const AdminDashboardPage: React.FC = () => {
     const renderView = () => {
         switch (activeView) {
             case 'dashboard': return <DashboardHome user={auth.user!} setActiveView={setActiveView} />;
-            case 'blogs': return hasPermission(['Super Admin', 'Admin / Manager', 'Editor', 'Content Creator']) ? <BlogManagerModule /> : <p>Permission Denied</p>;
-            case 'comments': return hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) ? <CommentModerationModule /> : <p>Permission Denied</p>;
-            case 'courses': return hasPermission(['Super Admin', 'Admin / Manager']) ? <CourseManagerModule /> : <p>Permission Denied</p>;
-            case 'events': return hasPermission(['Super Admin', 'Admin / Manager']) ? <EventManagerModule /> : <p>Permission Denied</p>;
-            case 'gallery': return hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) ? <GalleryManagerModule /> : <p>Permission Denied</p>;
-            case 'forms': return hasPermission(['Super Admin', 'Admin / Manager', 'Volunteer Coordinator']) ? <FormsManagerModule /> : <p>Permission Denied</p>;
-            case 'users': return hasPermission(['Super Admin']) ? <UserManagerModule /> : <p>Permission Denied</p>;
-            case 'backup': return hasPermission(['Super Admin']) ? <BackupRestoreModule /> : <p>Permission Denied</p>;
-            case 'settings': return hasPermission(['Super Admin']) ? <SettingsModule /> : <p>Permission Denied</p>;
-            case 'buttons': return hasPermission(['Super Admin']) ? <ButtonManagerModule /> : <p>Permission Denied</p>;
-            case 'pages': return hasPermission(['Super Admin', 'Admin / Manager']) ? <PageEditorModule /> : <p>Permission Denied</p>;
-            case 'media': return hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) ? <MediaManagerModule /> : <p>Permission Denied</p>;
-            case 'sliders': return hasPermission(['Super Admin', 'Admin / Manager']) ? <SliderManagerModule /> : <p>Permission Denied</p>;
-            case 'navigation': return hasPermission(['Super Admin', 'Admin / Manager']) ? <NavigationModule /> : <p>Permission Denied</p>;
-            case 'redirects': return hasPermission(['Super Admin', 'Admin / Manager']) ? <RedirectModule /> : <p>Permission Denied</p>;
-            case 'donations': return hasPermission(['Super Admin', 'Accountant / Finance']) ? <DonationPanel /> : <p>Permission Denied</p>;
-            case 'logs': return hasPermission(['Super Admin']) ? <ActivityLogModule /> : <p>Permission Denied</p>;
-            case 'trash': return hasPermission(['Super Admin']) ? <TrashModule /> : <p>Permission Denied</p>;
+            case 'blogs': return hasPermission('blogs') ? <BlogManagerModule /> : <p>Permission Denied</p>;
+            case 'comments': return hasPermission('comments') ? <CommentModerationModule /> : <p>Permission Denied</p>;
+            case 'courses': return hasPermission('courses') ? <CourseManagerModule /> : <p>Permission Denied</p>;
+            case 'events': return hasPermission('events') ? <EventManagerModule /> : <p>Permission Denied</p>;
+            case 'gallery': return hasPermission('gallery') ? <GalleryManagerModule /> : <p>Permission Denied</p>;
+            case 'forms': return hasPermission('forms') ? <FormsManagerModule /> : <p>Permission Denied</p>;
+            case 'users': return hasPermission('users') ? <UserManagerModule /> : <p>Permission Denied</p>;
+            case 'backup': return hasPermission('backup') ? <BackupRestoreModule /> : <p>Permission Denied</p>;
+            case 'settings': return hasPermission('settings') ? <SettingsModule /> : <p>Permission Denied</p>;
+            case 'buttons': return hasPermission('buttons') ? <ButtonManagerModule /> : <p>Permission Denied</p>;
+            case 'pages': return hasPermission('pages') ? <PageEditorModule /> : <p>Permission Denied</p>;
+            case 'media': return hasPermission('media') ? <MediaManagerModule /> : <p>Permission Denied</p>;
+            case 'sliders': return hasPermission('sliders') ? <SliderManagerModule /> : <p>Permission Denied</p>;
+            case 'navigation': return hasPermission('navigation') ? <NavigationModule /> : <p>Permission Denied</p>;
+            case 'redirects': return hasPermission('redirects') ? <RedirectModule /> : <p>Permission Denied</p>;
+            case 'donations': return hasPermission('donations') ? <DonationPanel /> : <p>Permission Denied</p>;
+            case 'logs': return hasPermission('logs') ? <ActivityLogModule /> : <p>Permission Denied</p>;
+            case 'trash': return hasPermission('trash') ? <TrashModule /> : <p>Permission Denied</p>;
             case 'profile': return <ProfileModule user={auth.user!} />;
             default: return <div>Select a module</div>;
         }
@@ -266,28 +274,28 @@ const AdminDashboardPage: React.FC = () => {
                     <SidebarItem id="dashboard" label="Dashboard" icon={PresentationChartBarIcon} isActive={activeView === 'dashboard'} onClick={() => handleSidebarClick('dashboard')} />
                     
                     <div className="px-4 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Content Engine</div>
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor', 'Content Creator']) && <SidebarItem id="blogs" label="Blog Posts" icon={NewspaperIcon} isActive={activeView === 'blogs'} onClick={() => handleSidebarClick('blogs')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) && <SidebarItem id="comments" label="Moderation" icon={ChatBubbleLeftIcon} isActive={activeView === 'comments'} onClick={() => handleSidebarClick('comments')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="pages" label="Site Pages" icon={DocumentTextIcon} isActive={activeView === 'pages'} onClick={() => handleSidebarClick('pages')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="events" label="Event Calendar" icon={CalendarDaysIcon} isActive={activeView === 'events'} onClick={() => handleSidebarClick('events')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) && <SidebarItem id="gallery" label="Visual Gallery" icon={EyeIcon} isActive={activeView === 'gallery'} onClick={() => handleSidebarClick('gallery')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Editor']) && <SidebarItem id="media" label="Media Assets" icon={CameraIcon} isActive={activeView === 'media'} onClick={() => handleSidebarClick('media')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="navigation" label="Menu Config" icon={GlobeIcon} isActive={activeView === 'navigation'} onClick={() => handleSidebarClick('navigation')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="sliders" label="Slider Manager" icon={CameraIcon} isActive={activeView === 'sliders'} onClick={() => handleSidebarClick('sliders')} />}
-                    {hasPermission(['Super Admin', 'Admin / Manager']) && <SidebarItem id="redirects" label="Redirects" icon={ArrowRightIcon} isActive={activeView === 'redirects'} onClick={() => handleSidebarClick('redirects')} />}
+                    {hasPermission('blogs') && <SidebarItem id="blogs" label="Blog Posts" icon={NewspaperIcon} isActive={activeView === 'blogs'} onClick={() => handleSidebarClick('blogs')} />}
+                    {hasPermission('comments') && <SidebarItem id="comments" label="Moderation" icon={ChatBubbleLeftIcon} isActive={activeView === 'comments'} onClick={() => handleSidebarClick('comments')} />}
+                    {hasPermission('pages') && <SidebarItem id="pages" label="Site Pages" icon={DocumentTextIcon} isActive={activeView === 'pages'} onClick={() => handleSidebarClick('pages')} />}
+                    {hasPermission('events') && <SidebarItem id="events" label="Event Calendar" icon={CalendarDaysIcon} isActive={activeView === 'events'} onClick={() => handleSidebarClick('events')} />}
+                    {hasPermission('gallery') && <SidebarItem id="gallery" label="Visual Gallery" icon={EyeIcon} isActive={activeView === 'gallery'} onClick={() => handleSidebarClick('gallery')} />}
+                    {hasPermission('media') && <SidebarItem id="media" label="Media Assets" icon={CameraIcon} isActive={activeView === 'media'} onClick={() => handleSidebarClick('media')} />}
+                    {hasPermission('navigation') && <SidebarItem id="navigation" label="Menu Config" icon={GlobeIcon} isActive={activeView === 'navigation'} onClick={() => handleSidebarClick('navigation')} />}
+                    {hasPermission('sliders') && <SidebarItem id="sliders" label="Slider Manager" icon={CameraIcon} isActive={activeView === 'sliders'} onClick={() => handleSidebarClick('sliders')} />}
+                    {hasPermission('redirects') && <SidebarItem id="redirects" label="Redirects" icon={ArrowRightIcon} isActive={activeView === 'redirects'} onClick={() => handleSidebarClick('redirects')} />}
 
                     <div className="px-4 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Data & CRM</div>
-                    {hasPermission(['Super Admin', 'Admin / Manager', 'Volunteer Coordinator']) && <SidebarItem id="forms" label="Submissions" icon={EnvelopeIcon} isActive={activeView === 'forms'} onClick={() => handleSidebarClick('forms')} />}
-                    {hasPermission(['Super Admin', 'Accountant / Finance']) && <SidebarItem id="donations" label="Finance" icon={CreditCardIcon} isActive={activeView === 'donations'} onClick={() => handleSidebarClick('donations')} />}
-                    {hasPermission(['Super Admin']) && <SidebarItem id="users" label="Team Access" icon={UsersIcon} isActive={activeView === 'users'} onClick={() => handleSidebarClick('users')} />}
+                    {hasPermission('forms') && <SidebarItem id="forms" label="Submissions" icon={EnvelopeIcon} isActive={activeView === 'forms'} onClick={() => handleSidebarClick('forms')} />}
+                    {hasPermission('donations') && <SidebarItem id="donations" label="Finance" icon={CreditCardIcon} isActive={activeView === 'donations'} onClick={() => handleSidebarClick('donations')} />}
+                    {hasPermission('users') && <SidebarItem id="users" label="Team Access" icon={UsersIcon} isActive={activeView === 'users'} onClick={() => handleSidebarClick('users')} />}
 
-                    {hasPermission(['Super Admin']) && <>
+                    {hasPermission('settings') && <>
                         <div className="px-4 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider">System</div>
-                        <SidebarItem id="buttons" label="Payments" icon={CreditCardIcon} isActive={activeView === 'buttons'} onClick={() => handleSidebarClick('buttons')} />
-                        <SidebarItem id="settings" label="Site Config" icon={LockClosedIcon} isActive={activeView === 'settings'} onClick={() => handleSidebarClick('settings')} />
-                        <SidebarItem id="logs" label="Audit Logs" icon={ClockIcon} isActive={activeView === 'logs'} onClick={() => handleSidebarClick('logs')} />
-                        <SidebarItem id="trash" label="Trash Bin" icon={TrashIcon} isActive={activeView === 'trash'} onClick={() => handleSidebarClick('trash')} />
-                        <SidebarItem id="backup" label="Infrastructure" icon={ShieldCheckIcon} isActive={activeView === 'backup'} onClick={() => handleSidebarClick('backup')} />
+                        {hasPermission('buttons') && <SidebarItem id="buttons" label="Payments" icon={CreditCardIcon} isActive={activeView === 'buttons'} onClick={() => handleSidebarClick('buttons')} />}
+                        {hasPermission('settings') && <SidebarItem id="settings" label="Site Config" icon={LockClosedIcon} isActive={activeView === 'settings'} onClick={() => handleSidebarClick('settings')} />}
+                        {hasPermission('logs') && <SidebarItem id="logs" label="Audit Logs" icon={ClockIcon} isActive={activeView === 'logs'} onClick={() => handleSidebarClick('logs')} />}
+                        {hasPermission('trash') && <SidebarItem id="trash" label="Trash Bin" icon={TrashIcon} isActive={activeView === 'trash'} onClick={() => handleSidebarClick('trash')} />}
+                        {hasPermission('backup') && <SidebarItem id="backup" label="Infrastructure" icon={ShieldCheckIcon} isActive={activeView === 'backup'} onClick={() => handleSidebarClick('backup')} />}
                     </>}
                 </div>
                 <div className="p-4 border-t border-white/5 bg-black/20">

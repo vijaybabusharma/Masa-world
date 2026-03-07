@@ -98,13 +98,20 @@ const getUsers = () => readJsonFile(USERS_FILE, []);
 const saveUsers = (users: any[]) => fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 
 // Initialize default admin if no users exist or force update specific admin
-const initDefaultAdmin = () => {
+const initDefaultAdmin = async () => {
+    console.log('[AUTH DEBUG] initDefaultAdmin called');
+    console.log(`[AUTH DEBUG] USERS_FILE: ${USERS_FILE}`);
     const users = getUsers();
     const targetEmail = process.env.ADMIN_EMAIL || 'vijaybabusharma0@gmail.com';
     const targetPassword = process.env.ADMIN_PASSWORD || 'Masa@world@vijay123';
     
+    console.log(`[AUTH DEBUG] Initializing admin. Email: ${targetEmail}, Password: ${targetPassword}`);
+    console.log(`[AUTH DEBUG] Password from env: ${!!process.env.ADMIN_PASSWORD}`);
+
     const existingAdminIndex = users.findIndex((u: any) => u.email === targetEmail);
-    const hashedPassword = bcrypt.hashSync(targetPassword, 10);
+    console.log(`[AUTH DEBUG] Existing admin index: ${existingAdminIndex}`);
+    const hashedPassword = await bcrypt.hash(targetPassword, 10);
+    console.log(`[AUTH DEBUG] Hashed password: ${hashedPassword}`);
 
     if (existingAdminIndex !== -1) {
         // Update existing admin
@@ -112,7 +119,7 @@ const initDefaultAdmin = () => {
         users[existingAdminIndex].role = 'Super Admin'; // Ensure role is Super Admin
         users[existingAdminIndex].active = true;
         saveUsers(users);
-        console.log('Admin credentials updated.');
+        console.log(`Admin credentials updated for: ${targetEmail}`);
     } else {
         // Create new admin
         const adminUser = {
@@ -127,11 +134,13 @@ const initDefaultAdmin = () => {
         };
         users.push(adminUser);
         saveUsers(users);
-        console.log('Default admin user created.', adminUser);
+        console.log(`Default admin user created: ${targetEmail}`);
     }
 };
 
-initDefaultAdmin();
+// Call initDefaultAdmin in startServer
+// initDefaultAdmin(); // Remove this from here
+
 
 // Middleware to verify JWT and Role
 const requirePermission = (allowedRoles: string[]) => (req: any, res: any, next: any) => {
@@ -212,6 +221,11 @@ app.post('/api/donations', requireFinance, (req, res) => {
 });
 
 // --- Auth Routes ---
+app.get('/api/debug/hash', async (req, res) => {
+    const hash = await bcrypt.hash('Masa@masa@vijay123', 10);
+    console.log(`[DEBUG] Hash: ${hash}`);
+    res.json({ hash });
+});
 
 app.post('/api/auth/login', async (req, res) => {
     try {
@@ -225,11 +239,13 @@ app.post('/api/auth/login', async (req, res) => {
         const user = users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
 
         if (!user || user.status === 'Disabled') {
+            console.log(`Login failed: User not found or disabled for email: ${email}`);
             return res.status(401).json({ message: 'Invalid credentials or account disabled.' });
         }
 
         const validPassword = await bcrypt.compare(password, user.passwordHash);
         if (!validPassword) {
+            console.log(`Login failed: Invalid password for email: ${email}`);
             return res.status(401).json({ message: 'Invalid credentials.' });
         }
 
@@ -719,6 +735,7 @@ app.get('/api/stats', (req, res) => {
 // --- Vite Middleware ---
 
 async function startServer() {
+    await initDefaultAdmin();
     if (process.env.NODE_ENV !== 'production') {
         try {
             const { createServer: createViteServer } = await import('vite');

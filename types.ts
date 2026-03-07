@@ -327,6 +327,7 @@ export interface GlobalSettings {
         enableRegistrations: boolean;
         maintenanceMode: boolean;
     };
+    rolePermissions: Record<UserRole, string[]>; // Map role to list of allowed view IDs
     homepage: HomepageSettings;
     navigation: {
         headerMenu: MenuItem[];

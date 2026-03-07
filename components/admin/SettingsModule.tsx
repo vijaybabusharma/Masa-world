@@ -50,6 +50,7 @@ const SettingsModule: React.FC = () => {
         { id: 'seo', label: 'SEO' },
         { id: 'scripts', label: 'Scripts & Analytics' },
         { id: 'appearance', label: 'Appearance' },
+        { id: 'roles', label: 'Role Permissions' },
     ];
 
     return (
@@ -973,7 +974,7 @@ const SettingsModule: React.FC = () => {
                     </div>
                 </div>
             )}
-            {activeTab !== 'scripts' && activeTab !== 'general' && activeTab !== 'social' && activeTab !== 'homepage' && activeTab !== 'navigation' && <div>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} settings will be managed here.</div>}
+
             {activeTab === 'appearance' && (
                 <div className="space-y-8 max-w-4xl">
                     <div className="bg-white p-6 rounded-lg border border-gray-200">
@@ -1054,6 +1055,39 @@ const SettingsModule: React.FC = () => {
                                 />
                             )}
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {activeTab === 'roles' && (
+                <div className="bg-white p-6 rounded-lg border border-gray-200">
+                    <h3 className="text-lg font-bold text-gray-800 mb-4">Role Permissions</h3>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm text-left">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3">Role</th>
+                                    {['blogs', 'comments', 'courses', 'events', 'gallery', 'forms', 'users', 'backup', 'settings', 'buttons', 'pages', 'media', 'sliders', 'navigation', 'redirects', 'donations', 'logs', 'trash'].map(v => <th key={v} className="px-6 py-3">{v}</th>)}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {(['Super Admin', 'Admin / Manager', 'Editor', 'Content Creator', 'Volunteer Coordinator', 'Accountant / Finance'] as const).map(role => (
+                                    <tr key={role} className="bg-white border-b">
+                                        <td className="px-6 py-4 font-medium text-gray-900">{role}</td>
+                                        {['blogs', 'comments', 'courses', 'events', 'gallery', 'forms', 'users', 'backup', 'settings', 'buttons', 'pages', 'media', 'sliders', 'navigation', 'redirects', 'donations', 'logs', 'trash'].map(v => (
+                                            <td key={v} className="px-6 py-4">
+                                                <input type="checkbox" checked={settings.rolePermissions[role]?.includes(v)} onChange={(e) => {
+                                                    const newPermissions = e.target.checked 
+                                                        ? [...(settings.rolePermissions[role] || []), v]
+                                                        : (settings.rolePermissions[role] || []).filter(p => p !== v);
+                                                    handleSettingsChange('rolePermissions', role, newPermissions);
+                                                }} />
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             )}

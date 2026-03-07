@@ -335,6 +335,14 @@ const defaultSettings: GlobalSettings = {
     payments: { currency: 'INR', razorpayEnabled: true, razorpayKey: '', stripeEnabled: false, stripeKey: '', paypalEnabled: false, paypalClientId: '', manualPaymentEnabled: true, manualPaymentInstructions: 'Contact for details.', donationSuccessMessage: 'Thank you!', donationFailureMessage: 'Payment failed.' },
     features: { blogEnabled: true, eventsEnabled: true, coursesEnabled: true, whatsAppIntegrationEnabled: false, whatsAppNumber: '' },
     buttons: defaultButtonSettings,
+    rolePermissions: {
+        'Super Admin': ['blogs', 'comments', 'courses', 'events', 'gallery', 'forms', 'users', 'backup', 'settings', 'buttons', 'pages', 'media', 'sliders', 'navigation', 'redirects', 'donations', 'logs', 'trash'],
+        'Admin / Manager': ['blogs', 'comments', 'courses', 'events', 'gallery', 'forms', 'pages', 'media', 'sliders', 'navigation', 'redirects', 'donations'],
+        'Editor': ['blogs', 'comments', 'gallery', 'media'],
+        'Content Creator': ['blogs'],
+        'Volunteer Coordinator': ['forms'],
+        'Accountant / Finance': ['donations'],
+    },
 };
 
 const defaultPages: PageMetadata[] = [
