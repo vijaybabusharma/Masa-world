@@ -110,6 +110,19 @@ const requirePermission = (roles: UserRole[]) => (req: any, res: any, next: any)
 const superAdminOnly = requirePermission(['Super Admin']);
 
 // --- Auth Utils ---
+// Helper to read/write JSON files
+const readJsonFile = (filePath: string, defaultValue: any = []) => {
+    try {
+        if (!fs.existsSync(filePath)) return defaultValue;
+        const content = fs.readFileSync(filePath, 'utf-8');
+        if (!content) return defaultValue;
+        return JSON.parse(content);
+    } catch (e) {
+        console.error(`Error reading file ${filePath}`, e);
+        return defaultValue;
+    }
+};
+
 const getUsers = (): AdminUser[] => readJsonFile(USERS_FILE, []);
 const saveUsers = (users: AdminUser[]) => fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 
@@ -185,19 +198,6 @@ const initDefaultAdmin = async () => {
 };
 
 initDefaultAdmin();
-
-// Helper to read/write users
-const readJsonFile = (filePath: string, defaultValue: any = []) => {
-    try {
-        if (!fs.existsSync(filePath)) return defaultValue;
-        const content = fs.readFileSync(filePath, 'utf-8');
-        if (!content) return defaultValue;
-        return JSON.parse(content);
-    } catch (e) {
-        console.error(`Error reading file ${filePath}`, e);
-        return defaultValue;
-    }
-};
 
 // --- Email Notification Helper ---
 const sendEmailNotification = (to: string, subject: string, body: string) => {

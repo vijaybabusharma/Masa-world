@@ -270,13 +270,17 @@ const Footer: React.FC<NavigationProps> = ({ navigateTo }) => {
           </div>
           
           <div className="flex items-center gap-6">
-            <button 
-              onClick={() => navigateTo('admin-login')} 
+            <a 
+              href="/admin-login"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('admin-login');
+              }} 
               className="text-gray-500 hover:text-white transition-colors duration-300 text-sm font-medium"
               aria-label="Admin Access"
             >
               Admin
-            </button>
+            </a>
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               <span className="text-sm text-gray-500 font-medium">Live</span>
