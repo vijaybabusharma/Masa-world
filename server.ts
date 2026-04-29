@@ -21,7 +21,7 @@ console.log('Environment variables loaded:', {
 });
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT || '3000', 10);
 const JWT_SECRET = process.env.JWT_SECRET || 'masa-super-secret-key-change-in-prod';
 const DATA_DIR = path.join(process.cwd(), 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
@@ -210,35 +210,54 @@ Body: ${body}
     // For this CMS conversion, we log it to demonstrate server-side handling.
 };
 
+// --- Health Check ---
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', time: new Date().toISOString() });
+});
+
 // --- Auth Routes ---
 app.post('/api/auth/login', async (req, res) => {
-    const { email, password } = req.body;
-    const users = getUsers();
-    const user = users.find(u => u.email === email);
+    console.log(`Login attempt for: ${req.body?.email}`);
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+        
+        const users = getUsers();
+        const user = users.find(u => u.email === email);
 
-    if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+        if (!user) {
+            console.log(`User not found: ${email}`);
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        console.log(`User found, comparing password for: ${email}`);
+        const isMatch = await bcrypt.compare(password, user.passwordHash);
+        if (!isMatch) {
+            console.log(`Password mismatch for: ${email}`);
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const payload = { id: user.id, email: user.email, role: user.role };
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
+
+        res.cookie('admin_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 8 * 60 * 60 * 1000 // 8 hours
+        });
+
+        user.lastLogin = new Date().toISOString();
+        saveUsers(users);
+
+        console.log(`Login successful for: ${email}`);
+        res.json({ user: { id: user.id, email: user.email, name: user.name, role: user.role } });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Internal server error during login' });
     }
-
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!isMatch) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    const payload = { id: user.id, email: user.email, role: user.role };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
-
-    res.cookie('admin_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 8 * 60 * 60 * 1000 // 8 hours
-    });
-
-    user.lastLogin = new Date().toISOString();
-    saveUsers(users);
-
-    res.json({ user: { id: user.id, email: user.email, name: user.name, role: user.role } });
 });
 
 app.get('/api/auth/me', authenticateToken, (req: any, res) => {
@@ -572,8 +591,8 @@ async function startServer() {
         });
     }
 
-    app.listen(PORT, () => {
-        console.log(`Server running on http://localhost:${PORT}`);
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server running on http://0.0.0.0:${PORT}`);
     });
 }
 

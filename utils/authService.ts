@@ -11,13 +11,22 @@ export const AuthService = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             });
-            const data = await res.json();
-            if (res.ok) {
-                return { user: data.user };
+            
+            const contentType = res.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await res.json();
+                if (res.ok) {
+                    return { user: data.user };
+                }
+                return { user: null, message: data.message || 'Login failed' };
+            } else {
+                const text = await res.text();
+                console.error('Non-JSON response:', text);
+                return { user: null, message: `Server error: Received non-JSON response from server.` };
             }
-            return { user: null, message: data.message || 'Login failed' };
         } catch (err) {
-            return { user: null, message: 'Server error' };
+            console.error('Fetch error:', err);
+            return { user: null, message: `Connection error: ${err instanceof Error ? err.message : 'Unknown error'}` };
         }
     },
 
@@ -58,10 +67,18 @@ export const AuthService = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })
             });
-            const data = await res.json();
-            return { success: res.ok, message: data.message };
+            const contentType = res.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await res.json();
+                return { success: res.ok, message: data.message };
+            } else {
+                const text = await res.text();
+                console.error('Non-JSON response (forgotPassword):', text);
+                return { success: false, message: 'Server error: Received non-JSON response' };
+            }
         } catch (err) {
-            return { success: false, message: 'Server error' };
+            console.error('Fetch error (forgotPassword):', err);
+            return { success: false, message: `Connection error: ${err instanceof Error ? err.message : 'Unknown error'}` };
         }
     },
 
@@ -72,10 +89,18 @@ export const AuthService = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, otp })
             });
-            const data = await res.json();
-            return { success: res.ok, message: data.message };
+            const contentType = res.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await res.json();
+                return { success: res.ok, message: data.message };
+            } else {
+                const text = await res.text();
+                console.error('Non-JSON response (verifyOtp):', text);
+                return { success: false, message: 'Server error: Received non-JSON response' };
+            }
         } catch (err) {
-            return { success: false, message: 'Server error' };
+            console.error('Fetch error (verifyOtp):', err);
+            return { success: false, message: `Connection error: ${err instanceof Error ? err.message : 'Unknown error'}` };
         }
     },
 
@@ -86,10 +111,18 @@ export const AuthService = {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, otp, newPassword })
             });
-            const data = await res.json();
-            return { success: res.ok, message: data.message };
+            const contentType = res.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await res.json();
+                return { success: res.ok, message: data.message };
+            } else {
+                const text = await res.text();
+                console.error('Non-JSON response (resetPassword):', text);
+                return { success: false, message: 'Server error: Received non-JSON response' };
+            }
         } catch (err) {
-            return { success: false, message: 'Server error' };
+            console.error('Fetch error (resetPassword):', err);
+            return { success: false, message: `Connection error: ${err instanceof Error ? err.message : 'Unknown error'}` };
         }
     }
 };

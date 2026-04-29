@@ -133,7 +133,7 @@ const LoginPage: React.FC<NavigationProps> = ({ navigateTo }) => {
                                 disabled={isSubmitting}
                                 className="w-full bg-masa-charcoal text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-masa-orange transition-all duration-300 disabled:bg-gray-300"
                             >
-                                {isSubmitting ? 'Sending...' : 'Send Secuity OTP'}
+                                {isSubmitting ? 'Sending...' : 'Send Security OTP'}
                             </button>
                             <div className="text-center">
                                 <button 
