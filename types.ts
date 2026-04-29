@@ -98,34 +98,6 @@ export interface Testimonial {
 export type MembershipType = 'Community' | 'Supporting' | 'Life' | 'International' | 'Student / Youth';
 export type PartnershipType = 'Institutional' | 'Corporate';
 
-// --- Admin & Auth Types ---
-export type UserRole = 'Super Admin' | 'Admin / Manager' | 'Editor' | 'Content Creator' | 'Volunteer Coordinator' | 'Accountant / Finance';
-
-export interface ActivityLog {
-    id: string;
-    userId: string;
-    userName: string;
-    action: string;
-    target: string;
-    timestamp: string;
-    details?: string;
-}
-
-export interface AdminUser {
-    id: string;
-    name: string;
-    email: string;
-    role: UserRole;
-    avatar?: string;
-    status: 'Active' | 'Disabled';
-    lastLogin?: string;
-}
-
-export interface AuthState {
-    isAuthenticated: boolean;
-    user: AdminUser | null;
-}
-
 // --- CMS Content Types ---
 export interface PageSection {
     id: string;
@@ -327,7 +299,6 @@ export interface GlobalSettings {
         enableRegistrations: boolean;
         maintenanceMode: boolean;
     };
-    rolePermissions: Record<UserRole, string[]>; // Map role to list of allowed view IDs
     homepage: HomepageSettings;
     navigation: {
         headerMenu: MenuItem[];
@@ -424,4 +395,25 @@ export interface TrashItem {
 export interface Menu {
     id: 'header' | 'footer';
     items: MenuItem[];
+}
+
+export type UserRole = 'Super Admin' | 'Admin / Manager' | 'Editor' | 'Content Creator' | 'Volunteer Coordinator' | 'Accountant / Finance';
+
+export interface AdminUser {
+    id: string;
+    email: string;
+    passwordHash: string;
+    name: string;
+    role: UserRole;
+    lastLogin?: string;
+    otp?: {
+        code: string;
+        expiresAt: string;
+    };
+}
+
+export interface AuthState {
+    isAuthenticated: boolean;
+    user: Partial<AdminUser> | null;
+    loading: boolean;
 }

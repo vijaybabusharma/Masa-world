@@ -23,7 +23,6 @@ import SportsPage from './pages/SportsPage';
 import EducationPage from './pages/EducationPage';
 import CulturePage from './pages/CulturePage';
 import ThankYouPage from './pages/ThankYouPage';
-import AdminDashboardPage from './pages/AdminDashboardPage';
 import CareersPage from './pages/CareersPage';
 import MissionVisionPage from './pages/MissionVisionPage';
 import CoreValuesPage from './pages/CoreValuesPage';
@@ -240,13 +239,10 @@ const App: React.FC = () => {
       case 'thank-you-contact': return <ThankYouPage navigateTo={navigateTo} type="contact" />;
       case 'thank-you-event': return <ThankYouPage navigateTo={navigateTo} type="event" />;
       
-      // Admin
-      case 'admin-dashboard':
-      case 'admin-login':
-        return <AdminDashboardPage />;
-
       // Member login and dashboard
+      case 'admin-login':
       case 'login': return <LoginPage navigateTo={navigateTo} />;
+      case 'admin/dashboard':
       case 'dashboard': return <DashboardPage navigateTo={navigateTo} />;
 
       // Policy Pages
@@ -267,24 +263,22 @@ const App: React.FC = () => {
     }
   };
 
-  const isDashboard = currentPage === 'admin-dashboard' || currentPage === 'admin-login';
-
   return (
-    <div className={`bg-gray-50 min-h-screen flex flex-col font-sans ${isDashboard ? 'text-gray-800' : 'text-masa-charcoal'}`}>
+    <div className="bg-gray-50 min-h-screen flex flex-col font-sans text-masa-charcoal">
       <GlobalScriptManager />
-      {!isDashboard && <PreviewBanner />}
-      {!isDashboard && <Header navigateTo={navigateTo} currentPage={currentPage} />}
+      <PreviewBanner />
+      <Header navigateTo={navigateTo} currentPage={currentPage} />
       <main className="flex-grow">
         {renderPage()}
       </main>
-      {!isDashboard && <CredibilityBanner />}
-      {!isDashboard && <Footer navigateTo={navigateTo} />}
+      <CredibilityBanner />
+      <Footer navigateTo={navigateTo} />
       
-      {!isDashboard && <ScrollToTopButton />}
-      {!isDashboard && <AccessibilityWidget />}
-      {!isDashboard && <LiveActivityToast />}
+      <ScrollToTopButton />
+      <AccessibilityWidget />
+      <LiveActivityToast />
       
-      {!isDashboard && floatingBtn && floatingBtn.visible && (
+      {floatingBtn && floatingBtn.visible && (
           <button 
             onClick={() => handleSmartButtonClick(floatingBtn, paymentLinks, navigateTo)}
             className={`fixed z-40 bg-masa-orange text-white px-6 py-3 rounded-full font-bold shadow-2xl hover:bg-orange-600 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2 animate-bounce-subtle ${
