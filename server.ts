@@ -178,8 +178,8 @@ const moveToTrash = (originalId: string | number, type: string, data: any, delet
 
 const initDefaultAdmin = async () => {
     const users = getUsers();
-    const email = process.env.ADMIN_EMAIL || 'admin@masa.org';
-    const password = process.env.ADMIN_PASSWORD || 'masa@admin2024';
+    const email = (process.env.ADMIN_EMAIL || 'admin@masa.org').trim();
+    const password = (process.env.ADMIN_PASSWORD || 'masa@admin2024').trim();
     
     const existingAdminIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
     
@@ -205,10 +205,11 @@ const initDefaultAdmin = async () => {
         const passwordHash = await bcrypt.hash(password, salt);
         users[existingAdminIndex].passwordHash = passwordHash;
         saveUsers(users);
+        console.log(`Admin credentials synced successfully for: ${email}`);
     }
 };
 
-initDefaultAdmin();
+// initDefaultAdmin(); // Moved into startServer
 
 // --- Email Notification Helper ---
 const sendEmailNotification = (to: string, subject: string, body: string) => {
@@ -236,17 +237,18 @@ app.post('/api/auth/login', async (req, res) => {
         }
         
         const users = getUsers();
-        const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+        const trimEmail = email.trim();
+        const user = users.find(u => u.email.toLowerCase() === trimEmail.toLowerCase());
 
         if (!user) {
-            console.log(`User not found: ${email}`);
+            console.log(`User not found: ${trimEmail}`);
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        console.log(`User found, comparing password for: ${email}`);
+        console.log(`User found, comparing password for: ${trimEmail}`);
         const isMatch = await bcrypt.compare(password, user.passwordHash);
         if (!isMatch) {
-            console.log(`Password mismatch for: ${email}`);
+            console.log(`Password mismatch for: ${trimEmail}`);
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
@@ -583,6 +585,9 @@ app.get('/api/stats', authenticateToken, (req, res) => {
 // --- Vite Middleware ---
 
 async function startServer() {
+    // Sync admin credentials before starting
+    await initDefaultAdmin();
+
     if (process.env.NODE_ENV !== 'production') {
         try {
             const { createServer: createViteServer } = await import('vite');
