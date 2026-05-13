@@ -178,10 +178,13 @@ const moveToTrash = (originalId: string | number, type: string, data: any, delet
 
 const initDefaultAdmin = async () => {
     const users = getUsers();
-    if (users.length === 0) {
+    const email = process.env.ADMIN_EMAIL || 'admin@masa.org';
+    const password = process.env.ADMIN_PASSWORD || 'masa@admin2024';
+    
+    const existingAdminIndex = users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+    
+    if (existingAdminIndex === -1 && users.length === 0) {
         console.log('No admin users found. Initializing default admin...');
-        const email = process.env.ADMIN_EMAIL || 'admin@masa.org';
-        const password = process.env.ADMIN_PASSWORD || 'masa@admin2024';
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, salt);
         
@@ -194,6 +197,14 @@ const initDefaultAdmin = async () => {
         });
         saveUsers(users);
         console.log(`Default admin created: ${email}`);
+    } else if (existingAdminIndex !== -1) {
+        // Force update password from .env if it's the default admin and we want to ensure it's synced
+        // This helps if user changed .env password and wants it to take effect
+        console.log(`Ensuring admin credentials are synced for: ${email}`);
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(password, salt);
+        users[existingAdminIndex].passwordHash = passwordHash;
+        saveUsers(users);
     }
 };
 
@@ -225,7 +236,7 @@ app.post('/api/auth/login', async (req, res) => {
         }
         
         const users = getUsers();
-        const user = users.find(u => u.email === email);
+        const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
         if (!user) {
             console.log(`User not found: ${email}`);
